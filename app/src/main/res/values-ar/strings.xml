@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ام في في ام</string>
+    <string name="menu_settings">الإعدادات</string>
+    <string name="menu_alarm">المنبه</string>
+    <string name="menu_feedback">ملاحظات</string>
+    <string name="home_humidity">HUMIDITY</string>
+    <string name="home_pressure">PRESSURE</string>
+    <string name="home_wind">WIND</string>
+    <string name="home_clouds">CLOUDS</string>
+</resources>

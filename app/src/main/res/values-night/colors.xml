@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="home_table_separator">#36F4CE</color>
+    <color name="home_table_label">#F7F1F1</color>
+</resources>
