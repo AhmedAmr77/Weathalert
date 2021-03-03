@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityHomeBinding
+import com.example.Weathalert.datalayer.entity.Daily
+import com.example.Weathalert.datalayer.entity.Hourly
 import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.Weathalert.favoritecities.view.FavoriteActivity
 import com.example.Weathalert.home.viewmodel.WeatherViewModel
@@ -39,7 +42,6 @@ class HomeActivity : AppCompatActivity() {
 
         favCitiesFabListener()
 
-        viewModel.fetchData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -76,14 +78,19 @@ class HomeActivity : AppCompatActivity() {
     private fun observeViewModel(viewModel: WeatherViewModel) {
         viewModel.loadingLiveData.observe(this, { showLoading(it) })
         viewModel.errorLiveData.observe(this, { showError(it) })
-        viewModel.weatherListLiveData.observe(this, { updateUI(it) })
+        viewModel.fetchData().observe(this, Observer {
+            if (it != null){
+                updateUI(it)
+            }
+        })
+//        viewModel.weatherLiveData.observe(this, { updateUI(it) })
     }
 
     private fun updateUI(it: WeatherData) {
-        val cityTime = it.timezone_offset+it.current.dt
+        val cityTime = it.timezone_offset?.plus(it.current?.dt!!)
         binding.cityTV.text = it.timezone
-        binding.descriptionTV.text = it.current.weather[0].description
-        binding.dateTV.text = convertLongToDateString( cityTime,"MM-dd-yyyy")
+        binding.descriptionTV.text = it.current?.weather?.get(0)?.description
+        binding.dateTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "MM-dd-yyyy") }
 
 //        val test= convertLongToDateString(cityTime, "MM-dd-yyyy")
 //        val test2= convertLongToDateString(cityTime, "HH:mm")
@@ -93,14 +100,14 @@ class HomeActivity : AppCompatActivity() {
 //                                            "test => $test\n" +
 //                                            "test2 => $test2", Toast.LENGTH_LONG).show()
 
-        binding.hourTV.text = convertLongToDateString(cityTime, "HH:mm")
-        binding.tempTV.text = (it.current.temp- 273.15).toInt().toString()
-        binding.humidityValTV.text = it.current.humidity.toString().plus(" %")
-        binding.pressureValTV.text = it.current.pressure.toString()
-        binding.windValTVa.text = it.current.wind_speed.toString().plus(" m/s")
-        binding.cloudsValTV.text = it.current.clouds.toString().plus(" %")
-        hoursListAdapter.updateHours(it.hourly)
-        daysListAdapter.updateHours(it.daily)
+        binding.hourTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "HH:mm") }
+        binding.tempTV.text = (it.current?.temp?.minus(273.15))?.toInt().toString()
+        binding.humidityValTV.text = it.current?.humidity.toString().plus(" %")
+        binding.pressureValTV.text = it.current?.pressure.toString()
+        binding.windValTVa.text = it.current?.wind_speed.toString().plus(" m/s")
+        binding.cloudsValTV.text = it.current?.clouds.toString().plus(" %")
+        hoursListAdapter.updateHours(it.hourly as List<Hourly>)
+        daysListAdapter.updateDays(it.daily as List<Daily>)
     }
 
     /*
@@ -119,7 +126,10 @@ class HomeActivity : AppCompatActivity() {
 //        return SimpleDateFormat(pattern)
 //            .format(systemTime).toString()
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            var ldt: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(systemTime.toLong()), ZoneId.systemDefault())
+            var ldt: LocalDateTime = LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(systemTime.toLong()),
+                ZoneId.systemDefault()
+            )
             return ldt.format(DateTimeFormatter.ofPattern(pattern))
         } else {
             return "OS lessThan OREO"

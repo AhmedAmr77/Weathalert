@@ -36,9 +36,9 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
 
     class HoursVH(val binding: HoursCellBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(hours: Hourly) {
-            binding.hoursCellHour.text = convert(hours.dt.toLong()).toString()
+            binding.hoursCellHour.text = hours.dt?.let { convert(it.toLong()).toString() }
             binding.hoursCellIcon.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
-            binding.hoursCellTemp.text = (hours.temp-273.15).toInt().toString()
+            binding.hoursCellTemp.text = (hours.temp)?.toInt().toString()
         }
 
         private fun convert(time: Long): Serializable {

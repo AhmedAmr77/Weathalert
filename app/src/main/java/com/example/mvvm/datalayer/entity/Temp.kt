@@ -1,10 +1,10 @@
 package com.example.Weathalert.datalayer.entity
 
 data class Temp(
-    val day: Double,
-    val eve: Double,
-    val max: Double,
-    val min: Double,
-    val morn: Double,
-    val night: Double
+    val day: Double? = null,
+    val eve: Double? = null,
+    val max: Double? = null,
+    val min: Double? = null,
+    val morn: Double? = null,
+    val night: Double? = null
 )

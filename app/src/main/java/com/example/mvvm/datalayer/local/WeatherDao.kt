@@ -8,8 +8,8 @@ import com.example.Weathalert.datalayer.entity.WeatherData
 @Dao
 interface WeatherDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(weather: WeatherData)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(weather: WeatherData?)
 
     @Update         //DLT if not needed
     suspend fun update(weather: WeatherData)

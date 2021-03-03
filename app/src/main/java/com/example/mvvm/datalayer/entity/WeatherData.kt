@@ -10,13 +10,13 @@ import com.example.Weathalert.datalayer.entity.coverters.HourlyConverter
 @Entity(primaryKeys = ["lat", "lon"])
 @TypeConverters(AlertConverter::class,DailyConverter::class,HourlyConverter::class)
 data class WeatherData(
-    val alerts: List<Alert>,
+    val alerts: List<Alert?>? = null,
     @Embedded(prefix = "curr_")
-    val current: Current,
-    val daily: List<Daily>,
-    val hourly: List<Hourly>,
+    val current: Current? = null,
+    val daily: List<Daily?>? = null,
+    val hourly: List<Hourly?>? = null,
     val lat: Double,
     val lon: Double,
-    val timezone: String,
-    val timezone_offset: Int
+    val timezone: String? = null,
+    val timezone_offset: Int? = null
 )

@@ -2,6 +2,7 @@ package com.example.Weathalert.datalayer
 
 import android.app.Application
 import android.content.Context
+import android.provider.SyncStateContract
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -18,14 +19,32 @@ class WeatherRepository(val application: Application) {
     val remoteDataSource = RemoteDataSource()
     val localDataSource = LocalDataSource.getInstance(application)
 
-    fun add(){
+//    fun addCityToLocal(city: WeatherData){
+//        localDataSource.insert(city)
+//    }
 
-    }
+//    suspend fun getAndAdd(lat: String, lon: String): String{
+//        val res = getWeatherData(lat, lon)
+//        return if (res.isSuccessful && res != null){
+//            addCityToLocal(res.body()!!)
+//            "Done"
+//        } else {
+//            res.message()
+//        }
+//    }
 
-    suspend fun getWeatherData(lat: String, lon: String): Response<WeatherData>{
-        val resposne = RemoteDataSource().getWeatherData(lat, lon)
-        Log.i("test","in repo => ${resposne.message()}")
-        return resposne
+    fun getWeatherData(lat: Double, lon: Double): LiveData<WeatherData> {
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test","exception from retrofit${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            val response = remoteDataSource.getWeatherData (lat.toString(), lon.toString())
+            if(response.isSuccessful){
+                localDataSource.insert(response.body()!!)
+                Log.i("test","success")
+            }
+        }
+        return LocalDataSource.getInstance(application).getCityData(lat, lon)
     }
 }
 /*
@@ -46,6 +65,24 @@ fun loadCurrentData(): LiveData<WeatherResponse> {
 }
 */
 /*
+fun fetchData() {
+        loadingLiveData.postValue(true)
+        val exceptionHandlerException = CoroutineExceptionHandler{_, th ->
+            loadingLiveData.postValue(false)
+            errorLiveData.postValue("from ExceptionHandlerr : ${th.message.toString()}")
+        }
+        CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
+            val res: Response<WeatherData> = weatherRepository.getWeatherData("61.90609352577086", "92.44568906858825")
+            withContext(Dispatchers.Main){
+                loadingLiveData.postValue(false)
+                if (res.isSuccessful){
+                    weatherListLiveData.postValue(res.body())
+                } else{
+                    errorLiveData.postValue("Resposne => ${res.message()}")
+                }
+            }
+        }
+    }
 fun fetchData() {
         loadingLiveData.postValue(true)
         val exceptionHandlerException = CoroutineExceptionHandler{_, th ->

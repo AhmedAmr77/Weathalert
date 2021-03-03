@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.Weathalert.datalayer.WeatherRepository
 import com.example.Weathalert.datalayer.entity.WeatherData
@@ -13,53 +14,27 @@ import kotlin.math.log
 
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
-    val weatherListLiveData = MutableLiveData<WeatherData>()
+//    val weatherLiveData = MutableLiveData<WeatherData>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String>()
 
     private val weatherRepository = WeatherRepository(getApplication())
 
-    fun fetchData() {
-        loadingLiveData.postValue(true)
-        Log.i("test","begin fetch method")
-        val exceptionHandlerException = CoroutineExceptionHandler{_, th ->
-            Log.i("test","begin excepHandler block")
-            loadingLiveData.postValue(false)
-            errorLiveData.postValue("from ExceptionHandlerr : ${th.message.toString()}")
-            Log.i("test","end excepHandler block")
-        }
-        Log.i("test","after excepHandler block")
-        CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
-            Log.i("test","begin CoroScope block")
-            //val response = WeatherService.getWeatherService().getWeatherData("33.441792", "-94.037689", "676da108dea75e4101df9c4c03b3d757")
-            val res: Response<WeatherData> = weatherRepository.getWeatherData("61.90609352577086", "92.44568906858825")
-            Log.i("test","after call getWeathData")
-            withContext(Dispatchers.Main){
-                loadingLiveData.postValue(false)
-                if (res.isSuccessful){
-                    weatherListLiveData.postValue(res.body())
-                } else{
-                    errorLiveData.postValue("Resposne => ${res.message()}")
-                }
-            }
-        }
-    }
-}
-/*
+    private val lat = 61.9060
+    private val lon = 92.4456
 
-
-        CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
-            //val response = WeatherService.getWeatherService().getWeatherData("33.441792", "-94.037689", "676da108dea75e4101df9c4c03b3d757")
-            val response:WeatherData? = weatherRepository.getWeatherData("33.441792", "-94.037689", "676da108dea75e4101df9c4c03b3d757")
-            withContext(Dispatchers.Main){
-                loadingLiveData.postValue(false)
-                if (response != null) {
-                    weatherListLiveData.postValue(response)
-                } else {
-                    //errorLiveData.postValue(response.message())
-                }
-            }
-        }
+    fun fetchData(): LiveData<WeatherData> {
+        loadingLiveData.postValue(false)
+        return weatherRepository.getWeatherData(lat, lon)
+//        val res = weatherRepository.getWeatherData(lat, lon)
+//        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+////            loadingLiveData.postValue(false)
+////            errorLiveData.postValue("from ExceptionHandlerr : ${th.message.toString()}")
+//        }
+//        CoroutineScope(Dispatchers.Main + exceptionHandlerException).launch {
+//            loadingLiveData.postValue(false)
+//            weatherLiveData.postValue(res)
+//        }
     }
+//
 }
- */
