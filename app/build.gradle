@@ -89,4 +89,7 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.2.6"
 
+    //google play service for location
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
 }
