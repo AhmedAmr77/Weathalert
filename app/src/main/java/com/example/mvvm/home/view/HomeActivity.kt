@@ -47,7 +47,6 @@ class HomeActivity : AppCompatActivity() {
 
 
     lateinit var flpc: FusedLocationProviderClient
-
     var permissions = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
