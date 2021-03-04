@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.Weathalert.datalayer.local.LocalDataSource
 import com.example.Weathalert.datalayer.remote.RemoteDataSource
+import com.example.mvvm.utils.Constants
 import kotlinx.coroutines.*
 import retrofit2.Response
 
@@ -33,18 +34,22 @@ class WeatherRepository(val application: Application) {
 //        }
 //    }
 
-    fun getWeatherData(lat: Double, lon: Double): LiveData<WeatherData> {
+    fun getWeatherData(): LiveData<WeatherData> {
+        val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
+            Constants.LATITUDE,"0").toString()
+        val lon = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
+            Constants.LONGITUDE,"0").toString()
         val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
             Log.i("test","exception from retrofit${th.message}")
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
-            val response = remoteDataSource.getWeatherData (lat.toString(), lon.toString())
+            val response = remoteDataSource.getWeatherData (lat, lon)
             if(response.isSuccessful){
                 localDataSource.insert(response.body()!!)
                 Log.i("test","success")
             }
         }
-        return LocalDataSource.getInstance(application).getCityData(lat, lon)
+        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())
     }
 }
 /*

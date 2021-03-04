@@ -36,13 +36,13 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     private val weatherRepository = WeatherRepository(getApplication())
 
-    private val lat = 61.9060
-    private val lon = 92.4456
+//    private val lat = 61.9060
+//    private val lon = 92.4456
 
 
     fun fetchData(): LiveData<WeatherData> {
         loadingLiveData.postValue(false)
-        return weatherRepository.getWeatherData(lat, lon)
+        return weatherRepository.getWeatherData()
 //        val res = weatherRepository.getWeatherData(lat, lon)
 //        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
 ////            loadingLiveData.postValue(false)
