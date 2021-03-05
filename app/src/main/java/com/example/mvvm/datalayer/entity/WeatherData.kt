@@ -19,5 +19,5 @@ data class WeatherData(
     val lon: Double,
     val timezone: String? = null,
     val timezone_offset: Int? = null,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 )

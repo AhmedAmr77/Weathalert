@@ -35,32 +35,26 @@ class WeatherRepository(val application: Application) {
 //    }
 
     fun addFavCity(lat:String, lon:String){
+        var res:WeatherData
         val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
             Log.i("test","exception from retrofit${th.message}")
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
             val response = remoteDataSource.getWeatherData (lat, lon)
             if(response.isSuccessful){
-                localDataSource.insert(response.body()!!)
+                val res = response.body()
+                res?.isFavorite = true
+                localDataSource.insert(res)
                 Log.i("test","success")
             } else {
                 //response ERROR
             }
         }
+
     }
 
     fun getFavCities(): LiveData<List<WeatherData>>{
-        val response = localDataSource.getAllCities()
-        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
-            Log.i("test","exception from retrofit${th.message}")
-        }
-        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
-                                                                                                     //What if there is no data (Empty Fav)
-            if(response.value.isNullOrEmpty()){
-                Log.i("test","fav isNullOrEmpty in DB ") //leha lazma??
-            }
-        }
-        return LocalDataSource.getInstance(application).getAllCities()
+        return localDataSource.getAllCities()
     }
 
     fun getWeatherData(): LiveData<WeatherData> {

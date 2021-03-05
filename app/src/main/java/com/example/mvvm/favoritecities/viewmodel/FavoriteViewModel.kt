@@ -22,7 +22,7 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
 
     val searchContainerLiveData = MutableLiveData<Boolean>()
 
-    fun fetchData(): LiveData<List<WeatherData>> {
+    fun fetchFavCities(): LiveData<List<WeatherData>> {
         return weatherRepository.getFavCities()
     }
 

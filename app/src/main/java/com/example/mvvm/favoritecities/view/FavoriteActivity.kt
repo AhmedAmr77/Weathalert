@@ -61,13 +61,16 @@ class FavoriteActivity : AppCompatActivity() {
     private fun observeViewModel(viewModel: FavoriteViewModel) {
 //        viewModel.loadingLiveData.observe(this, { showLoading(it) })
 //        viewModel.errorLiveData.observe(this, { showError(it) })
-        viewModel.fetchData().observe(this, Observer {
-            if (it != null) {
-                updateUI(it)
-            }
-        })
+//        viewModel.fetchData().observe(this, Observer {
+//            if (it != null) {
+//                updateUI(it)
+//            }
+//        })
         viewModel.searchContainerLiveData.observe(this, Observer {
             showSearchContainer()
+        })
+        viewModel.fetchFavCities().observe(this, Observer {
+            updateUI(it)
         })
     }
 
@@ -89,6 +92,7 @@ class FavoriteActivity : AppCompatActivity() {
 
                 //add lat&long to DB and refresh RecyclerView
                 viewModel.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
+//                updateUI()
             }
 
             override fun onCancel() {
@@ -100,9 +104,7 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun updateUI(it: List<WeatherData>) {
-
         citisListAdapter.updateHours(it)
-//        daysListAdapter.updateDays(it.daily as List<Daily>)
     }
 
 
