@@ -44,36 +44,11 @@ class FavoriteActivity : AppCompatActivity() {
     private fun favCitiesFabListener() {            ///WRITE IT IN VIEWMODEL
         val fab: View = binding.addFavCityFab
         fab.setOnClickListener {         //view ->
-            showAutoComplete()
+            viewModel.showAutoComplete()
         }
     }
 
-    private fun showAutoComplete() {
-        binding.searchFragmentContainer.visibility= View.VISIBLE
-        val autocompleteFragment = PlaceAutocompleteFragment.newInstance(Constants.MAPBOX_API_KEY)
-        transaction = supportFragmentManager?.beginTransaction()
-        transaction?.add(R.id.searchFragmentContainer, autocompleteFragment, Constants.AUTOCOMPLETE_FRAGMENT_TAG)
-        transaction?.commit()
 
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(carmenFeature: CarmenFeature) {
-                // TODO: Use the longitude and latitude
-                Toast.makeText(applicationContext,"latitude ${carmenFeature.center()?.latitude()} \n longitude ${carmenFeature.center()?.longitude()}"
-                    , Toast.LENGTH_LONG).show()
-                supportFragmentManager?.beginTransaction()?.remove(autocompleteFragment)?.commit()
-                binding.searchFragmentContainer.visibility= View.GONE
-
-                //add lat&long to DB and refresh RecyclerView
-
-            }
-
-            override fun onCancel() {
-                Log.i("places","cancel")
-                supportFragmentManager?.beginTransaction()?.remove(autocompleteFragment)?.commit()
-                binding.searchFragmentContainer.visibility= View.GONE
-            }
-        })
-    }
 
     private fun initUI() {
         binding.citiesRecyclerView.apply {
@@ -89,6 +64,37 @@ class FavoriteActivity : AppCompatActivity() {
         viewModel.fetchData().observe(this, Observer {
             if (it != null) {
                 updateUI(it)
+            }
+        })
+        viewModel.searchContainerLiveData.observe(this, Observer {
+            showSearchContainer()
+        })
+    }
+
+    private fun showSearchContainer() {
+        binding.searchFragmentContainer.visibility= View.VISIBLE
+
+        val autocompleteFragment = PlaceAutocompleteFragment.newInstance(Constants.MAPBOX_API_KEY)
+        transaction = supportFragmentManager?.beginTransaction()
+        transaction?.add(R.id.searchFragmentContainer, autocompleteFragment, Constants.AUTOCOMPLETE_FRAGMENT_TAG) //replace by binding => R.id.searchFragmentContainer
+        transaction?.commit()
+
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(carmenFeature: CarmenFeature) {
+                // TODO: Use the longitude and latitude
+                Toast.makeText(applicationContext,"latitude ${carmenFeature.center()?.latitude()} \n longitude ${carmenFeature.center()?.longitude()}"
+                    , Toast.LENGTH_LONG).show()
+                supportFragmentManager?.beginTransaction()?.remove(autocompleteFragment)?.commit()
+                binding.searchFragmentContainer.visibility= View.GONE
+
+                //add lat&long to DB and refresh RecyclerView
+                //viewModel.savaFavCity()
+            }
+
+            override fun onCancel() {
+                Log.i("places","cancel")
+                supportFragmentManager?.beginTransaction()?.remove(autocompleteFragment)?.commit()
+                binding.searchFragmentContainer.visibility= View.GONE
             }
         })
     }

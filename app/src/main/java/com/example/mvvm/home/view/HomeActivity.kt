@@ -25,7 +25,7 @@ import com.example.Weathalert.datalayer.entity.Daily
 import com.example.Weathalert.datalayer.entity.Hourly
 import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.Weathalert.favoritecities.view.FavoriteActivity
-import com.example.Weathalert.home.viewmodel.WeatherViewModel
+import com.example.Weathalert.home.viewmodel.HomeViewModel
 import com.example.Weathalert.settings.view.SettingsActivity
 import com.example.mvvm.utils.Constants
 import com.google.android.gms.location.*
@@ -40,7 +40,7 @@ import java.time.format.DateTimeFormatter
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: WeatherViewModel
+    private lateinit var viewModel: HomeViewModel
     lateinit var binding: ActivityHomeBinding
     private var hoursListAdapter = HoursAdapter(arrayListOf())
     private var daysListAdapter = DaysAdapter(arrayListOf())
@@ -58,13 +58,13 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         flpc = LocationServices.getFusedLocationProviderClient(getApplication() )
-//        setupNavigation()
+
+        //setupNavigation()
 
         getLastLoc()
-
 
         initUI()
         observeViewModel(viewModel)
@@ -75,16 +75,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
 
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == permissionID) {  //maybe there are many permissions returned. Here we check for the location id that i defined before
-            if (permissions.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLoc()
-            }
-        }
-    }
-
+//----------------------------------MENU------------------------------------------------------------
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)                 ///USE BINDING
         return true
@@ -103,7 +94,7 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
-
+//--------------------------------------------------------------------------------------------------
     private fun initUI() {
         binding.hoursRecyclerView.apply {
             layoutManager =
@@ -117,7 +108,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeViewModel(viewModel: WeatherViewModel) {
+    private fun observeViewModel(viewModel: HomeViewModel) {
         viewModel.loadingLiveData.observe(this, { showLoading(it) })
         viewModel.errorLiveData.observe(this, { showError(it) })
         viewModel.fetchData().observe(this, Observer {
@@ -178,7 +169,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-
+//--------------------------------------------------------------------------------------------------
     private fun showLoading(it: Boolean) {
         if (it) {
             binding.loadingView.visibility = View.VISIBLE
@@ -204,7 +195,19 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+//---------------------------------------places-----------------------------------------------------
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == permissionID) {  //maybe there are many permissions returned. Here we check for the location id that i defined before
+            if (permissions.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLoc()
+            }
+        }
+    }
 
+    private fun requestPremession() {                           //dialog for request permissions
+    ActivityCompat.requestPermissions(this, permissions, permissionID)
+} // to know if user accept permission or not there is a callback method thats called automatically when user click on permissions button to tell what user answer.
     private fun checkForPermission(): Boolean {
         return if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -237,9 +240,6 @@ class HomeActivity : AppCompatActivity() {
             saveCurrentLocationToSharedPref(latit.toString(), longit.toString())
         }
     } // like listner
-    fun requestPremession() {                           //dialog for request permissions
-        ActivityCompat.requestPermissions(this, permissions, permissionID)
-    } // to know if user accept permission or not there is a callback method thats called automatically when user click on permissions button to tell what user answer.
     private fun getLastLoc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkForPermission()) {
@@ -295,6 +295,9 @@ class HomeActivity : AppCompatActivity() {
         editor.putString(Constants.LATITUDE,latitude).apply()
         editor.putString(Constants.LONGITUDE,longitude).apply()
     }
+
+//----------------------try to apply mvvm on places and permissions---------------------------------
+    /*
     private fun setupNavigation() {
         viewModel.showDialog.observe(this, Observer {
             showPermDialog()
@@ -304,9 +307,9 @@ class HomeActivity : AppCompatActivity() {
 //            openTaskDetails(it)
 //        })
     }
-
     private fun showPermDialog() {
         val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         startActivity(i)
     }
+     */
 }

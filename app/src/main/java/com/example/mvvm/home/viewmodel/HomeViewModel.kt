@@ -27,12 +27,12 @@ import kotlinx.coroutines.*
 import retrofit2.Response
 import kotlin.math.log
 
-class WeatherViewModel(application: Application) : AndroidViewModel(application) {
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
 //    val weatherLiveData = MutableLiveData<WeatherData>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String>()
-    val showDialog = MutableLiveData<Unit>()
+    //val showDialog = MutableLiveData<Unit>()
 
     private val weatherRepository = WeatherRepository(getApplication())
 
