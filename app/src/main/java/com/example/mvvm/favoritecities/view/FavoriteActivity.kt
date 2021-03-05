@@ -88,7 +88,7 @@ class FavoriteActivity : AppCompatActivity() {
                 binding.searchFragmentContainer.visibility= View.GONE
 
                 //add lat&long to DB and refresh RecyclerView
-                //viewModel.savaFavCity()
+                viewModel.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
             }
 
             override fun onCancel() {
@@ -99,9 +99,9 @@ class FavoriteActivity : AppCompatActivity() {
         })
     }
 
-    private fun updateUI(it: WeatherData) {
-        val citiesList = listOf(it)
-        citisListAdapter.updateHours(citiesList)
+    private fun updateUI(it: List<WeatherData>) {
+
+        citisListAdapter.updateHours(it)
 //        daysListAdapter.updateDays(it.daily as List<Daily>)
     }
 

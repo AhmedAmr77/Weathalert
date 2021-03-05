@@ -22,8 +22,8 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
 
     val searchContainerLiveData = MutableLiveData<Boolean>()
 
-    fun fetchData(): LiveData<WeatherData> {
-        return weatherRepository.getWeatherData()
+    fun fetchData(): LiveData<List<WeatherData>> {
+        return weatherRepository.getFavCities()
     }
 
     fun showAutoComplete() {
@@ -31,6 +31,6 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun savaFavCity(lat:String, lon:String) {
-        weatherRepository.getWeatherData()
+        weatherRepository.addFavCity(lat, lon)
     }
 }

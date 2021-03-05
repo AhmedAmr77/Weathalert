@@ -34,6 +34,35 @@ class WeatherRepository(val application: Application) {
 //        }
 //    }
 
+    fun addFavCity(lat:String, lon:String){
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test","exception from retrofit${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            val response = remoteDataSource.getWeatherData (lat, lon)
+            if(response.isSuccessful){
+                localDataSource.insert(response.body()!!)
+                Log.i("test","success")
+            } else {
+                //response ERROR
+            }
+        }
+    }
+
+    fun getFavCities(): LiveData<List<WeatherData>>{
+        val response = localDataSource.getAllCities()
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test","exception from retrofit${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+                                                                                                     //What if there is no data (Empty Fav)
+            if(response.value.isNullOrEmpty()){
+                Log.i("test","fav isNullOrEmpty in DB ") //leha lazma??
+            }
+        }
+        return LocalDataSource.getInstance(application).getAllCities()
+    }
+
     fun getWeatherData(): LiveData<WeatherData> {
         val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
             Constants.LATITUDE,"0").toString()
