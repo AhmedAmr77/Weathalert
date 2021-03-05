@@ -24,7 +24,11 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
 
     fun fetchData(): LiveData<List<WeatherData>> {
         return weatherRepository.getFavCities()
+    }            //wakeup
+    fun fetchFavCities(): LiveData<List<WeatherData>> {
+        return weatherRepository.getFavCities()
     }
+
 
     fun showAutoComplete() {
         searchContainerLiveData.value = true
@@ -33,4 +37,9 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
     fun savaFavCity(lat:String, lon:String) {
         weatherRepository.addFavCity(lat, lon)
     }
+
+    fun deleteCity(city: WeatherData) {
+        weatherRepository.deleteCityData(city.lat, city.lon)
+    }
+
 }

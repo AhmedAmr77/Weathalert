@@ -35,13 +35,16 @@ class WeatherRepository(val application: Application) {
 //    }
 
     fun addFavCity(lat:String, lon:String){
+        var res:WeatherData
         val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
             Log.i("test","exception from retrofit${th.message}")
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
             val response = remoteDataSource.getWeatherData (lat, lon)
             if(response.isSuccessful){
-                localDataSource.insert(response.body()!!)
+                val res = response.body()
+                res?.isFavorite = true
+                localDataSource.insert(res)
                 Log.i("test","success")
             } else {
                 //response ERROR
@@ -49,6 +52,10 @@ class WeatherRepository(val application: Application) {
         }
     }
 
+    fun getFavCities(): LiveData<List<WeatherData>>{
+        return localDataSource.getAllCities()
+    }
+    /*       wakeup
     fun getFavCities(): LiveData<List<WeatherData>>{
         val response = localDataSource.getAllCities()
         val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
@@ -62,6 +69,7 @@ class WeatherRepository(val application: Application) {
         }
         return LocalDataSource.getInstance(application).getAllCities()
     }
+     */
 
     fun getWeatherData(): LiveData<WeatherData> {
         val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
@@ -78,7 +86,16 @@ class WeatherRepository(val application: Application) {
                 Log.i("test","success")
             }
         }
-        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())
+        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())  //edit LocalDataSource.getCityData(l,l) ??
+    }
+
+    fun deleteCityData(lat: Double, lon: Double) {
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test","exception from database${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            localDataSource.deleteCityData(lat, lon)
+        }
     }
 }
 /*

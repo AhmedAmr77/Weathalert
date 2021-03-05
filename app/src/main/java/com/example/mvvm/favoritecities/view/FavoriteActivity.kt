@@ -1,14 +1,17 @@
 package com.example.Weathalert.favoritecities.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityFavoriteBinding
 import com.example.Weathalert.datalayer.entity.WeatherData
@@ -19,11 +22,13 @@ import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteFragment
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListener
 
+
 class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var viewModel: FavoriteViewModel
     lateinit var binding: ActivityFavoriteBinding
     private var citisListAdapter = FavoriteAdapter(arrayListOf())
+    private lateinit var citiesList : List<WeatherData>
 
     private var transaction : FragmentTransaction? = null
 
@@ -38,6 +43,8 @@ class FavoriteActivity : AppCompatActivity() {
         observeViewModel(viewModel)
 
         favCitiesFabListener()
+
+        SwipDeleteRecyclerViewCell()
 
     }
 
@@ -61,10 +68,17 @@ class FavoriteActivity : AppCompatActivity() {
     private fun observeViewModel(viewModel: FavoriteViewModel) {
 //        viewModel.loadingLiveData.observe(this, { showLoading(it) })
 //        viewModel.errorLiveData.observe(this, { showError(it) })
+        /*   wakeup
         viewModel.fetchData().observe(this, Observer {
             if (it != null) {
+                citiesList = it
                 updateUI(it)
             }
+        })
+         */
+        viewModel.fetchFavCities().observe(this, Observer {
+            citiesList = it
+            updateUI(it)
         })
         viewModel.searchContainerLiveData.observe(this, Observer {
             showSearchContainer()
@@ -100,9 +114,54 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun updateUI(it: List<WeatherData>) {
-
         citisListAdapter.updateHours(it)
-//        daysListAdapter.updateDays(it.daily as List<Daily>)
+    }
+
+    private fun SwipDeleteRecyclerViewCell() {
+        val mIth = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
+                    val fromPos = viewHolder.adapterPosition
+                    val toPos = target.adapterPosition
+                    // move item in `fromPos` to `toPos` in adapter.
+                    return true // true if moved, false otherwise
+                }
+
+                override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                    // remove from adapter
+                    viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
+                    viewModel.fetchFavCities().observe(this@FavoriteActivity, Observer {
+                        if (it != null) {
+                            citiesList = it
+                            updateUI(it)
+                        }
+                    })
+                }
+            })
+        mIth.attachToRecyclerView(binding.citiesRecyclerView)
+//        val itemTouchHelperCallback =
+//            object :
+//                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+//                override fun onMove(
+//                    recyclerView: RecyclerView,
+//                    viewHolder: RecyclerView.ViewHolder,
+//                    target: RecyclerView.ViewHolder
+//                ): Boolean {
+//
+//                    return false
+//                }
+//
+//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//
+//                    viewModel.delete(citisListAdapter.getNoteAt(viewHolder.adapterPosition))
+//                    //Toast.makeText(this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show()
+//                }
+//
+//            }
+//
+//        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+//        itemTouchHelper.attachToRecyclerView(rvNote)
+
     }
 
 
