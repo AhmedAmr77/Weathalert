@@ -46,8 +46,8 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
             binding.daysCellDate.text = (days.dt?.let { convert(it.toLong()) })?.get(0)?.subSequence(0,3).toString().plus(" ${(days.dt?.let {
                 convert(it.toLong())
             })?.get(1) ?: "NULL"}")
-            binding.daysCellTempGreat.text = (days.temp?.max)?.toInt().toString()
-            binding.daysCellTempSmall.text = (days.temp?.min)?.toInt().toString()
+            binding.daysCellTempGreat.text = (days.temp?.max)?.toInt().toString().plus("°")
+            binding.daysCellTempSmall.text = (days.temp?.min)?.toInt().toString().plus("°")
         }
 
         /*  GOOGLE time converter --- TRY it

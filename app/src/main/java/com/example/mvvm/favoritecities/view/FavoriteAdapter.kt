@@ -41,7 +41,7 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>,
     class CitiesVH (val binding: CitiesCellBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(city: WeatherData) {
             binding.cityCellName.text = city.timezone
-            binding.tempTV.text = city.current?.temp.toString()
+            binding.tempTV.text = city.current?.temp.toString().plus("°")
             binding.cityCellIcon.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
         }
     }

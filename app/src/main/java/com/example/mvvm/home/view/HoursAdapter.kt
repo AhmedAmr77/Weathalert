@@ -38,7 +38,7 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
         fun bind(hours: Hourly) {
             binding.hoursCellHour.text = hours.dt?.let { convert(it.toLong()).toString() }
             binding.hoursCellIcon.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
-            binding.hoursCellTemp.text = (hours.temp)?.toInt().toString()
+            binding.hoursCellTemp.text = (hours.temp)?.toInt().toString().plus("°")
         }
 
         private fun convert(time: Long): Serializable {

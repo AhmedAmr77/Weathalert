@@ -134,7 +134,7 @@ class HomeActivity : AppCompatActivity() {
 //                                            "test2 => $test2", Toast.LENGTH_LONG).show()
 
         binding.hourTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "HH:mm") }
-        binding.tempTV.text = (it.current?.temp?.minus(273.15))?.toInt().toString()
+        binding.tempTV.text = (it.current?.temp?.minus(273.15))?.toInt().toString().plus("°")
         binding.humidityValTV.text = it.current?.humidity.toString().plus(" %")
         binding.pressureValTV.text = it.current?.pressure.toString()
         binding.windValTVa.text = it.current?.wind_speed.toString().plus(" m/s")
