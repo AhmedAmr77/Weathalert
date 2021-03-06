@@ -37,9 +37,9 @@ class FavoriteViewModel(application: Application) : AndroidViewModel(application
 //
 //    }
 
-    fun fetchFavCities(): LiveData<List<WeatherData>> {
-        return weatherRepository.getFavCities()
-    }            //wakeup
+//    fun fetchFavCities(): LiveData<List<WeatherData>> {
+//        return weatherRepository.getFavCities()
+//    }            //wakeup
     fun fetchFavCities(): LiveData<List<WeatherData>> {
         return weatherRepository.getFavCities()
     }
