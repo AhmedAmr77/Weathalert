@@ -33,6 +33,9 @@ class WeatherRepository(val application: Application) {
 //            res.message()
 //        }
 //    }
+    fun getCity(lat:String, lon:String): LiveData<WeatherData> {  //from local
+        return localDataSource.getCityData(lat.toDouble(), lon.toDouble())
+    }
 
     fun addFavCity(lat:String, lon:String){
         var res:WeatherData
@@ -71,7 +74,7 @@ class WeatherRepository(val application: Application) {
     }
      */
 
-    fun getWeatherData(): LiveData<WeatherData> {
+    fun getWeatherData(): LiveData<WeatherData> { //from Retrofit
         val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
             Constants.LATITUDE,"0").toString()
         val lon = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(

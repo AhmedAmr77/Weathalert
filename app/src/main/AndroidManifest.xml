@@ -3,9 +3,9 @@
     package="com.example.Weathalert">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,8 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVVM">
-        <activity android:name=".favoritecities.view.FavoriteActivity"></activity>
-        <activity android:name=".settings.view.SettingsActivity"
+        <activity android:name="com.example.mvvm.favoritecities.view.FavoriteCityDetailsActivity"></activity>
+        <activity android:name=".favoritecities.view.FavoriteActivity" />
+        <activity
+            android:name=".settings.view.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".home.view.HomeActivity">
             <intent-filter>

@@ -1,5 +1,6 @@
 package com.example.Weathalert.favoritecities.view
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -20,6 +21,7 @@ import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityFavoriteBinding
 import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.mvvm.favoritecities.view.FavoriteAdapter
+import com.example.mvvm.favoritecities.view.FavoriteCityDetailsActivity
 import com.example.mvvm.favoritecities.viewmodel.FavoriteViewModel
 import com.example.mvvm.utils.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -34,7 +36,7 @@ class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var viewModel: FavoriteViewModel
     lateinit var binding: ActivityFavoriteBinding
-    private var citisListAdapter = FavoriteAdapter(arrayListOf())
+    private lateinit var citisListAdapter : FavoriteAdapter
     private lateinit var citiesList : List<WeatherData>
 
     private var transaction : FragmentTransaction? = null
@@ -65,8 +67,19 @@ class FavoriteActivity : AppCompatActivity() {
 
     private fun initUI() {
         binding.citiesRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+
+            citisListAdapter = FavoriteAdapter(arrayListOf()){item ->
+                Log.i("favo", "listenerClicked. ${item.lon} & ${item.lat} & ${item.isFavorite} & ${item.current?.temp}")
+//                recyclerViewListener(item)
+                val intent = Intent(this@FavoriteActivity, FavoriteCityDetailsActivity::class.java).apply {
+                    putExtra("LAT", item.lat.toString())
+                    putExtra("LON", item.lon.toString())
+                    Log.i("favo", "putExtrasss")
+                }
+                Log.i("favo", "before start")
+                startActivity(intent)
+            }
             adapter = citisListAdapter
         }
     }
@@ -130,7 +143,6 @@ class FavoriteActivity : AppCompatActivity() {
                     Log.i("RycVi", "onMove")
                     return false // true if moved, false otherwise
                 }
-
                 override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
                     //showConfirmationDialog()
                     MaterialAlertDialogBuilder(this@FavoriteActivity, R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog_Delete)
@@ -179,6 +191,10 @@ class FavoriteActivity : AppCompatActivity() {
                     icon.draw(c)
                 }
 
+                override fun onSelectedChanged(viewHolder: ViewHolder?, actionState: Int) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                }
+                                    // DELETE  onSelectedChanged() if useless
             })
         mIth.attachToRecyclerView(binding.citiesRecyclerView)
     }

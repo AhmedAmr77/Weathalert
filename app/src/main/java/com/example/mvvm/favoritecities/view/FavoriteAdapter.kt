@@ -7,7 +7,8 @@ import com.example.Weathalert.R
 import com.example.Weathalert.databinding.CitiesCellBinding
 import com.example.Weathalert.datalayer.entity.WeatherData
 
-class FavoriteAdapter(var cities: ArrayList<WeatherData>) : RecyclerView.Adapter<FavoriteAdapter.CitiesVH>()  {
+class FavoriteAdapter(var cities: ArrayList<WeatherData>,
+                      val listener: (WeatherData) -> Unit) : RecyclerView.Adapter<FavoriteAdapter.CitiesVH>()  {
 
     lateinit var binding: CitiesCellBinding
 
@@ -18,6 +19,7 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>) : RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: CitiesVH, position: Int) {
         holder.bind(cities[position])
+        holder.itemView.setOnClickListener { listener(cities[position]) }
     }
 
     override fun getItemCount(): Int {
