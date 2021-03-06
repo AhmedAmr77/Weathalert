@@ -1,10 +1,14 @@
 package com.example.Weathalert.favoritecities.view
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,9 +22,11 @@ import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.mvvm.favoritecities.view.FavoriteAdapter
 import com.example.mvvm.favoritecities.viewmodel.FavoriteViewModel
 import com.example.mvvm.utils.Constants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteFragment
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListener
+import kotlinx.coroutines.NonCancellable.cancel
 
 
 class FavoriteActivity : AppCompatActivity() {
@@ -54,7 +60,6 @@ class FavoriteActivity : AppCompatActivity() {
             viewModel.showAutoComplete()
         }
     }
-
 
 
     private fun initUI() {
@@ -118,51 +123,63 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun SwipDeleteRecyclerViewCell() {
+        val background =  ColorDrawable(Color.RED)
+        val icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_delete_24);
         val mIth = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
-                    val fromPos = viewHolder.adapterPosition
-                    val toPos = target.adapterPosition
-                    // move item in `fromPos` to `toPos` in adapter.
-                    return true // true if moved, false otherwise
+                    Log.i("RycVi", "onMove")
+                    return false // true if moved, false otherwise
                 }
 
                 override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-                    // remove from adapter
-                    viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
-                    viewModel.fetchFavCities().observe(this@FavoriteActivity, Observer {
-                        if (it != null) {
-                            citiesList = it
-                            updateUI(it)
+                    //showConfirmationDialog()
+                    MaterialAlertDialogBuilder(this@FavoriteActivity)
+                        .setTitle(resources.getString(R.string.deleteDialogtitle))
+                        .setMessage(resources.getString(R.string.deleteDialogSupportingText))
+                        .setNeutralButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
+//                            citisListAdapter.notifyDataSetChanged()
+                            Log.i("dialog", "Cancel")
                         }
-                    })
+                        .setNegativeButton(resources.getString(R.string.deleteDialogDelete)) { dialog, which ->
+                            // remove from adapter
+                            viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
+                            viewModel.fetchFavCities().observe(this@FavoriteActivity, Observer {
+                                if (it != null) {
+                                    citiesList = it
+                                    updateUI(it)
+                                }
+                            })
+                            Log.i("dialog", "Delete")
+                        }
+                        .setOnDismissListener { citisListAdapter.notifyDataSetChanged()
+                                                Log.i("dialog", "Dismiss Listener") }
+                        .setIcon(R.drawable.ic_baseline_delete_24)
+                        .setCancelable(false)
+                        .show()
                 }
+                override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: ViewHolder, dX: Float, dY: Float,
+                                         actionState: Int, isCurrentlyActive: Boolean) {
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    val itemView = viewHolder.itemView
+                    val backgroundCornerOffset = 20
+                    val iconMargin: Int = (itemView.height - icon!!.intrinsicHeight) / 2
+                    val iconTop: Int = itemView.top + (itemView.height - icon.intrinsicHeight) / 2
+                    val iconBottom: Int = iconTop + icon.intrinsicHeight
+
+                    //if (dX < 0) { // Swiping to the left
+                    val iconLeft: Int = itemView.right - iconMargin - icon.intrinsicWidth
+                    val iconRight: Int = itemView.right - iconMargin
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                    background.setBounds(itemView.right + (dX.toInt()) - backgroundCornerOffset,
+                            itemView.top, itemView.right, itemView.bottom)
+                   // }
+                    background.draw(c)
+                    icon.draw(c)
+                }
+
             })
         mIth.attachToRecyclerView(binding.citiesRecyclerView)
-//        val itemTouchHelperCallback =
-//            object :
-//                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-//                override fun onMove(
-//                    recyclerView: RecyclerView,
-//                    viewHolder: RecyclerView.ViewHolder,
-//                    target: RecyclerView.ViewHolder
-//                ): Boolean {
-//
-//                    return false
-//                }
-//
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//
-//                    viewModel.delete(citisListAdapter.getNoteAt(viewHolder.adapterPosition))
-//                    //Toast.makeText(this, getString(R.string.note_deleted), Toast.LENGTH_SHORT).show()
-//                }
-//
-//            }
-//
-//        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-//        itemTouchHelper.attachToRecyclerView(rvNote)
-
     }
-
 
 }
