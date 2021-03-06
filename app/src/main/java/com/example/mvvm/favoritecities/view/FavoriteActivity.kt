@@ -23,6 +23,7 @@ import com.example.mvvm.favoritecities.view.FavoriteAdapter
 import com.example.mvvm.favoritecities.viewmodel.FavoriteViewModel
 import com.example.mvvm.utils.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteFragment
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListener
@@ -134,14 +135,10 @@ class FavoriteActivity : AppCompatActivity() {
 
                 override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
                     //showConfirmationDialog()
-                    MaterialAlertDialogBuilder(this@FavoriteActivity)
+                    MaterialAlertDialogBuilder(this@FavoriteActivity, R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog_Delete)
                         .setTitle(resources.getString(R.string.deleteDialogtitle))
                         .setMessage(resources.getString(R.string.deleteDialogSupportingText))
-                        .setNeutralButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
-//                            citisListAdapter.notifyDataSetChanged()
-                            Log.i("dialog", "Cancel")
-                        }
-                        .setNegativeButton(resources.getString(R.string.deleteDialogDelete)) { dialog, which ->
+                        .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ dialog, which ->
                             // remove from adapter
                             viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
                             viewModel.fetchFavCities().observe(this@FavoriteActivity, Observer {
@@ -151,6 +148,10 @@ class FavoriteActivity : AppCompatActivity() {
                                 }
                             })
                             Log.i("dialog", "Delete")
+                        }
+                        .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
+
+                            Log.i("dialog", "Cancel")
                         }
                         .setOnDismissListener { citisListAdapter.notifyDataSetChanged()
                                                 Log.i("dialog", "Dismiss Listener") }
