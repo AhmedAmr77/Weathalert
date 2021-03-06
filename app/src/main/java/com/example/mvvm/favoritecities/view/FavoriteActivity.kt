@@ -1,29 +1,43 @@
 package com.example.Weathalert.favoritecities.view
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityFavoriteBinding
 import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.mvvm.favoritecities.view.FavoriteAdapter
+import com.example.mvvm.favoritecities.view.FavoriteCityDetailsActivity
 import com.example.mvvm.favoritecities.viewmodel.FavoriteViewModel
 import com.example.mvvm.utils.Constants
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.dialog.MaterialDialogs
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteFragment
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListener
+import kotlinx.coroutines.NonCancellable.cancel
+
 
 class FavoriteActivity : AppCompatActivity() {
 
     private lateinit var viewModel: FavoriteViewModel
     lateinit var binding: ActivityFavoriteBinding
-    private var citisListAdapter = FavoriteAdapter(arrayListOf())
+    private lateinit var citisListAdapter : FavoriteAdapter
+    private lateinit var citiesList : List<WeatherData>
 
     private var transaction : FragmentTransaction? = null
 
@@ -39,6 +53,8 @@ class FavoriteActivity : AppCompatActivity() {
 
         favCitiesFabListener()
 
+        SwipDeleteRecyclerViewCell()
+
     }
 
     private fun favCitiesFabListener() {            ///WRITE IT IN VIEWMODEL
@@ -49,11 +65,21 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
 
-
     private fun initUI() {
         binding.citiesRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+
+            citisListAdapter = FavoriteAdapter(arrayListOf()){item ->
+                Log.i("favo", "listenerClicked. ${item.lon} & ${item.lat} & ${item.isFavorite} & ${item.current?.temp}")
+//                recyclerViewListener(item)
+                val intent = Intent(this@FavoriteActivity, FavoriteCityDetailsActivity::class.java).apply {
+                    putExtra("LAT", item.lat.toString())
+                    putExtra("LON", item.lon.toString())
+                    Log.i("favo", "putExtrasss")
+                }
+                Log.i("favo", "before start")
+                startActivity(intent)
+            }
             adapter = citisListAdapter
         }
     }
@@ -61,16 +87,20 @@ class FavoriteActivity : AppCompatActivity() {
     private fun observeViewModel(viewModel: FavoriteViewModel) {
 //        viewModel.loadingLiveData.observe(this, { showLoading(it) })
 //        viewModel.errorLiveData.observe(this, { showError(it) })
-//        viewModel.fetchData().observe(this, Observer {
-//            if (it != null) {
-//                updateUI(it)
-//            }
-//        })
+        /*   wakeup
+        viewModel.fetchData().observe(this, Observer {
+            if (it != null) {
+                citiesList = it
+                updateUI(it)
+            }
+        })
+         */
+        viewModel.fetchFavCities().observe(this, Observer {
+            citiesList = it
+            updateUI(it)
+        })
         viewModel.searchContainerLiveData.observe(this, Observer {
             showSearchContainer()
-        })
-        viewModel.fetchFavCities().observe(this, Observer {
-            updateUI(it)
         })
     }
 
@@ -92,7 +122,6 @@ class FavoriteActivity : AppCompatActivity() {
 
                 //add lat&long to DB and refresh RecyclerView
                 viewModel.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
-//                updateUI()
             }
 
             override fun onCancel() {
@@ -107,5 +136,67 @@ class FavoriteActivity : AppCompatActivity() {
         citisListAdapter.updateHours(it)
     }
 
+    private fun SwipDeleteRecyclerViewCell() {
+        val mIth = ItemTouchHelper(
+            object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
+                    Log.i("RycVi", "onMove")
+                    return false // true if moved, false otherwise
+                }
+                override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+                    //showConfirmationDialog()
+                    MaterialAlertDialogBuilder(this@FavoriteActivity, R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog_Delete)
+                        .setTitle(resources.getString(R.string.deleteDialogtitle))
+                        .setMessage(resources.getString(R.string.deleteDialogSupportingText))
+                        .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ dialog, which ->
+                            // remove from adapter
+                            viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
+                            viewModel.fetchFavCities().observe(this@FavoriteActivity, Observer {
+                                if (it != null) {
+                                    citiesList = it
+                                    updateUI(it)
+                                }
+                            })
+                            Log.i("dialog", "Delete")
+                        }
+                        .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
+
+                            Log.i("dialog", "Cancel")
+                        }
+                        .setOnDismissListener { citisListAdapter.notifyDataSetChanged()
+                                                Log.i("dialog", "Dismiss Listener") }
+                        .setIcon(R.drawable.ic_baseline_delete_24)
+                        .setCancelable(false)
+                        .show()
+                }
+                override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: ViewHolder, dX: Float, dY: Float,
+                                         actionState: Int, isCurrentlyActive: Boolean) {
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    val background =  ColorDrawable(Color.RED)
+                    val icon = ContextCompat.getDrawable(this@FavoriteActivity, R.drawable.ic_baseline_delete_24)
+                    val itemView = viewHolder.itemView
+                    val backgroundCornerOffset = 20
+                    val iconMargin: Int = (itemView.height - icon!!.intrinsicHeight) / 2
+                    val iconTop: Int = itemView.top + (itemView.height - icon.intrinsicHeight) / 2
+                    val iconBottom: Int = iconTop + icon.intrinsicHeight
+
+                    //if (dX < 0) { // Swiping to the left
+                    val iconLeft: Int = itemView.right - iconMargin - icon.intrinsicWidth
+                    val iconRight: Int = itemView.right - iconMargin
+                    icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                    background.setBounds(itemView.right + (dX.toInt()) - backgroundCornerOffset,
+                            itemView.top, itemView.right, itemView.bottom)
+                   // }
+                    background.draw(c)
+                    icon.draw(c)
+                }
+
+                override fun onSelectedChanged(viewHolder: ViewHolder?, actionState: Int) {
+                    super.onSelectedChanged(viewHolder, actionState)
+                }
+                                    // DELETE  onSelectedChanged() if useless
+            })
+        mIth.attachToRecyclerView(binding.citiesRecyclerView)
+    }
 
 }

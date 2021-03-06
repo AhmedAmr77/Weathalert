@@ -33,6 +33,9 @@ class WeatherRepository(val application: Application) {
 //            res.message()
 //        }
 //    }
+    fun getCity(lat:String, lon:String): LiveData<WeatherData> {  //from local
+        return localDataSource.getCityData(lat.toDouble(), lon.toDouble())
+    }
 
     fun addFavCity(lat:String, lon:String){
         var res:WeatherData
@@ -50,14 +53,28 @@ class WeatherRepository(val application: Application) {
                 //response ERROR
             }
         }
-
     }
 
     fun getFavCities(): LiveData<List<WeatherData>>{
         return localDataSource.getAllCities()
     }
+    /*       wakeup
+    fun getFavCities(): LiveData<List<WeatherData>>{
+        val response = localDataSource.getAllCities()
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test","exception from retrofit${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+                                                                                                     //What if there is no data (Empty Fav)
+            if(response.value.isNullOrEmpty()){
+                Log.i("test","fav isNullOrEmpty in DB ") //leha lazma??
+            }
+        }
+        return LocalDataSource.getInstance(application).getAllCities()
+    }
+     */
 
-    fun getWeatherData(): LiveData<WeatherData> {
+    fun getWeatherData(): LiveData<WeatherData> { //from Retrofit
         val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
             Constants.LATITUDE,"0").toString()
         val lon = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
@@ -72,7 +89,16 @@ class WeatherRepository(val application: Application) {
                 Log.i("test","success")
             }
         }
-        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())
+        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())  //edit LocalDataSource.getCityData(l,l) ??
+    }
+
+    fun deleteCityData(lat: Double, lon: Double) {
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test","exception from database${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            localDataSource.deleteCityData(lat, lon)
+        }
     }
 }
 /*

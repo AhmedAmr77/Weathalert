@@ -7,4 +7,8 @@
     <string name="home_pressure">PRESSURE</string>
     <string name="home_wind">WIND</string>
     <string name="home_clouds">CLOUDS</string>
+    <string name="deleteDialogtitle">Are you sure you want to delete ?</string>
+    <string name="deleteDialogSupportingText">This city will be deleted immediately. You can\'t undo this action.</string>
+    <string name="deleteDialogCancel">Cancel</string>
+    <string name="deleteDialogDelete">Delete</string>
 </resources>
