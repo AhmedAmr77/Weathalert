@@ -124,8 +124,6 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun SwipDeleteRecyclerViewCell() {
-        val background =  ColorDrawable(Color.RED)
-        val icon = ContextCompat.getDrawable(this, R.drawable.ic_baseline_delete_24);
         val mIth = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
@@ -162,6 +160,8 @@ class FavoriteActivity : AppCompatActivity() {
                 override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: ViewHolder, dX: Float, dY: Float,
                                          actionState: Int, isCurrentlyActive: Boolean) {
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    val background =  ColorDrawable(Color.RED)
+                    val icon = ContextCompat.getDrawable(this@FavoriteActivity, R.drawable.ic_baseline_delete_24)
                     val itemView = viewHolder.itemView
                     val backgroundCornerOffset = 20
                     val iconMargin: Int = (itemView.height - icon!!.intrinsicHeight) / 2
