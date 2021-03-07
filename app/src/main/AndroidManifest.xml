@@ -18,7 +18,7 @@
         <activity android:name=".favoritecities.view.FavoriteActivity" />
         <activity
             android:name=".settings.view.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settingss" />
         <activity android:name=".home.view.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -14,6 +14,23 @@
     <string name="language_settings_TV">Language</string>
     <string name="english_btn_settings" translatable="false">English</string>
     <string name="arabic_btn_settings" translatable="false">العربية</string>
-    <string name="unit_settings_TV">Unit</string>
-    <string name="celsius_btn_settings">C°</string>
+    <string name="tempLabel_settings_TV">Units</string>
+    <string name="celsius_btn_settings">Celsius</string>
+    <string name="fahrenheit_btn_settings">Fahrenheit</string>
+    <string name="windSpeed_settings_TV">Wind Speed</string>
+    <string name="temp_settings_TV">Temperature</string>
+    <string name="mSec_btn_settings">Meter / Sec</string>
+    <string name="miHour_btn_settings">Mile / Hour</string>
+    <string name="cancel_btn_settings">Cancel</string>
+    <string name="save_btn_settings">Save</string>
+    <string name="unitLabel_settings_TV">Units</string>
+    <string name="setting_tempDesc">Temp : Kelvin</string>
+    <string name="setting_windDesc">Wind : meter/sec</string>
+    <string name="metric_btn_settings">Metric</string>
+    <string name="setting_metricTempDesc">Temp : Celsius</string>
+    <string name="standard_btn_settings">Standard</string>
+    <string name="imperial_btn_settings">Imperial</string>
+    <string name="setting_imperialTempDesc">Temp : Fahrenheit</string>
+    <string name="setting_imprialWindDesc">Wind : miles/hour</string>
+    <string name="title_activity_settingss">Settings</string>
 </resources>

@@ -58,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setAppLocale(getSharedPreferences(Constants.SHARED_PREF_SETTINGS_LANGUAGE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE,"en")!!)
+        setAppLocale(getSharedPreferences(Constants.SHARED_PREF_SETTINGS, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_SETTINGS,"en")!!)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

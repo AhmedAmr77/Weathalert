@@ -3,7 +3,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_alarm">Alarm</string>
     <string name="menu_feedback">Feedback</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -16,9 +16,10 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+
     <string name="home_humidity">HUMIDITY</string>
     <string name="home_pressure">PRESSURE</string>
     <string name="home_wind">WIND</string>
@@ -28,8 +29,25 @@
     <string name="deleteDialogCancel">Cancel</string>
     <string name="deleteDialogDelete">Delete</string>
     <string name="language_settings_TV">Language</string>
-    <string name="english_btn_settings">English</string>
-    <string name="arabic_btn_settings">العربية</string>
-    <string name="unit_settings_TV">Temperature</string>
-    <string name="celsius_btn_settings">C°</string>
+    <string name="english_btn_settings" translatable="false">English</string>
+    <string name="arabic_btn_settings" translatable="false">العربية</string>
+    <string name="tempLabel_settings_TV">Temperature</string>
+    <string name="celsius_btn_settings">Celsius</string>
+    <string name="fahrenheit_btn_settings">Fahrenheit</string>
+    <string name="windSpeed_settings_TV">Wind Speed</string>
+    <string name="temp_settings_TV">Temperature</string>
+    <string name="mSec_btn_settings">Meter / Sec</string>
+    <string name="miHour_btn_settings">Mile / Hour</string>
+    <string name="cancel_btn_settings">Cancel</string>
+    <string name="save_btn_settings">Save</string>
+    <string name="unitLabel_settings_TV">Units</string>
+    <string name="setting_tempDesc">Temp : Kelvin</string>
+    <string name="setting_windDesc">Wind : meter/sec</string>
+    <string name="metric_btn_settings">Metric</string>
+    <string name="setting_metricTempDesc">Temp : Celsius</string>
+    <string name="standard_btn_settings">Standard</string>
+    <string name="imperial_btn_settings">Imperial</string>
+    <string name="setting_imperialTempDesc">Temp : Fahrenheit</string>
+    <string name="setting_imprialWindDesc">Wind : miles/hour</string>
+    <string name="title_activity_settingss">Settings</string>
 </resources>

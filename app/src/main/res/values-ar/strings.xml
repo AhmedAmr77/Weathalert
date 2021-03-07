@@ -21,7 +21,24 @@
     <string name="attachment_title">رووت</string>
     <string name="attachment_summary_on">رووت</string>
     <string name="attachment_summary_off">رووت</string>
-    <string name="language_settings_TV">Language</string>
-    <string name="unit_settings_TV">Unit</string>
-    <string name="celsius_btn_settings">C°</string>
+    <string name="language_settings_TV">اللغة</string>
+    <string name="tempLabel_settings_TV">درجة الحرارة</string>
+    <string name="celsius_btn_settings">درجة مئوية</string>
+    <string name="fahrenheit_btn_settings">فهرنهايت</string>
+    <string name="windSpeed_settings_TV">سرعة الرياح</string>
+    <string name="temp_settings_TV">درجة الحرارة</string>
+    <string name="mSec_btn_settings">متر / ثانية</string>
+    <string name="miHour_btn_settings">ميل / ساعة</string>
+    <string name="cancel_btn_settings">إالغاء</string>
+    <string name="save_btn_settings">حفظ</string>
+    <string name="unitLabel_settings_TV">وحدات</string>
+    <string name="setting_tempDesc">درجة حرارة : كيلفين</string>
+    <string name="setting_windDesc">الرياح : متر / ثانية</string>
+    <string name="metric_btn_settings">متر</string>
+    <string name="setting_metricTempDesc">درجة حرارة : سيليزيس</string>
+    <string name="standard_btn_settings">اساسي</string>
+    <string name="imperial_btn_settings">امبراطوري</string>
+    <string name="setting_imperialTempDesc">درجة حرارة : فهرنهايت</string>
+    <string name="setting_imprialWindDesc">الرياح : ميل / ساعة</string>
+    <string name="title_activity_settingss">الإعدادات</string>
 </resources>
