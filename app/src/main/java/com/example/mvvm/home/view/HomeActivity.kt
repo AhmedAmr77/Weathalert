@@ -2,6 +2,7 @@ package com.example.Weathalert.home.view
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -10,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -36,6 +38,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class HomeActivity : AppCompatActivity() {
@@ -55,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setAppLocale(getSharedPreferences(Constants.SHARED_PREF_SETTINGS_LANGUAGE, Context.MODE_PRIVATE).getString(Constants.LANGUAGE,"en")!!)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -64,18 +68,30 @@ class HomeActivity : AppCompatActivity() {
 
         //setupNavigation()
 
-        getLastLoc()
-
         initUI()
-        observeViewModel(viewModel)
-
 
         favCitiesFabListener()
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        getLastLoc()
+        observeViewModel(viewModel)
+    }
 
-//----------------------------------MENU------------------------------------------------------------
+
+//-----------------------------------LOCAL---------------------------------------------------------
+    private fun setAppLocale(localeCode: String){
+        val resources = resources;
+        val dm = resources.getDisplayMetrics()
+        val config = resources.getConfiguration()
+        config.setLocale(Locale(localeCode.toLowerCase()));
+        resources.updateConfiguration(config, dm);
+    }
+
+
+    //----------------------------------MENU------------------------------------------------------------
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu, menu)                 ///USE BINDING
         return true
@@ -94,7 +110,7 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
-//--------------------------------------------------------------------------------------------------
+//-------------------------------------INIT------------------------------------------------------
     private fun initUI() {
         binding.hoursRecyclerView.apply {
             layoutManager =
@@ -120,7 +136,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun updateUI(it: WeatherData) {
-        val cityTime = it.timezone_offset?.plus(it.current?.dt!!)
+//        val cityTime = it.timezone_offset?.plus(it.current?.dt!!)
+        val cityTime = it.current?.dt
         binding.cityTV.text = it.timezone
         binding.descriptionTV.text = it.current?.weather?.get(0)?.description
         binding.dateTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "MM-dd-yyyy") }
@@ -169,7 +186,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-//--------------------------------------------------------------------------------------------------
+//---------------------------------------VIEW-------------------------------------------------------
     private fun showLoading(it: Boolean) {
         if (it) {
             binding.loadingView.visibility = View.VISIBLE
@@ -223,9 +240,9 @@ class HomeActivity : AppCompatActivity() {
     fun requestNewLoc() {
         //Toast.makeText(MainActivity.this, "new REQUst", Toast.LENGTH_SHORT).show();
         val locReq = LocationRequest() //LocationRequest.create()
-        locReq.setNumUpdates(1) //get only one udate then stop.
-        locReq.setInterval(0)
-        locReq.setFastestInterval(0)
+//        locReq.setNumUpdates(1) //get only one udate then stop.
+        locReq.setInterval(1000)
+//        locReq.setFastestInterval(0)
         locReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         flpc = LocationServices.getFusedLocationProviderClient(this)
         flpc.requestLocationUpdates(locReq, locCallBack, Looper.getMainLooper())
@@ -246,7 +263,7 @@ class HomeActivity : AppCompatActivity() {
                 Toast.makeText(this, "1111", Toast.LENGTH_SHORT).show()
                 if (locEnabled()) {
                     Toast.makeText(this, "2222", Toast.LENGTH_SHORT).show()
-                    flpc.getLastLocation()
+ /*                   flpc.getLastLocation()
                         .addOnCompleteListener(OnCompleteListener<Location?> { task ->
                             val loc = task.getResult()
                             if (loc != null) {
@@ -258,7 +275,8 @@ class HomeActivity : AppCompatActivity() {
                             } else {
                                 requestNewLoc()
                             }
-                        })
+                        })*/
+                    requestNewLoc()
                 } else {
                     val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(i)
@@ -290,6 +308,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
     private fun saveCurrentLocationToSharedPref(latitude: String,longitude: String){
+        Log.i("loc", "${latitude} and ${longitude}")
         val sharedPref = getSharedPreferences(Constants.SHARED_PREF_LOCATION, MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putString(Constants.LATITUDE,latitude).apply()

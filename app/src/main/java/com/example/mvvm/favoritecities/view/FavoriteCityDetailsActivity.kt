@@ -57,7 +57,7 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
 
     }
     private fun updateUI(it: WeatherData) {
-        val cityTime = it.timezone_offset?.plus(it.current?.dt!!)
+        val cityTime = it.current?.dt
         binding.cityTV.text = it.timezone
         binding.descriptionTV.text = it.current?.weather?.get(0)?.description
         binding.dateTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "MM-dd-yyyy") }

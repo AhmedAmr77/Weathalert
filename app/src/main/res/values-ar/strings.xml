@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ام في في ام</string>
+    <string name="app_name">منبه الطقس</string>
     <string name="menu_settings">الإعدادات</string>
     <string name="menu_alarm">المنبه</string>
     <string name="menu_feedback">ملاحظات</string>
-    <string name="home_humidity">HUMIDITY</string>
-    <string name="home_pressure">PRESSURE</string>
-    <string name="home_wind">WIND</string>
-    <string name="home_clouds">CLOUDS</string>
-    <string name="deleteDialogtitle">Are you sure you want to delete ?</string>
-    <string name="deleteDialogSupportingText">This city will be deleted immediately. You can\'t undo this action.</string>
-    <string name="deleteDialogCancel">Cancel</string>
-    <string name="deleteDialogDelete">Delete</string>
+    <string name="home_humidity">رطوبة</string>
+    <string name="home_pressure">الضغط</string>
+    <string name="home_wind">ريح</string>
+    <string name="home_clouds">سحاب</string>
+    <string name="deleteDialogtitle">هل أنت متأكد من أنك تريد المسح ؟</string>
+    <string name="deleteDialogSupportingText">هذه المدينة سوف تمسح نهائيئا. ولا يمكن التراجع</string>
+    <string name="deleteDialogCancel">إلغاء</string>
+    <string name="deleteDialogDelete">مسح</string>
     <string name="title_activity_settings">الضبط</string>
     <string name="messages_header">رووت</string>
     <string name="sync_header">رووت</string>
