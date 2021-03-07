@@ -21,4 +21,7 @@
     <string name="attachment_title">رووت</string>
     <string name="attachment_summary_on">رووت</string>
     <string name="attachment_summary_off">رووت</string>
+    <string name="language_settings_TV">Language</string>
+    <string name="unit_settings_TV">Unit</string>
+    <string name="celsius_btn_settings">C°</string>
 </resources>

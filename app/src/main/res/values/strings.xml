@@ -27,4 +27,9 @@
     <string name="deleteDialogSupportingText">This city will be deleted immediately. You can\'t undo this action.</string>
     <string name="deleteDialogCancel">Cancel</string>
     <string name="deleteDialogDelete">Delete</string>
+    <string name="language_settings_TV">Language</string>
+    <string name="english_btn_settings">English</string>
+    <string name="arabic_btn_settings">العربية</string>
+    <string name="unit_settings_TV">Temperature</string>
+    <string name="celsius_btn_settings">C°</string>
 </resources>

@@ -2,4 +2,10 @@
 <resources>
     <color name="home_table_separator">#36F4CE</color>
     <color name="home_table_label">#F7F1F1</color>
+    <color name="rounded_layout_background">#F0EAE9</color>
+    <color name="settings_sperator">#B8B8B8</color>
+    <color name="rounded_layout_stroke">#AAA6A5</color>
+    <color name="settings_main_background">#80D8FF</color>
+    <color name="btn_pressed">#616161</color>
+    <color name="btn_Unpressed">#BDBDBD</color>
 </resources>
