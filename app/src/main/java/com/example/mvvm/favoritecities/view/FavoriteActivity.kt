@@ -57,6 +57,7 @@ class FavoriteActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
                                                                         citisListAdapter.notifyDataSetChanged()  //try 1
+//        Log.i("test", "onStart adptr => ${citisListAdapter.cities} \n listyyy => ${citiesList}")
         observeViewModel(viewModel)
         SwipDeleteRecyclerViewCell()
 
@@ -75,7 +76,7 @@ class FavoriteActivity : AppCompatActivity() {
     private fun favCitiesFabListener() {            ///WRITE IT IN VIEWMODEL
         val fab: View = binding.addFavCityFab
         fab.setOnClickListener {         //view ->
-            viewModel.showAutoComplete()
+            showSearchContainer()
         }
     }
 
@@ -104,9 +105,6 @@ class FavoriteActivity : AppCompatActivity() {
         viewModel.citisListLiveData.observe(this, Observer {
             citiesList = it
             updateUI(it)
-        })
-        viewModel.searchContainerLiveData.observe(this, Observer {
-            showSearchContainer()
         })
     }
 
@@ -164,8 +162,8 @@ class FavoriteActivity : AppCompatActivity() {
         Log.i("test", "Fav save in shPref lat => ${latitude} and lon => ${longitude}")
         val sharedPref = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
         val editor = sharedPref.edit()
-        editor.putString(Constants.LATITUDE,latitude).apply()
-        editor.putString(Constants.LONGITUDE,longitude).apply()
+        editor.putString(Constants.FAV_LATITUDE,latitude).apply()
+        editor.putString(Constants.FAV_LONGITUDE,longitude).apply()
     }
 
     private fun updateUI(it: List<WeatherData>) {
@@ -186,17 +184,23 @@ class FavoriteActivity : AppCompatActivity() {
                         .setMessage(resources.getString(R.string.deleteDialogSupportingText))
                         .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ dialog, which ->
                             // remove from adapter
+                            Log.i("test", "onSwiped PstvBtn Before adptr => ${citisListAdapter.cities} \n listyyy => ${citiesList}")
                             viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
+                            Log.i("test", "onSwiped PstvBtn middle adptr => ${citisListAdapter.cities} \n listyyy => ${citiesList}")
                             viewModel.fetchFavCities()                                                  // remove these two from here
-                            Log.i("test", "Fav swip to dlt recycler view onSwiped() DeleteBtn")
+//                            Log.i("test", "Fav swip to dlt recycler view onSwiped() DeleteBtn")
+                            Log.i("test", "onSwiped PstvBtn after adptr => ${citisListAdapter.cities} \n listyyy => ${citiesList}")
                         }
                         .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
-
-                            Log.i("test", "Fav swip to dlt recycler view onSwiped() CancelBtn")
+//                            Log.i("test", "Fav swip to dlt recycler view onSwiped() CancelBtn")
+                            Log.i("test", "onSwiped NgtvBtn adptr => ${citisListAdapter.cities} \n listyyy => ${citiesList}")
                         }
                         .setOnDismissListener {
                             citisListAdapter.notifyDataSetChanged()                                  // to here    &&    u can remove this
-                            Log.i("test", "Fav swip to dlt recycler view onSwiped() DismissBtn Listener") }  //mlhash lazma
+                            Log.i("test", "onSwiped Dismiss adptr => ${citisListAdapter.cities} \n listyyy => ${citiesList}")
+//                            Log.i("test", "Fav swip to dlt recycler view onSwiped() DismissBtn Listener")
+                        }  //mlhash lazma
+
                         .setIcon(R.drawable.ic_baseline_delete_24)
                         .setCancelable(false)
                         .show()

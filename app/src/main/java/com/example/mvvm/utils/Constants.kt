@@ -5,12 +5,14 @@ object Constants {
     const val BASE_URL = "https://api.openweathermap.org"
     const val APP_ID = "fa90ecd453772250052b7116b8472152"
     const val EXECLUDE = "minutely"
-    const val FIRST_USE = "0"
-    var ENABLE_LOCATION = "0"
+    const val FIRST_USE = "FIRST_USE"
+    var ENABLE_LOCATION = "ENABLE_LOCATION"
 
     const val SHARED_PREF = "MyShared"
-    const val LONGITUDE = "0"
-    const val LATITUDE = "0"
+    const val LONGITUDE = "LONGITUDE"
+    const val LATITUDE = "LATITUDE"
+    const val FAV_LONGITUDE = "FAV_LONGITUDE"
+    const val FAV_LATITUDE = "FAV_LATITUDE"
 
     //    const val SHARED_PREF_SETTINGS = "SETTINGS"
     const val LANGUAGE_SETTINGS = "en"

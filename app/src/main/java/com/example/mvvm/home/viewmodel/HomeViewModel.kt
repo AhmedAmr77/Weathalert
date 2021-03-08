@@ -54,9 +54,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             errorLiveData.postValue("from ExceptionHandlerr : ${th.message.toString()}")
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            Log.i("db", "fetchData start $lat and $lon")
+            Log.i("db", "fetchData init ${shPref.getString(Constants.LATITUDE,"0").toString()}\n${shPref.getString(Constants.LONGITUDE,"0").toString()}")
             val response = weatherRepository.getWeatherData(lat, lon, Constants.APP_ID, units, lang, Constants.EXECLUDE)
             if(response.isSuccessful){
                 weatherRepository.deleteOldCurrent()                    //what if there no current (no isFav=0)
+                Log.i("db", "fetchData success ${response.body()?.lat} and ${response.body()?.lon}")
                 weatherRepository.addCityToLocal(response.body()!!)
                 Log.i("test","Home VM fetchData success")
                 withContext(Dispatchers.Main){
@@ -78,9 +81,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             Log.i("test", "Home VM deleteOldCurrent exception  ${th.message}")
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            Log.i("db", "deleteOldCurrent start ${lat} and ${lon}")
             val response = weatherRepository.getWeatherData(lat, lon, Constants.APP_ID, units, lang, Constants.EXECLUDE)
             if(response.isSuccessful){
                 weatherRepository.deleteOldCurrent()
+                Log.i("db", "deleteOldCurrent success ${response.body()?.lat} and ${response.body()?.lon}")
                 weatherRepository.addCityToLocal(response.body()!!)
                 Log.i("test","Home VM deleteOldCurrent success after delete current & add to local")
                 withContext(Dispatchers.Main){
@@ -97,6 +102,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         shPref = app.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
         lat = shPref.getString(Constants.LATITUDE,"0").toString()
         lon = shPref.getString(Constants.LONGITUDE,"0").toString()
+        Log.i("db", "init: $lat and $lon ")
+        Log.i("db", "${shPref.getString(Constants.LATITUDE,"0").toString()}\n${shPref.getString(Constants.LONGITUDE,"0").toString()}")
         lang = shPref.getString(Constants.LANGUAGE_SETTINGS,"en").toString()
         units = shPref.getString(Constants.UNIT_SETTINGS,"standard").toString()
     }

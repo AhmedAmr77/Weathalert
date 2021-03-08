@@ -291,7 +291,7 @@ class HomeActivity : AppCompatActivity() {
         //Toast.makeText(MainActivity.this, "new REQUst", Toast.LENGTH_SHORT).show();
         val locReq = LocationRequest() //LocationRequest.create()
 //        locReq.setNumUpdates(1) //get only one udate then stop.
-        locReq.setInterval(50000)
+        locReq.setInterval(300000)
 //        locReq.setFastestInterval(0)
         locReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         flpc = LocationServices.getFusedLocationProviderClient(this)
@@ -302,8 +302,10 @@ class HomeActivity : AppCompatActivity() {
         override fun onLocationResult(locationResult: LocationResult) {
             //super.onLocationResult(locationResult);
             val loc = locationResult.lastLocation
+            Log.i("db", "callBack before ${loc.latitude} and ${loc.longitude}")
             val latit = BigDecimal(loc.latitude).setScale(4,RoundingMode.HALF_DOWN)
             val longit = BigDecimal(loc.longitude).setScale(4, RoundingMode.HALF_DOWN)
+            Log.i("db", "callBack after ${latit} and ${longit}")
             saveCurrentLocationToSharedPref(latit.toString(), longit.toString())
         }
     }
@@ -344,8 +346,10 @@ class HomeActivity : AppCompatActivity() {
         Log.i("test", "Home save in shPref lat => ${latitude} and lon => ${longitude}")
         val sharedPref = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
         val editor = sharedPref.edit()
+        Log.i("db", "save before $latitude and $longitude")
         editor.putString(Constants.LATITUDE,latitude).apply()
         editor.putString(Constants.LONGITUDE,longitude).apply()
+        Log.i("db", "save after $latitude and $longitude")
         viewModel.deleteOldCurrent()
     }
 
