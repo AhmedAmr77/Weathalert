@@ -35,26 +35,61 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(FavoriteCityDetailsViewModel::class.java)
 
         initUI()
-        Log.i("favo", "welcomw")
+        Log.i("test", "welcome FavDetails")
         // Get the Intent that started this activity and extract the string
         val lat = intent.getStringExtra("LAT")
         val lon = intent.getStringExtra("LON")
-        Log.i("favo", "teteetettee")
-        //var city : WeatherData
-        if (lat != null) {
-            Log.i("favo", lat)
-        }
-        if (lon != null) {
-            Log.i("favo", lon)
-        }
-        if (lat != null && lon != null) {
-            viewModel.getCity(lat, lon).observe(this, Observer {
-                if (it != null) {
-                    updateUI(it)
-                }
-            })
+
+        if (lat != null && lon != null) {   //  8-3
+            Log.i("test", "welcome FavDetails lat $lat")
+            Log.i("test", "welcome FavDetails lon $lon")
+            viewModel.getCity(lat, lon)
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        observeViewModel(viewModel)
+    }
+
+    private fun initUI() {
+        binding.hoursRecyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            adapter = hoursListAdapter
+        }
+        binding.daysRecyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+            adapter = daysListAdapter
+        }
+    }
+
+    private fun observeViewModel(viewModel: FavoriteCityDetailsViewModel) {
+        viewModel.loadingLiveData.observe(this, { showLoading(it) })
+        viewModel.errorLiveData.observe(this, { showError(it) })
+        viewModel.cityLiveData.observe(this, { updateUI(it) })
+    }
+
+    private fun showLoading(it: Boolean) {
+        if (it) {
+            binding.loadingView.visibility = View.VISIBLE
+        } else {
+            binding.loadingView.visibility = View.GONE
+        }
+    }
+
+    private fun showError(it: String) {
+        if (!it.isNullOrEmpty()) {
+            binding.listError.text = it
+            binding.listError.visibility = View.VISIBLE
+            binding.linearLayoutContainer.visibility = View.GONE
+            binding.daysRecyclerView.visibility = View.GONE
+            binding.hoursRecyclerView.visibility = View.GONE
+        } else {
+            binding.listError.visibility = View.GONE
+        }
     }
     private fun updateUI(it: WeatherData) {
         val cityTime = it.current?.dt
@@ -71,7 +106,7 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
 //                                            "test2 => $test2", Toast.LENGTH_LONG).show()
 
         binding.hourTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "HH:mm") }
-        binding.tempTV.text = (it.current?.temp?.minus(273.15))?.toInt().toString()
+        binding.tempTV.text = it.current?.temp?.toInt().toString().plus("°")
         binding.humidityValTV.text = it.current?.humidity.toString().plus(" %")
         binding.pressureValTV.text = it.current?.pressure.toString()
         binding.windValTVa.text = it.current?.wind_speed.toString().plus(" m/s")
@@ -79,19 +114,6 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
         hoursListAdapter.updateHours(it.hourly as List<Hourly>)
         daysListAdapter.updateDays(it.daily as List<Daily>)
         binding.loadingView.visibility = View.GONE
-    }
-
-    private fun initUI() {
-        binding.hoursRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-            adapter = hoursListAdapter
-        }
-        binding.daysRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-            adapter = daysListAdapter
-        }
     }
 
     private fun convertLongToDateString(systemTime: Int, pattern: String): String {

@@ -32,12 +32,6 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>,
         notifyDataSetChanged()
     }
 
-//    fun removeItem(position: Int) {
-//        cities[position].lat.toString()
-//        cities.removeAt(position)
-//        notifyDataSetChanged()
-//    }
-
     class CitiesVH (val binding: CitiesCellBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(city: WeatherData) {
             binding.cityCellName.text = city.timezone

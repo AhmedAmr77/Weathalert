@@ -50,4 +50,5 @@
     <string name="setting_imperialTempDesc">Temp : Fahrenheit</string>
     <string name="setting_imprialWindDesc">Wind : miles/hour</string>
     <string name="title_activity_settingss">Settings</string>
+    <string name="enable_permission_btn">Enable</string>
 </resources>

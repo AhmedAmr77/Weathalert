@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -32,6 +33,7 @@ import com.example.Weathalert.settings.view.SettingsActivity
 import com.example.mvvm.utils.Constants
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
+import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.Instant
@@ -48,6 +50,8 @@ class HomeActivity : AppCompatActivity() {
     private var hoursListAdapter = HoursAdapter(arrayListOf())
     private var daysListAdapter = DaysAdapter(arrayListOf())
 
+    lateinit var sharedPreferences: SharedPreferences
+
 
     lateinit var flpc: FusedLocationProviderClient
     var permissions = arrayOf(
@@ -58,11 +62,13 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setAppLocale(getSharedPreferences(Constants.SHARED_PREF_SETTINGS, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_SETTINGS,"en")!!)
+        setAppLocale(getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_SETTINGS,"en")!!)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
 
         flpc = LocationServices.getFusedLocationProviderClient(getApplication() )
 
@@ -74,10 +80,35 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        getData()
+        observeViewModel(viewModel)   // should call it in  onCreate() or onStart()
+    }
+
+    private fun getData() {
+        Toast.makeText(this, "${Constants.LANGUAGE_SETTINGS} => ${sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "def")}", Toast.LENGTH_LONG).show()
+//        Log.i("test")
+        if (sharedPreferences.getString(Constants.FIRST_USE.toString(), "0") == "0"){
+            getLastLoc()
+            viewModel.fetchData()
+            changeFirstUseStatus()
+        } else {
+            viewModel.fetchData()
+            getLastLoc()
+        }
+    }
+
+    private fun changeFirstUseStatus() {
+        val editor = sharedPreferences.edit()
+        editor.putString(Constants.FIRST_USE, "1").apply()
+    }
+
+
     override fun onResume() {
         super.onResume()
-        getLastLoc()
-        observeViewModel(viewModel)
+//        getLastLoc()
+//        observeViewModel(viewModel)
     }
 
 
@@ -89,7 +120,6 @@ class HomeActivity : AppCompatActivity() {
         config.setLocale(Locale(localeCode.toLowerCase()));
         resources.updateConfiguration(config, dm);
     }
-
 
     //----------------------------------MENU------------------------------------------------------------
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -106,7 +136,6 @@ class HomeActivity : AppCompatActivity() {
                 )
             )
         }
-
         return true
     }
 
@@ -127,12 +156,7 @@ class HomeActivity : AppCompatActivity() {
     private fun observeViewModel(viewModel: HomeViewModel) {
         viewModel.loadingLiveData.observe(this, { showLoading(it) })
         viewModel.errorLiveData.observe(this, { showError(it) })
-        viewModel.fetchData().observe(this, Observer {
-            if (it != null) {
-                updateUI(it)
-            }
-        })
-//        viewModel.weatherLiveData.observe(this, { updateUI(it) })
+        viewModel.cityLiveData.observe(this, { updateUI(it) })
     }
 
     private fun updateUI(it: WeatherData) {
@@ -151,7 +175,7 @@ class HomeActivity : AppCompatActivity() {
 //                                            "test2 => $test2", Toast.LENGTH_LONG).show()
 
         binding.hourTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "HH:mm") }
-        binding.tempTV.text = (it.current?.temp?.minus(273.15))?.toInt().toString().plus("°")
+        binding.tempTV.text = it.current?.temp?.toInt().toString().plus("°")
         binding.humidityValTV.text = it.current?.humidity.toString().plus(" %")
         binding.pressureValTV.text = it.current?.pressure.toString()
         binding.windValTVa.text = it.current?.wind_speed.toString().plus(" m/s")
@@ -200,9 +224,19 @@ class HomeActivity : AppCompatActivity() {
             binding.listError.text = it
             binding.listError.visibility = View.VISIBLE
             binding.linearLayoutContainer.visibility = View.GONE
+            binding.daysRecyclerView.visibility = View.GONE
+            binding.hoursRecyclerView.visibility = View.GONE
         } else {
             binding.listError.visibility = View.GONE
         }
+    }
+
+    private fun hideError() {
+        binding.listError.visibility = View.GONE
+        binding.permissionBtn.visibility = View.GONE
+        binding.linearLayoutContainer.visibility = View.VISIBLE
+        binding.daysRecyclerView.visibility = View.VISIBLE
+        binding.hoursRecyclerView.visibility = View.VISIBLE
     }
 
     private fun favCitiesFabListener() {            ///WRITE IT IN VIEWMODEL
@@ -216,39 +250,55 @@ class HomeActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == permissionID) {  //maybe there are many permissions returned. Here we check for the location id that i defined before
-            if (permissions.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (permissions.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLastLoc()
+                hideError()
+            } else {
+                showError("Please, allow the location permission")
+                showEnableBtn(0)
+            }
+        }
+    }
+
+    private fun showEnableBtn(n: Int) {
+        binding.permissionBtn.visibility = View.VISIBLE
+        binding.permissionBtn.setOnClickListener {
+            if (n == 0){
+                requestPremession()
+            } else {
+                enableLocation()
             }
         }
     }
 
     private fun requestPremession() {                           //dialog for request permissions
-    ActivityCompat.requestPermissions(this, permissions, permissionID)
-} // to know if user accept permission or not there is a callback method thats called automatically when user click on permissions button to tell what user answer.
+        ActivityCompat.requestPermissions(this, permissions, permissionID)
+    } // to know if user accept permission or not there is a callback method thats called automatically when user click on permissions button to tell what user answer.
     private fun checkForPermission(): Boolean {
-        return if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            false
-        } else
-            true
+        return !(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
     }
     private fun locEnabled(): Boolean {
         val locMngr = getSystemService(LOCATION_SERVICE) as LocationManager
         return locMngr.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+    private fun enableLocation() {
+        val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(i)
     }
     @SuppressLint("MissingPermission")
     fun requestNewLoc() {
         //Toast.makeText(MainActivity.this, "new REQUst", Toast.LENGTH_SHORT).show();
         val locReq = LocationRequest() //LocationRequest.create()
 //        locReq.setNumUpdates(1) //get only one udate then stop.
-        locReq.setInterval(1000)
+        locReq.setInterval(50000)
 //        locReq.setFastestInterval(0)
         locReq.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         flpc = LocationServices.getFusedLocationProviderClient(this)
         flpc.requestLocationUpdates(locReq, locCallBack, Looper.getMainLooper())
         //Toast.makeText(MainActivity.this, "after REQUst", Toast.LENGTH_SHORT).show();
     }
-    private var locCallBack: LocationCallback = object : LocationCallback() {
+    private var locCallBack: LocationCallback = object : LocationCallback() {  // like listner
         override fun onLocationResult(locationResult: LocationResult) {
             //super.onLocationResult(locationResult);
             val loc = locationResult.lastLocation
@@ -256,30 +306,23 @@ class HomeActivity : AppCompatActivity() {
             val longit = BigDecimal(loc.longitude).setScale(4, RoundingMode.HALF_DOWN)
             saveCurrentLocationToSharedPref(latit.toString(), longit.toString())
         }
-    } // like listner
+    }
     private fun getLastLoc() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkForPermission()) {
                 Toast.makeText(this, "1111", Toast.LENGTH_SHORT).show()
                 if (locEnabled()) {
                     Toast.makeText(this, "2222", Toast.LENGTH_SHORT).show()
- /*                   flpc.getLastLocation()
-                        .addOnCompleteListener(OnCompleteListener<Location?> { task ->
-                            val loc = task.getResult()
-                            if (loc != null) {
-                                Toast.makeText(
-                                    this,
-                                    loc.latitude.toString() + "\n" + loc.longitude.toString() + "",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                requestNewLoc()
-                            }
-                        })*/
                     requestNewLoc()
                 } else {
-                    val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                    startActivity(i)
+                    Toast.makeText(this, "Please, Enable the Location", Toast.LENGTH_LONG).show()
+                    if(Constants.ENABLE_LOCATION == "0") {
+                        Constants.ENABLE_LOCATION = "1"
+                        enableLocation()
+                    } else {
+                        showError("Please, Enable the location")
+                        showEnableBtn(1)
+                    }
                 }
             } else {
                 Toast.makeText(this, "3333", Toast.LENGTH_SHORT).show()
@@ -287,32 +330,23 @@ class HomeActivity : AppCompatActivity() {
             }
         } else {
             if (locEnabled()) {
-                flpc.getLastLocation().addOnCompleteListener(OnCompleteListener<Location?> { task ->
+                flpc.lastLocation.addOnCompleteListener(OnCompleteListener<Location?> { task ->
                     val loc = task.result
                     requestNewLoc()
-                    /*
-                                if (loc != null) {
-                                    requestNewLoc();
-                                    longit = loc.getLongitude()+"";
-                                    latit = loc.getLatitude()+"";
-                                    Toast.makeText(MainActivity.this, loc.getLatitude()+"\n"+loc.getLongitude(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    //Toast.makeText(MainActivity.this, "new LOCAAAAAA", Toast.LENGTH_SHORT).show();
-                                    requestNewLoc();
-                                }*/
                 })
             } else {
-                val i = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(i)
+                enableLocation()
             }
         }
     }
+
     private fun saveCurrentLocationToSharedPref(latitude: String,longitude: String){
-        Log.i("loc", "${latitude} and ${longitude}")
-        val sharedPref = getSharedPreferences(Constants.SHARED_PREF_LOCATION, MODE_PRIVATE)
+        Log.i("test", "Home save in shPref lat => ${latitude} and lon => ${longitude}")
+        val sharedPref = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
         val editor = sharedPref.edit()
         editor.putString(Constants.LATITUDE,latitude).apply()
         editor.putString(Constants.LONGITUDE,longitude).apply()
+        viewModel.deleteOldCurrent()
     }
 
 //----------------------try to apply mvvm on places and permissions---------------------------------

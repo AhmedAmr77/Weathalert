@@ -11,22 +11,24 @@ interface WeatherDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(weather: WeatherData?)
 
-    @Update         //DLT if not needed
-    suspend fun update(weather: WeatherData)
-
     @Query("SELECT * FROM WeatherData WHERE lat = :lat and lon = :lon")
-    fun getCityData(lat: Double, lon: Double): LiveData<WeatherData>  //no need suspend cause => Room already uses a background thread for that specific @Query which returns LiveData
+    suspend fun getCityData(lat: Double, lon: Double): WeatherData  //no need suspend cause => Room already uses a background thread for that specific @Query which returns LiveData
 
     @Query("SELECT * from WeatherData WHERE isFavorite = 1")
-    fun getAllCities(): LiveData<List<WeatherData>>
+    suspend fun getAllCities(): List<WeatherData>
 
     @Query("DELETE FROM WeatherData WHERE lat = :lat and lon = :lon")
     suspend fun deleteCityData(lat: Double, lon: Double)
+
+    @Query("DELETE FROM WeatherData WHERE isFavorite = 0")
+    suspend fun deleteOldCurrent()
 
     @Query("DELETE FROM WeatherData")
     suspend fun deleteAll()
 }
 /*
+//    @Update         //DLT if not needed
+//    suspend fun update(weather: WeatherData)
 @Dao
 interface SleepDatabaseDao {
 

@@ -15,14 +15,37 @@ import retrofit2.Response
 
 class WeatherRepository(val application: Application) {
 
-//    lateinit var weatherDao: WeatherDao
-//    lateinit var cityData: LiveData<WeatherData>
-    val remoteDataSource = RemoteDataSource()
-    val localDataSource = LocalDataSource.getInstance(application)
+    private val remoteDataSource = RemoteDataSource()
+    private val localDataSource = LocalDataSource.getInstance(application)
 
-//    fun addCityToLocal(city: WeatherData){
-//        localDataSource.insert(city)
-//    }
+
+
+    suspend fun getWeatherData(lat: String, lon: String, appid: String, units: String, lang: String, execlude: String): Response<WeatherData> { //from Retrofit
+        return remoteDataSource.getWeatherData(lat, lon, appid, units, lang, execlude)
+    }
+
+    suspend fun deleteOldCurrent(){
+        return localDataSource.deleteOldCurrent()
+    }
+
+    suspend fun getCity(lat:String, lon:String): WeatherData {  //from local
+        return localDataSource.getCityData(lat.toDouble(), lon.toDouble())
+    }
+
+    suspend fun getFavCities(): List<WeatherData>{
+        return localDataSource.getAllCities()
+    }
+
+    suspend fun addCityToLocal(city: WeatherData){
+        localDataSource.insert(city)
+    }
+
+    suspend fun deleteCityData(lat: Double, lon: Double) {
+        localDataSource.deleteCityData(lat, lon)
+    }
+
+
+
 
 //    suspend fun getAndAdd(lat: String, lon: String): String{
 //        val res = getWeatherData(lat, lon)
@@ -33,31 +56,33 @@ class WeatherRepository(val application: Application) {
 //            res.message()
 //        }
 //    }
-    fun getCity(lat:String, lon:String): LiveData<WeatherData> {  //from local
-        return localDataSource.getCityData(lat.toDouble(), lon.toDouble())
-    }
 
-    fun addFavCity(lat:String, lon:String){
-        var res:WeatherData
-        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
-            Log.i("test","exception from retrofit${th.message}")
-        }
-        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
-            val response = remoteDataSource.getWeatherData (lat, lon)
-            if(response.isSuccessful){
-                val res = response.body()
-                res?.isFavorite = true
-                localDataSource.insert(res)
-                Log.i("test","success")
-            } else {
-                //response ERROR
-            }
-        }
-    }
 
-    fun getFavCities(): LiveData<List<WeatherData>>{
-        return localDataSource.getAllCities()
-    }
+
+    //getWeatherData(Constants.LATITUDE, Constants.LONGITUDE, Constants.APP_ID,
+    //                                       Constants.UNIT_SETTINGS, Constants.LANGUAGE_SETTINGS, Constants.EXECLUDE)
+
+
+
+//    fun addFavCity(lat:String, lon:String){    //   8-3
+//        var res:WeatherData
+//        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+//            Log.i("test","exception from retrofit${th.message}")
+//        }
+//        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+//            val response = remoteDataSource.getWeatherData (lat, lon, Constants.APP_ID, )
+//            if(response.isSuccessful){
+//                val res = response.body()
+//                res?.isFavorite = true
+//                localDataSource.insert(res)
+//                Log.i("test","success")
+//            } else {
+//                //response ERROR
+//            }
+//        }
+//    }
+
+
     /*       wakeup
     fun getFavCities(): LiveData<List<WeatherData>>{
         val response = localDataSource.getAllCities()
@@ -74,32 +99,25 @@ class WeatherRepository(val application: Application) {
     }
      */
 
-    fun getWeatherData(): LiveData<WeatherData> { //from Retrofit
-        val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
-            Constants.LATITUDE,"0").toString()
-        val lon = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
-            Constants.LONGITUDE,"0").toString()
-        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
-            Log.i("test","exception from retrofit${th.message}")
-        }
-        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
-            val response = remoteDataSource.getWeatherData (lat, lon)
-            if(response.isSuccessful){
-                localDataSource.insert(response.body()!!)
-                Log.i("test","success")
-            }
-        }
-        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())  //edit LocalDataSource.getCityData(l,l) ??
-    }
 
-    fun deleteCityData(lat: Double, lon: Double) {
-        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
-            Log.i("test","exception from database${th.message}")
-        }
-        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
-            localDataSource.deleteCityData(lat, lon)
-        }
-    }
+
+    //        val lat = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
+//            Constants.LATITUDE,"0").toString()
+//        val lon = application.getSharedPreferences(Constants.SHARED_PREF_LOCATION, Context.MODE_PRIVATE).getString(
+//            Constants.LONGITUDE,"0").toString()
+//        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+//            Log.i("test","exception from retrofit${th.message}")
+//        }
+//        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+//            val response = remoteDataSource.getWeatherData (lat, lon)
+//            if(response.isSuccessful){
+//                localDataSource.insert(response.body()!!)
+//                Log.i("test","success")
+//            }
+//        }
+//        return LocalDataSource.getInstance(application).getCityData(lat.toDouble(), lon.toDouble())  //edit LocalDataSource.getCityData(l,l) ??
+
+
 }
 /*
 fun loadCurrentData(): LiveData<WeatherResponse> {

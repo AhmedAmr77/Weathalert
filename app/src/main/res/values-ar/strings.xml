@@ -41,4 +41,5 @@
     <string name="setting_imperialTempDesc">درجة حرارة : فهرنهايت</string>
     <string name="setting_imprialWindDesc">الرياح : ميل / ساعة</string>
     <string name="title_activity_settingss">الإعدادات</string>
+    <string name="enable_permission_btn">Enable</string>
 </resources>

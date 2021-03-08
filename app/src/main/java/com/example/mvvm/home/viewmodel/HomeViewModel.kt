@@ -4,7 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -21,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.Weathalert.datalayer.WeatherRepository
 import com.example.Weathalert.datalayer.entity.WeatherData
 import com.example.Weathalert.home.view.HomeActivity
+import com.example.mvvm.utils.Constants
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.coroutines.*
@@ -29,30 +32,77 @@ import kotlin.math.log
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
-//    val weatherLiveData = MutableLiveData<WeatherData>()
+    val cityLiveData = MutableLiveData<WeatherData>()
     val loadingLiveData = MutableLiveData<Boolean>()
     val errorLiveData = MutableLiveData<String>()
     //val showDialog = MutableLiveData<Unit>()
 
     private val weatherRepository = WeatherRepository(getApplication())
 
-//    private val lat = 61.9060
-//    private val lon = 92.4456
+    lateinit var shPref: SharedPreferences
+    lateinit var lat: String
+    lateinit var lon: String
+    lateinit var lang: String
+    lateinit var units: String
 
 
-    fun fetchData(): LiveData<WeatherData> {
-        loadingLiveData.postValue(false)
-        return weatherRepository.getWeatherData()
-//        val res = weatherRepository.getWeatherData(lat, lon)
-//        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
-////            loadingLiveData.postValue(false)
-////            errorLiveData.postValue("from ExceptionHandlerr : ${th.message.toString()}")
-//        }
-//        CoroutineScope(Dispatchers.Main + exceptionHandlerException).launch {
-//            loadingLiveData.postValue(false)
-//            weatherLiveData.postValue(res)
-//        }
+    fun fetchData() {
+        initVar(getApplication())
+        loadingLiveData.postValue(true)
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            loadingLiveData.postValue(false)
+            errorLiveData.postValue("from ExceptionHandlerr : ${th.message.toString()}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            val response = weatherRepository.getWeatherData(lat, lon, Constants.APP_ID, units, lang, Constants.EXECLUDE)
+            if(response.isSuccessful){
+                weatherRepository.deleteOldCurrent()                    //what if there no current (no isFav=0)
+                weatherRepository.addCityToLocal(response.body()!!)
+                Log.i("test","Home VM fetchData success")
+                withContext(Dispatchers.Main){
+                    loadingLiveData.postValue(false)
+                    cityLiveData.postValue(response.body())
+                    Log.i("test","Home VM fetchData success main scope livedata")
+                }
+            } else {
+                withContext(Dispatchers.Main){
+                    errorLiveData.postValue("from Retrofit not successful : ${response.message()}")
+                }
+            }
+        }
     }
+
+    fun deleteOldCurrent() {
+        initVar(getApplication())
+        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+            Log.i("test", "Home VM deleteOldCurrent exception  ${th.message}")
+        }
+        CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
+            val response = weatherRepository.getWeatherData(lat, lon, Constants.APP_ID, units, lang, Constants.EXECLUDE)
+            if(response.isSuccessful){
+                weatherRepository.deleteOldCurrent()
+                weatherRepository.addCityToLocal(response.body()!!)
+                Log.i("test","Home VM deleteOldCurrent success after delete current & add to local")
+                withContext(Dispatchers.Main){
+                    cityLiveData.postValue(response.body())
+                    Log.i("test","Home VM deleteOldCurrent success main scope livedata")
+                }
+            } else {
+                // what if not success..
+            }
+        }
+    }
+
+    private fun initVar(app: Application) {
+        shPref = app.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+        lat = shPref.getString(Constants.LATITUDE,"0").toString()
+        lon = shPref.getString(Constants.LONGITUDE,"0").toString()
+        lang = shPref.getString(Constants.LANGUAGE_SETTINGS,"en").toString()
+        units = shPref.getString(Constants.UNIT_SETTINGS,"standard").toString()
+    }
+
+}
+
 /*
     private fun checkForPermission(): Boolean {
         return if (ActivityCompat.checkSelfPermission(getApplication(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -133,4 +183,3 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 */
-}

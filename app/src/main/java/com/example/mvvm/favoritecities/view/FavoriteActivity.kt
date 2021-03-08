@@ -49,12 +49,27 @@ class FavoriteActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(FavoriteViewModel::class.java)
 
         initUI()
-        observeViewModel(viewModel)
 
         favCitiesFabListener()
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+                                                                        citisListAdapter.notifyDataSetChanged()  //try 1
+        observeViewModel(viewModel)
         SwipDeleteRecyclerViewCell()
 
+        //                          GET FAV LIST
+        //                                   viewModel.fetchFavCities()  // not needed cause fetch in refreshFavCitiesList()
+        //                         REFRESH DATA
+        viewModel.refreshFavCitiesList()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+                                                                        //citisListAdapter.notifyDataSetChanged() //try 2
     }
 
     private fun favCitiesFabListener() {            ///WRITE IT IN VIEWMODEL
@@ -68,16 +83,15 @@ class FavoriteActivity : AppCompatActivity() {
     private fun initUI() {
         binding.citiesRecyclerView.apply {
             layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-
             citisListAdapter = FavoriteAdapter(arrayListOf()){item ->
-                Log.i("favo", "listenerClicked. ${item.lon} & ${item.lat} & ${item.isFavorite} & ${item.current?.temp}")
+                Log.i("test", "Fav cities RecyclerView Listener ${item.lon} & ${item.lat} & ${item.isFavorite} & ${item.current?.temp}")
 //                recyclerViewListener(item)
                 val intent = Intent(this@FavoriteActivity, FavoriteCityDetailsActivity::class.java).apply {
                     putExtra("LAT", item.lat.toString())
                     putExtra("LON", item.lon.toString())
-                    Log.i("favo", "putExtrasss")
+                    Log.i("test", "Fav putExtrasss intent")
                 }
-                Log.i("favo", "before start")
+                Log.i("test", "Fav before start new FavDet Activity")
                 startActivity(intent)
             }
             adapter = citisListAdapter
@@ -85,23 +99,33 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel(viewModel: FavoriteViewModel) {
-//        viewModel.loadingLiveData.observe(this, { showLoading(it) })
-//        viewModel.errorLiveData.observe(this, { showError(it) })
-        /*   wakeup
-        viewModel.fetchData().observe(this, Observer {
-            if (it != null) {
-                citiesList = it
-                updateUI(it)
-            }
-        })
-         */
-        viewModel.fetchFavCities().observe(this, Observer {
+        viewModel.loadingLiveData.observe(this, { showLoading(it) })
+        viewModel.errorLiveData.observe(this, { showError(it) })
+        viewModel.citisListLiveData.observe(this, Observer {
             citiesList = it
             updateUI(it)
         })
         viewModel.searchContainerLiveData.observe(this, Observer {
             showSearchContainer()
         })
+    }
+
+    private fun showLoading(it: Boolean) {
+        if (it) {
+            binding.loadingView.visibility = View.VISIBLE
+        } else {
+            binding.loadingView.visibility = View.GONE
+        }
+    }
+
+    private fun showError(it: String) {
+        if (!it.isNullOrEmpty()) {
+            binding.listError.text = it
+            binding.listError.visibility = View.VISIBLE
+//            binding.citiesRecyclerView.visibility = View.GONE
+        } else {
+            binding.listError.visibility = View.GONE
+        }
     }
 
     private fun showSearchContainer() {
@@ -121,15 +145,27 @@ class FavoriteActivity : AppCompatActivity() {
                 binding.searchFragmentContainer.visibility= View.GONE
 
                 //add lat&long to DB and refresh RecyclerView
-                viewModel.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
+                //viewModel.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
+
+                //add to shared then call fetchData()
+                saveCurrentLocationToSharedPref(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
+                viewModel.fetchData()
             }
 
             override fun onCancel() {
-                Log.i("places","cancel")
+                Log.i("test","Fav search canceled")
                 supportFragmentManager?.beginTransaction()?.remove(autocompleteFragment)?.commit()
                 binding.searchFragmentContainer.visibility= View.GONE
             }
         })
+    }
+
+    private fun saveCurrentLocationToSharedPref(latitude: String,longitude: String){
+        Log.i("test", "Fav save in shPref lat => ${latitude} and lon => ${longitude}")
+        val sharedPref = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putString(Constants.LATITUDE,latitude).apply()
+        editor.putString(Constants.LONGITUDE,longitude).apply()
     }
 
     private fun updateUI(it: List<WeatherData>) {
@@ -140,7 +176,7 @@ class FavoriteActivity : AppCompatActivity() {
         val mIth = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
-                    Log.i("RycVi", "onMove")
+                    Log.i("test", "Fav swip to dlt recycler view onMove()")
                     return false // true if moved, false otherwise
                 }
                 override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
@@ -151,20 +187,16 @@ class FavoriteActivity : AppCompatActivity() {
                         .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ dialog, which ->
                             // remove from adapter
                             viewModel.deleteCity(citiesList[viewHolder.adapterPosition])
-                            viewModel.fetchFavCities().observe(this@FavoriteActivity, Observer {
-                                if (it != null) {
-                                    citiesList = it
-                                    updateUI(it)
-                                }
-                            })
-                            Log.i("dialog", "Delete")
+                            viewModel.fetchFavCities()                                                  // remove these two from here
+                            Log.i("test", "Fav swip to dlt recycler view onSwiped() DeleteBtn")
                         }
                         .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
 
-                            Log.i("dialog", "Cancel")
+                            Log.i("test", "Fav swip to dlt recycler view onSwiped() CancelBtn")
                         }
-                        .setOnDismissListener { citisListAdapter.notifyDataSetChanged()
-                                                Log.i("dialog", "Dismiss Listener") }
+                        .setOnDismissListener {
+                            citisListAdapter.notifyDataSetChanged()                                  // to here    &&    u can remove this
+                            Log.i("test", "Fav swip to dlt recycler view onSwiped() DismissBtn Listener") }  //mlhash lazma
                         .setIcon(R.drawable.ic_baseline_delete_24)
                         .setCancelable(false)
                         .show()
