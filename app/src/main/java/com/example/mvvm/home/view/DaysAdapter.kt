@@ -1,5 +1,7 @@
 package com.example.Weathalert.home.view
 
+import android.content.Context
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,7 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysVH {
         binding = DaysCellBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DaysVH(binding)
+        return DaysVH(binding, parent.context)
     }
 
     override fun onBindViewHolder(holder: DaysVH, position: Int) {
@@ -38,16 +40,17 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
 
 
 
-    class DaysVH(val binding: DaysCellBinding) : RecyclerView.ViewHolder(binding.root) {
+    class DaysVH(val binding: DaysCellBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(days: Daily) {
-            binding.daysCellIcon.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
-            binding.daysCellDay.text = (days.dt?.let { convert(it.toLong()) })?.get(2)?.subSequence(0,3).toString()
-            binding.daysCellDate.text = (days.dt?.let { convert(it.toLong()) })?.get(0)?.subSequence(0,3).toString().plus(" ${(days.dt?.let {
-                convert(it.toLong())
-            })?.get(1) ?: "NULL"}")
-            binding.daysCellTempGreat.text = (days.temp?.max)?.toInt().toString().plus("°")
-            binding.daysCellTempSmall.text = (days.temp?.min)?.toInt().toString().plus("°")
+       //     binding.daysCellIcon.setImageResource(R.drawable.ic_baseline_cloud_24)  //(hours.weather[0].id)
+            binding.daysDayTVVal.text = (days.dt?.let { convert(it.toLong()) })?.get(2)
+            binding.daysTempTVVal.text = (days.temp?.max)?.toInt().toString().plus("°  |  ${days.temp?.min?.toInt().toString()}°")
+            binding.daysDescTVVal.text = days.weather?.get(0)?.main
+            binding.daysHumidityTVVal.text = (days.humidity)?.toString().plus(" %")
+            binding.daysCloudsTVVal.text = (days.clouds)?.toString().plus(" %")
+            binding.daysPressureTVVal.text = (days.pressure)?.toString().plus(" ${ context.resources.getString(R.string.hPa)}")
+            binding.daysWindTVVal.text = (days.wind_speed)?.toString().plus(" ${ context.resources.getString(R.string.met_per_sec)}")
         }
 
         /*  GOOGLE time converter --- TRY it

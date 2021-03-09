@@ -10,6 +10,7 @@ import com.example.Weathalert.datalayer.entity.Hourly
 import java.io.Serializable
 import java.time.Instant
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAdapter.HoursVH>() {
 
@@ -37,7 +38,7 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
     class HoursVH(val binding: HoursCellBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(hours: Hourly) {
             binding.hoursCellHour.text = hours.dt?.let { convert(it.toLong()).toString() }
-            binding.hoursCellIcon.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
+      //      binding.hoursCellIcon?.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
             binding.hoursCellTemp.text = (hours.temp)?.toInt().toString().plus("°")
         }
 
@@ -46,7 +47,7 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
                 Instant.ofEpochSecond(time)
                     .atZone(ZoneId.systemDefault())
                     .toLocalDateTime()
-                    .hour
+                    .format(DateTimeFormatter.ofPattern("h a"))
             } else {
                 "NOT OREO"
             }

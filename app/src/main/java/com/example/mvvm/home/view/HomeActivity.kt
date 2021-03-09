@@ -3,9 +3,11 @@ package com.example.Weathalert.home.view
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
@@ -19,8 +21,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityHomeBinding
@@ -72,18 +77,39 @@ class HomeActivity : AppCompatActivity() {
 
         flpc = LocationServices.getFusedLocationProviderClient(getApplication() )
 
-        //setupNavigation()
-
         initUI()
 
         favCitiesFabListener()
+        hourlyDailyListener()
 
     }
 
+
+
     override fun onStart() {
         super.onStart()
-        getData()
-        observeViewModel(viewModel)   // should call it in  onCreate() or onStart()
+        observeViewModel(viewModel)     // should call it in  onCreate() or onStart()
+//        checkPermissionAndLoc()
+//        getData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkPermissionAndLoc()
+//        getLastLoc()
+//        observeViewModel(viewModel)
+    }
+
+    private fun checkPermissionAndLoc(){
+        if(checkForPermission()){
+            if(locEnabled()){
+                getData()
+            } else {
+                showEnableBtn(1)
+            }
+        } else{
+            showEnableBtn(0)
+        }
     }
 
     private fun getData() {
@@ -91,24 +117,17 @@ class HomeActivity : AppCompatActivity() {
 //        Log.i("test")
         if (sharedPreferences.getString(Constants.FIRST_USE.toString(), "0") == "0"){
             getLastLoc()
-            viewModel.fetchData()
+            //viewModel.fetchData()
             changeFirstUseStatus()
         } else {
             viewModel.fetchData()
-            getLastLoc()
+//            getLastLoc()
         }
     }
 
     private fun changeFirstUseStatus() {
         val editor = sharedPreferences.edit()
         editor.putString(Constants.FIRST_USE, "1").apply()
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-//        getLastLoc()
-//        observeViewModel(viewModel)
     }
 
 
@@ -140,15 +159,16 @@ class HomeActivity : AppCompatActivity() {
     }
 
 //-------------------------------------INIT------------------------------------------------------
+
     private fun initUI() {
-        binding.hoursRecyclerView.apply {
+        binding.hourlyRecyclerView.apply {
             layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
             adapter = hoursListAdapter
         }
-        binding.daysRecyclerView.apply {
+        binding.dailyRecyclerView.apply {
             layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             adapter = daysListAdapter
         }
     }
@@ -162,39 +182,19 @@ class HomeActivity : AppCompatActivity() {
     private fun updateUI(it: WeatherData) {
 //        val cityTime = it.timezone_offset?.plus(it.current?.dt!!)
         val cityTime = it.current?.dt
-        binding.cityTV.text = it.timezone
-        binding.descriptionTV.text = it.current?.weather?.get(0)?.description
-        binding.dateTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "MM-dd-yyyy") }
+        binding.homeMainDateTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "EEE, d MMM") } //"EEE d MMM"
+        binding.homeMainCityNameTV.text = it.timezone                                                     //switch case to local days
+        binding.homeMainDescTV.text = it.current?.weather?.get(0)?.description
+        binding.homeMainTempTV.text = it.current?.temp?.toInt().toString().plus("°")
+        binding.homeMainHumidityTVVal.text = it.current?.humidity.toString().plus(" %")
+        binding.homeMainPressureTVVal.text = it.current?.pressure.toString().plus(" ${resources.getString(R.string.hPa)}")
+        binding.homeMainWindTVVal.text = it.current?.wind_speed?.toInt().toString().plus(" ${resources.getString(R.string.met_per_sec)}")
+        binding.homeMainCloudsTVVal.text = it.current?.clouds.toString().plus(" %")
 
-//        val test= convertLongToDateString(cityTime, "MM-dd-yyyy")
-//        val test2= convertLongToDateString(cityTime, "HH:mm")
-//        Toast.makeText(this, "curr => ${it.current.dt}\n" +
-//                                          "offs => ${it.timezone_offset}\n" +
-//                                          "cu+of=>C  $cityTime\n" +
-//                                            "test => $test\n" +
-//                                            "test2 => $test2", Toast.LENGTH_LONG).show()
-
-        binding.hourTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "HH:mm") }
-        binding.tempTV.text = it.current?.temp?.toInt().toString().plus("°")
-        binding.humidityValTV.text = it.current?.humidity.toString().plus(" %")
-        binding.pressureValTV.text = it.current?.pressure.toString()
-        binding.windValTVa.text = it.current?.wind_speed.toString().plus(" m/s")
-        binding.cloudsValTV.text = it.current?.clouds.toString().plus(" %")
         hoursListAdapter.updateHours(it.hourly as List<Hourly>)
         daysListAdapter.updateDays(it.daily as List<Daily>)
     }
 
-    /*
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun cinv(time:Long){
-        val formatter = DateTimeFormatter
-            .ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
-            .withZone(ZoneOffset.UTC)
-            .format(Instant.now())
-
-    }
-     */
-    //GOOGLE time converter
     //@SuppressLint("SimpleDateFormat")
     private fun convertLongToDateString(systemTime: Int, pattern: String): String {
 //        return SimpleDateFormat(pattern)
@@ -211,6 +211,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
 //---------------------------------------VIEW-------------------------------------------------------
+
     private fun showLoading(it: Boolean) {
         if (it) {
             binding.loadingView.visibility = View.VISIBLE
@@ -220,29 +221,62 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun showError(it: String) {
-        if (!it.isNullOrEmpty()) {
+        if (it.isNotEmpty()) {
             binding.listError.text = it
             binding.listError.visibility = View.VISIBLE
-            binding.linearLayoutContainer.visibility = View.GONE
-            binding.daysRecyclerView.visibility = View.GONE
-            binding.hoursRecyclerView.visibility = View.GONE
+            binding.loadingView.visibility = View.GONE
+            binding.homeDataContainer.visibility = View.GONE
+            binding.homeHoursAndDailyContainer.visibility = View.GONE
+            binding.favCitiesFab.visibility =View.GONE
         } else {
             binding.listError.visibility = View.GONE
+            binding.homeDataContainer.visibility = View.VISIBLE
+            binding.homeHoursAndDailyContainer.visibility = View.VISIBLE
+            binding.favCitiesFab.visibility =View.VISIBLE
         }
     }
 
     private fun hideError() {
         binding.listError.visibility = View.GONE
         binding.permissionBtn.visibility = View.GONE
-        binding.linearLayoutContainer.visibility = View.VISIBLE
-        binding.daysRecyclerView.visibility = View.VISIBLE
-        binding.hoursRecyclerView.visibility = View.VISIBLE
+        binding.homeDataContainer.visibility = View.VISIBLE
+        binding.homeHoursAndDailyContainer.visibility = View.VISIBLE
+        binding.favCitiesFab.visibility = View.VISIBLE
+    }
+
+    private fun showEnableBtn(n: Int) {
+        showError("Please, allow the location permission")
+        binding.permissionBtn.visibility = View.VISIBLE                                 //permissionBtn => GONE
+        binding.permissionBtn.setOnClickListener {
+            if (n == 0) {
+                requestPremession()
+            } else {
+                enableLocation()
+            }
+        }
     }
 
     private fun favCitiesFabListener() {            ///WRITE IT IN VIEWMODEL
         val fab: View = binding.favCitiesFab
         fab.setOnClickListener {         //view ->
             startActivity(Intent(applicationContext, FavoriteActivity::class.java))
+        }
+    }
+
+    private fun hourlyDailyListener() {
+        val hourly = binding.homeLabelHourlyTV
+        val daily = binding.homeLabelDailyTV
+        hourly.setOnClickListener {
+            hourly.setBackgroundResource(R.drawable.hourly_daily_pressed)
+            daily.setBackgroundResource(R.drawable.table_layout)
+            binding.hourlyRecyclerView.visibility = View.VISIBLE
+            binding.dailyRecyclerView.visibility = View.GONE
+        }
+        daily.setOnClickListener {
+            daily.setBackgroundResource(R.drawable.hourly_daily_pressed)
+            hourly.setBackgroundResource(R.drawable.table_layout)
+            binding.dailyRecyclerView.visibility = View.VISIBLE
+            binding.hourlyRecyclerView.visibility = View.GONE
         }
     }
 
@@ -260,16 +294,6 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showEnableBtn(n: Int) {
-        binding.permissionBtn.visibility = View.VISIBLE
-        binding.permissionBtn.setOnClickListener {
-            if (n == 0){
-                requestPremession()
-            } else {
-                enableLocation()
-            }
-        }
-    }
 
     private fun requestPremession() {                           //dialog for request permissions
         ActivityCompat.requestPermissions(this, permissions, permissionID)
@@ -323,7 +347,7 @@ class HomeActivity : AppCompatActivity() {
                         enableLocation()
                     } else {
                         showError("Please, Enable the location")
-                        showEnableBtn(1)
+                       showEnableBtn(1)
                     }
                 }
             } else {
@@ -370,3 +394,26 @@ class HomeActivity : AppCompatActivity() {
     }
      */
 }
+/*
+ /*
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun cinv(time:Long){
+        val formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+            .withZone(ZoneOffset.UTC)
+            .format(Instant.now())
+
+    }
+     */
+    //GOOGLE time converter
+
+
+//        val test= convertLongToDateString(cityTime, "MM-dd-yyyy")
+//        val test2= convertLongToDateString(cityTime, "HH:mm")
+//        Toast.makeText(this, "curr => ${it.current.dt}\n" +
+//                                          "offs => ${it.timezone_offset}\n" +
+//                                          "cu+of=>C  $cityTime\n" +
+//                                            "test => $test\n" +
+//                                            "test2 => $test2", Toast.LENGTH_LONG).show()
+
+ */

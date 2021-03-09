@@ -95,4 +95,7 @@ dependencies {
     //for autoComplete
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'
 
+    //gif
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+
 }

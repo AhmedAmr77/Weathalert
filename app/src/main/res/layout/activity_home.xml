@@ -8,234 +8,334 @@
     tools:context=".home.view.HomeActivity">
 
 
-    <TextView
-        android:id="@+id/cityTV"
-        android:layout_width="223dp"
-        android:layout_height="34dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:text="---"
-        android:textAlignment="center"
-        android:textSize="22sp"
-        android:textStyle="bold"
+    <ImageView
+        android:id="@+id/home_backgroud"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
 
-    <TextView
-        android:id="@+id/descriptionTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="--"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cityTV" />
+        android:background="@color/settings_main_background"
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="120dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="4dp"
+        android:id="@+id/home_data_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionTV">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"
+        android:background="@drawable/transparency_layout">
+
+        <!--android:background="@drawable/btn_unpressed"-->
 
         <TextView
-            android:id="@+id/hourTV"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
+            android:id="@+id/home_main_dateTV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:gravity="center"
-            android:text="--"
-            android:textSize="30sp"
-            app:autoSizeTextType="uniform"
+            android:text="@string/home_data"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateTV" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.013"
+            app:layout_constraintWidth_percent="0.3" />
 
         <TextView
-            android:id="@+id/dateTV"
-            android:layout_width="match_parent"
-            android:layout_height="17dp"
-            android:text="--"
-            android:textAlignment="center"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="103dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionTV">
-
-        <TextView
-            android:id="@+id/tempTV"
-            android:layout_width="61dp"
-            android:layout_height="56dp"
-            android:gravity="center"
-            android:text="--"
-            android:textSize="30sp"
-            app:autoSizeTextType="uniform"
+            android:id="@+id/home_main_cityNameTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/home_data"
+            android:textSize="40sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/home_main_descTV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/home_data"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.25"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/home_main_iconGIF"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4"
+            app:layout_constraintWidth_percent="0.25"
+            android:background="@drawable/animation_500_cloud"/>
+
+
+        <TextView
+            android:id="@+id/home_main_tempTV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/home_data"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.9"
+            app:layout_constraintWidth_percent="0.90"
+            android:background="@drawable/table_layout">
+            <!--android:alpha="0.9"-->
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="2"
+                android:layout_weight="1"
+                android:paddingTop="@dimen/today_table_section_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/home_main_humidityTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/home_main_humidityTV"
+                        android:textColor="@color/home_main_table_label" />
+
+                    <TextView
+                        android:id="@+id/home_main_humidityTV_val"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:text="@string/home_data"
+                        android:textSize="@dimen/today_table_val_elements_text_size"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/settings_sperator" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/home_main_pressureTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/home_main_pressureTV"
+                        android:textColor="@color/btn_pressed" />
+                    <TextView
+                        android:id="@+id/home_main_pressureTV_val"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:text="@string/home_data"
+                        android:gravity="center"
+                        android:textSize="@dimen/today_table_val_elements_text_size"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/settings_sperator" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="2"
+                android:layout_weight="1"
+                android:paddingTop="@dimen/today_table_section_padding">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/home_main_cloudsTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/home_main_cloudsTV"
+                        android:textColor="@color/home_main_table_label" />
+                    <TextView
+                        android:id="@+id/home_main_cloudsTV_val"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:text="@string/home_data"
+                        android:gravity="center"
+                        android:textSize="@dimen/today_table_val_elements_text_size"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/settings_sperator" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/home_main_windTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/home_main_windTV"
+                        android:textColor="@color/home_main_table_label" />
+                    <TextView
+                        android:id="@+id/home_main_windTV_val"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:text="@string/home_data"
+                        android:gravity="center"
+                        android:textSize="@dimen/today_table_val_elements_text_size"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayoutContainer"
-        android:layout_width="381dp"
-        android:layout_height="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_hours_and_daily_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="#C12B2B"
-        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.425"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:weightSum="2">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/humidityTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_humidity"
-                    android:textColor="@color/home_table_label"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/humidityValTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textSize="18sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/home_table_separator" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/windTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_wind"
-                    android:textColor="@color/home_table_label"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/windValTVa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textSize="18sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/home_table_separator" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95"
+        android:background="@drawable/transparency_layout">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:weightSum="2">
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintWidth_percent="0.9"
+            app:layout_constraintVertical_bias="0.05"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/table_layout">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+            <TextView
+                android:id="@+id/home_label_hourlyTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/pressureTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_pressure"
-                    android:textColor="@color/home_table_label"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/pressureValTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textSize="18sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/home_table_separator" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/home_label_hourlyTV"
+                android:background="@drawable/table_layout"/>
+            <TextView
+                android:id="@+id/home_label_dailyTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/cloudsTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/home_clouds"
-                    android:textColor="@color/home_table_label"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/cloudsValTV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="--"
-                    android:textSize="18sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/home_table_separator" />
-
-            </LinearLayout>
-
+                android:gravity="center"
+                android:text="@string/home_label_dailyTV"
+                android:background="@drawable/hourly_daily_pressed"/>
         </LinearLayout>
 
-    </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.85"
+            app:layout_constraintHeight_percent="0.7">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hourly_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/daily_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"/>
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/loading_view"
@@ -272,34 +372,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
+        android:backgroundTint="@color/settings_main_background"
         android:src="@drawable/ic_baseline_favorite_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hoursRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="#494141"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutContainer"
-        tools:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/daysRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_500"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hoursRecyclerView"
-        tools:visibility="gone" />
 
     <Button
         android:id="@+id/permissionBtn"
@@ -316,3 +393,367 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- third row in table-->
+    <!-- <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/today_visibilityTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:paddingStart="@dimen/today_table_key_elements_padding"
+                        android:text="Visibility"
+                        android:textColor="@color/btn_pressed" />
+                    <TextView
+                        android:id="@+id/today_visibilityTV_val"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:paddingStart="@dimen/today_table_val_elements_padding"
+                        android:text="77.7 Km"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/today_table_val_elements_text_size"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical"
+                    android:weightSum="3"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/today_feelsTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Feels like"
+                        android:textColor="@color/btn_pressed" />
+                    <TextView
+                        android:id="@+id/today_feelsTV_val"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="2"
+                        android:text="77°"
+                        android:gravity="center"
+                        android:textSize="@dimen/today_table_val_elements_text_size"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                -->
+
+    <!-- old xml-->
+    <!--
+       <TextView
+           android:id="@+id/cityTV"
+           android:layout_width="223dp"
+           android:layout_height="34dp"
+           android:layout_gravity="center"
+           android:layout_marginTop="40dp"
+           android:text="-"
+           android:textAlignment="center"
+           android:textSize="22sp"
+           android:textStyle="bold"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.5"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+
+       <TextView
+           android:id="@+id/descriptionTV"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="4dp"
+           android:text="-"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.5"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/cityTV" />
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:layout_width="120dp"
+           android:layout_height="64dp"
+           android:layout_marginStart="40dp"
+           android:layout_marginTop="4dp"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/descriptionTV">
+
+           <TextView
+               android:id="@+id/hourTV"
+               android:layout_width="match_parent"
+               android:layout_height="43dp"
+               android:gravity="center"
+               android:text="-"
+               android:textSize="30sp"
+               app:autoSizeTextType="uniform"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/dateTV" />
+
+           <TextView
+               android:id="@+id/dateTV"
+               android:layout_width="match_parent"
+               android:layout_height="17dp"
+               android:text="-"
+               android:textAlignment="center"
+               android:textSize="15sp"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/constraintLayout"
+           android:layout_width="103dp"
+           android:layout_height="68dp"
+           android:layout_marginTop="4dp"
+           android:layout_marginEnd="60dp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/descriptionTV">
+
+           <TextView
+               android:id="@+id/tempTV"
+               android:layout_width="61dp"
+               android:layout_height="56dp"
+               android:gravity="center"
+               android:text="-"
+               android:textSize="30sp"
+               app:autoSizeTextType="uniform"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintHorizontal_bias="0.5"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
+
+       </androidx.constraintlayout.widget.ConstraintLayout>
+
+       <LinearLayout
+           android:id="@+id/linearLayoutContainer"
+           android:layout_width="381dp"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="16dp"
+           android:layout_marginTop="16dp"
+           android:layout_marginEnd="16dp"
+           android:background="#C12B2B"
+           android:weightSum="2"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:weightSum="2">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="0dp"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <TextView
+                       android:id="@+id/humidityTV"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/home_humidity"
+                       android:textColor="@color/home_table_label"
+                       android:textSize="12sp" />
+
+                   <TextView
+                       android:id="@+id/humidityValTV"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text="-"
+                       android:textSize="18sp" />
+
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="1dp"
+                       android:background="@color/home_table_separator" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="0dp"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <TextView
+                       android:id="@+id/windTV"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/home_wind"
+                       android:textColor="@color/home_table_label"
+                       android:textSize="12sp" />
+
+                   <TextView
+                       android:id="@+id/windValTVa"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text="-"
+                       android:textSize="18sp" />
+
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="1dp"
+                       android:background="@color/home_table_separator" />
+
+               </LinearLayout>
+
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:orientation="vertical"
+               android:weightSum="2">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="0dp"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <TextView
+                       android:id="@+id/pressureTV"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/home_pressure"
+                       android:textColor="@color/home_table_label"
+                       android:textSize="12sp" />
+
+                   <TextView
+                       android:id="@+id/pressureValTV"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text=""
+                       android:textSize="18sp" />
+
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="1dp"
+                       android:background="@color/home_table_separator" />
+               </LinearLayout>
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="0dp"
+                   android:layout_weight="1"
+                   android:orientation="vertical">
+
+                   <TextView
+                       android:id="@+id/cloudsTV"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:text="@string/home_clouds"
+                       android:textColor="@color/home_table_label"
+                       android:textSize="12sp" />
+
+                   <TextView
+                       android:id="@+id/cloudsValTV"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text=""
+                       android:textSize="18sp" />
+
+                   <View
+                       android:layout_width="match_parent"
+                       android:layout_height="1dp"
+                       android:background="@color/home_table_separator" />
+
+               </LinearLayout>
+
+           </LinearLayout>
+
+       </LinearLayout>
+
+       <ProgressBar
+           android:id="@+id/loading_view"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="8dp"
+           android:layout_marginTop="8dp"
+           android:layout_marginEnd="8dp"
+           android:layout_marginBottom="8dp"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+
+       <TextView
+           android:id="@+id/list_error"
+           android:layout_width="340dp"
+           android:layout_height="196dp"
+           android:layout_marginStart="8dp"
+           android:layout_marginTop="8dp"
+           android:layout_marginEnd="8dp"
+           android:layout_marginBottom="8dp"
+           android:gravity="center"
+           android:text="Error"
+           android:visibility="gone"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent" />
+
+       <com.google.android.material.floatingactionbutton.FloatingActionButton
+           android:id="@+id/favCitiesFab"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="end|bottom"
+           android:layout_margin="16dp"
+           android:src="@drawable/ic_baseline_favorite_24"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           tools:ignore="MissingConstraints" />
+
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/hoursRecyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="16dp"
+           android:background="#494141"
+
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.0"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/linearLayoutContainer"
+           tools:visibility="gone" />
+
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/daysRecyclerView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@color/purple_500"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.0"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/hoursRecyclerView"
+           tools:visibility="gone" />
+
+       <Button
+           android:id="@+id/permissionBtn"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="@string/enable_permission_btn"
+           android:visibility="gone"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintHorizontal_bias="0.5"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintVertical_bias="0.75" />
+
+   -->

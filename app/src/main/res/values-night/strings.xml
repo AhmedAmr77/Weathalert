@@ -34,4 +34,15 @@
     <string name="setting_imprialWindDesc">Wind : miles/hour</string>
     <string name="title_activity_settingss">Settings</string>
     <string name="enable_permission_btn">Enable</string>
+    <string name="cityname_tv_today_home">Madrid</string>
+    <string name="temp_tv_today_home">77°</string>
+    <string name="date_tv_today_home">03-09-2021</string>
+    <string name="home_main_humidityTV">Humidity</string>
+    <string name="home_main_windTV">Wind</string>
+    <string name="home_main_cloudsTV">Clouds</string>
+    <string name="home_main_pressureTV">Pressure</string>
+    <string name="home_label_hourlyTV">Hourly</string>
+    <string name="home_label_dailyTV">Daily</string>
+    <string name="hPa">hPa</string>
+
 </resources>
