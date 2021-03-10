@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -83,7 +84,9 @@ class FavoriteActivity : AppCompatActivity() {
 
     private fun initUI() {
         binding.citiesRecyclerView.apply {
-            layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
+//                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             citisListAdapter = FavoriteAdapter(arrayListOf()){item ->
                 Log.i("test", "Fav cities RecyclerView Listener ${item.lon} & ${item.lat} & ${item.isFavorite} & ${item.current?.temp}")
 //                recyclerViewListener(item)

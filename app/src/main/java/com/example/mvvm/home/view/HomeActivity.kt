@@ -163,12 +163,13 @@ class HomeActivity : AppCompatActivity() {
     private fun initUI() {
         binding.hourlyRecyclerView.apply {
             layoutManager =
-                GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
+//                  GridLayoutManager(applicationContext, 2, GridLayoutManager.VERTICAL, false)
+                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             adapter = hoursListAdapter
         }
         binding.dailyRecyclerView.apply {
             layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             adapter = daysListAdapter
         }
     }
