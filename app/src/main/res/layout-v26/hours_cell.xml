@@ -51,12 +51,10 @@
                     app:layout_constraintWidth_percent="0.3"
                     app:srcCompat="@drawable/ic_baseline_cloud_24" />
         -->
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/daysCell_icon"
+        <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:alpha="0.5"
-            android:background="@drawable/d_ten"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"
@@ -64,7 +62,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.4"
-            app:layout_constraintWidth_percent="0.5" />
+            app:layout_constraintWidth_percent="0.5"/>
 
         <TextView
             android:id="@+id/hoursCell_temp"

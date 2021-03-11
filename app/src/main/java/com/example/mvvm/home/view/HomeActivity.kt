@@ -3,12 +3,9 @@ package com.example.Weathalert.home.view
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
@@ -23,11 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityHomeBinding
@@ -40,7 +33,6 @@ import com.example.Weathalert.settings.view.SettingsActivity
 import com.example.mvvm.utils.Constants
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
-import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.Instant
@@ -201,6 +193,9 @@ class HomeActivity : AppCompatActivity() {
         binding.homeMainDateTV.text = cityTime?.let { it1 -> convertLongToDateString(it1, "EEE, d MMM") } //"EEE d MMM"
         binding.homeMainCityNameTV.text = it.timezone                                                     //switch case to local days
         binding.homeMainDescTV.text = it.current?.weather?.get(0)?.description
+        Log.i("icon", "startHomeUI ${it.current?.weather?.get(0)?.icon}")
+        binding.homeMainIcon.setImageResource(getResId(it.current?.weather?.get(0)?.icon))
+        Log.i("icon", "endHomeUI ${it.current?.weather?.get(0)?.icon}")
         binding.homeMainTempTV.text = it.current?.temp?.toInt().toString().plus("°")
         binding.homeMainHumidityTVVal.text = it.current?.humidity.toString().plus(" %")
         binding.homeMainPressureTVVal.text = it.current?.pressure.toString().plus(" ${resources.getString(R.string.hPa)}")
@@ -209,6 +204,23 @@ class HomeActivity : AppCompatActivity() {
 
         hoursListAdapter.updateHours(it.hourly as List<Hourly>)
         daysListAdapter.updateDays(it.daily as List<Daily>)
+    }
+
+    private fun getResId(icon: String?): Int {
+        Log.i("icon", "startHomeGET ${icon}")
+        val res = when(icon){
+            "01d", "01n" -> R.drawable.d_oneone
+            "02d", "02n" -> R.drawable.n_two
+            "03d", "03n", "04d", "04n" -> R.drawable.n_three_four
+            "09d", "09n" -> R.drawable.n_nine
+            "10d", "10n" -> R.drawable.n_ten
+            "11d", "11n" -> R.drawable.n_eleven
+            "13d", "13n" -> R.drawable.n_thirteen
+            "50d", "50n" -> R.drawable.n_fifty
+            else -> R.drawable.n_two
+        }
+        Log.i("icon", "endHomeGET ${res}")
+        return res
     }
 
     //@SuppressLint("SimpleDateFormat")

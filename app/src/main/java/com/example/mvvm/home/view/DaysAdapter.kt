@@ -40,7 +40,7 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
     class DaysVH(val binding: DaysCellBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(days: Daily) {
-       //     binding.daysCellIcon.setImageResource(R.drawable.ic_baseline_cloud_24)  //(hours.weather[0].id)
+            binding.daysCellIcon.setImageResource(getResId(days.weather?.get(0)?.icon))  //(hours.weather[0].id)
             binding.daysDayTVVal.text = (days.dt?.let { convert(it.toLong()) })
             binding.daysGrtTempTVVal.text = days.temp?.max?.toInt().toString().plus("°")
             binding.daysSmlTempTVVal.text = days.temp?.min?.toInt().toString().plus("°")
@@ -93,6 +93,19 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
             }
         }
 
+        private fun getResId(icon: String?): Int {
+            return when(icon){
+                "01d", "01n" -> R.drawable.d_oneone
+                "02d", "02n" -> R.drawable.n_two
+                "03d", "03n", "04d", "04n" -> R.drawable.n_three_four
+                "09d", "09n" -> R.drawable.n_nine
+                "10d", "10n" -> R.drawable.n_ten
+                "11d", "11n" -> R.drawable.n_eleven
+                "13d", "13n" -> R.drawable.n_thirteen
+                "50d", "50n" -> R.drawable.n_fifty
+                else -> R.drawable.n_two
+            }
+        }
     }
 }
 
