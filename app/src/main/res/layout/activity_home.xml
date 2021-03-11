@@ -8,8 +8,9 @@
     tools:context=".home.view.HomeActivity">
 
 
-    <ImageView
-        android:id="@+id/home_backgroud"
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/home_main_iconaGIF"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
@@ -17,9 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
-        android:background="@color/settings_main_background"
-        />
+        android:src="@drawable/day_wall"
+        android:background="@color/settings_main_background"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_data_container"
@@ -44,6 +44,7 @@
             android:gravity="center"
             android:text="@string/home_data"
             android:textSize="20sp"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.1"
@@ -60,6 +61,7 @@
             android:text="@string/home_data"
             android:textSize="40sp"
             android:textStyle="bold"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -74,6 +76,7 @@
             android:gravity="center"
             android:text="@string/home_data"
             android:textSize="20sp"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.1"
@@ -87,15 +90,16 @@
             android:id="@+id/home_main_iconGIF"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:alpha="0.5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.4"
-            app:layout_constraintWidth_percent="0.25"
-            android:background="@drawable/sky01"/>
+            app:layout_constraintWidth_percent="0.2"
+            android:background="@drawable/d_fifty"/>
 
 
         <TextView
@@ -106,6 +110,7 @@
             android:text="@string/home_data"
             android:textSize="45sp"
             android:textStyle="bold"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.25"

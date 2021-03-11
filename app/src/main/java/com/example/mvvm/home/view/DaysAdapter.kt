@@ -45,7 +45,8 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
         fun bind(days: Daily) {
        //     binding.daysCellIcon.setImageResource(R.drawable.ic_baseline_cloud_24)  //(hours.weather[0].id)
             binding.daysDayTVVal.text = (days.dt?.let { convert(it.toLong()) })?.get(2)
-            binding.daysTempTVVal.text = (days.temp?.max)?.toInt().toString().plus("°  |  ${days.temp?.min?.toInt().toString()}°")
+            binding.daysGrtTempTVVal.text = days.temp?.max?.toInt().toString().plus("°")
+            binding.daysSmlTempTVVal.text = days.temp?.min?.toInt().toString().plus("°")
             binding.daysDescTVVal.text = days.weather?.get(0)?.main
             binding.daysHumidityTVVal.text = (days.humidity)?.toString().plus(" %")
             binding.daysCloudsTVVal.text = (days.clouds)?.toString().plus(" %")

@@ -39,7 +39,7 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>,
 
     class CitiesVH (val binding: CitiesCellBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(city: WeatherData) {
-            //            binding.cityCellIcon.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
+            //            binding.cityCellBackground.setImageResource(R.drawable.ic_baseline_favorite_24)  //(hours.weather[0].id)
             binding.favDateTVVal.text =
                 city.current?.dt?.let { it1 -> convertLongToDateString(it1, "EEE, d MMM") }.toString()
 //            binding.daysTempTVVal.text = city.current?.temp.toString().plus("°")
@@ -51,7 +51,7 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>,
 //            binding.daysCloudsTVVal.text = city.current?.clouds.toString()
 //            binding.daysPressureTVVal.text = city.current?.pressure.toString().plus(" ${ context.resources.getString(R.string.hPa)}")
 //            binding.daysWindTVVal.text = city.current?.wind_speed.toString().plus(" ${ context.resources.getString(R.string.met_per_sec)}")
-            binding.favTempTVVal.text = city.current?.temp.toString().plus("°")
+            binding.favTempTVVal.text = city.current?.temp?.toInt().toString().plus("°")
 
         }
 

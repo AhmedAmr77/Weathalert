@@ -41,34 +41,35 @@
                 android:id="@+id/daysCell_icon"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:alpha="0.9"
-                android:background="@drawable/sky01"
+                android:alpha="0.15"
+                android:background="@drawable/d_thirteen"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="1"
+                app:layout_constraintHeight_percent="0.6"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5"
-                app:layout_constraintWidth_percent="0.45" />
+                app:layout_constraintWidth_percent="0.3" />
 
 
         <TextView
             android:id="@+id/days_dayTV_val"
-            android:layout_width="120dp"
-            android:layout_height="44dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/home_data"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="0.6"
-            app:layout_constraintHeight_percent="0.5"
-            app:layout_constraintWidth_percent="0.5" />
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_percent="0.5"
+            tools:text="Madrid"/>
 
         <TextView
             android:id="@+id/days_descTV_val"
@@ -82,10 +83,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="0.9"/>
+            app:layout_constraintVertical_bias="0.95"
+            tools:text="Clouds"/>
 
         <TextView
-            android:id="@+id/days_tempTV_val"
+            android:id="@+id/days_grt_tempTV_val"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -95,8 +97,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.525"
-            app:layout_constraintVertical_bias="0.35"/>
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintVertical_bias="0.5"
+            tools:text="22°"/>
+
+        <TextView
+            android:id="@+id/days_sml_tempTV_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/home_data"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintVertical_bias="0.5"
+            tools:text="02°"/>
 
 
         <View

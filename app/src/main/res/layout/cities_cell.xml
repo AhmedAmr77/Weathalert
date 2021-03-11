@@ -40,11 +40,11 @@
 
 
         <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/daysCell_icon"
+            android:id="@+id/daysCell_backgroud"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.5"
-            android:background="@drawable/morn"
+            android:alpha="0.9"
+            android:background="@drawable/day_cities"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="1"
@@ -63,6 +63,7 @@
             android:text="@string/home_data"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.5"
@@ -70,7 +71,8 @@
             app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintVertical_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mon, 11 Mar"/>
 
         <TextView
             android:id="@+id/fav_cityNameTV_val"
@@ -79,8 +81,9 @@
             android:text="@string/home_data"
             android:paddingStart="8dp"
             android:gravity="center_vertical"
-            android:autoSizeTextType="uniform"
+            android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.55"
@@ -88,7 +91,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.9"
-            app:layout_constraintWidth_percent="1" />
+            app:layout_constraintWidth_percent="1"
+            tools:text="MADREDD"/>
 
         <TextView
             android:id="@+id/favTempTVVal"
@@ -96,16 +100,18 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/home_data"
-            android:autoSizeTextType="uniform"
+            android:textSize="20sp"
             android:textStyle="bold"
+            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintWidth_percent="0.4"
             app:layout_constraintHeight_percent="0.3"
             app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintVertical_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"  />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="22`"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
