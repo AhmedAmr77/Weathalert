@@ -85,7 +85,7 @@
             app:layout_constraintVertical_bias="0.25"
             app:layout_constraintWidth_percent="0.3" />
 
-        <pl.droidsonroids.gif.GifImageView
+        <ImageView
             android:id="@+id/home_main_iconGIF"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -99,7 +99,6 @@
             app:layout_constraintVertical_bias="0.4"
             app:layout_constraintWidth_percent="0.2"
             android:background="@drawable/n_fifty"/>
-
 
         <TextView
             android:id="@+id/home_main_tempTV"

@@ -57,12 +57,14 @@
     <string name="days_fri">الجمعة</string>
     <string name="days_wed">الأربعاء</string>
     <string name="home_main_humidityTV">الرطوبة</string>
-    <string name="home_main_windTV">الضغط</string>
-    <string name="home_main_cloudsTV">Clouds</string>
-    <string name="home_main_pressureTV">Pressure</string>
-    <string name="home_label_hourlyTV">Hourly</string>
-    <string name="home_label_dailyTV">Daily</string>
+    <string name="home_main_windTV">الرياح</string>
+    <string name="home_main_cloudsTV">السحاب</string>
+    <string name="home_main_pressureTV">الضغط</string>
+    <string name="home_label_hourlyTV">الساعات</string>
+    <string name="home_label_dailyTV">الأيام</string>
     <string name="met_per_sec">متر/ثانية</string>
     <string name="hPa">هيكتوباسكال</string>
+    <string name="home_hourly_am">صباحاً</string>
+    <string name="home_hourly_pm">مساءً</string>
 
 </resources>

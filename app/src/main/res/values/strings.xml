@@ -75,5 +75,7 @@
     <string name="home_label_dailyTV">Daily</string>
     <string name="met_per_sec">m/s</string>
     <string name="hPa">hPa</string>
+    <string name="home_hourly_am">AM</string>
+    <string name="home_hourly_pm">PM</string>
 
 </resources>
