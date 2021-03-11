@@ -195,7 +195,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/days_humidity"
-                android:textColor="@color/home_main_table_label"/>
+                android:alpha="0.5"/>
             <TextView
                 android:id="@+id/days_humidityTV_val"
                 android:layout_width="match_parent"
@@ -229,7 +229,7 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:text="@string/home_main_pressureTV"
-                android:textColor="@color/home_main_table_label"/>
+                android:alpha="0.5"/>
             <TextView
                 android:id="@+id/days_pressureTV_val"
                 android:layout_width="match_parent"
@@ -263,7 +263,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/home_main_cloudsTV"
-                android:textColor="@color/home_main_table_label"/>
+                android:alpha="0.5"/>
             <TextView
                 android:id="@+id/days_cloudsTV_val"
                 android:layout_width="match_parent"
@@ -297,7 +297,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/home_main_windTV"
-                android:textColor="@color/home_main_table_label"/>
+                android:alpha="0.5"/>
             <TextView
                 android:id="@+id/days_windTV_val"
                 android:layout_width="match_parent"

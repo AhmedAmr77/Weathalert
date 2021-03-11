@@ -7,6 +7,7 @@ import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.location.Location
 import android.location.LocationManager
@@ -20,6 +21,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
@@ -79,11 +81,24 @@ class HomeActivity : AppCompatActivity() {
 
         initUI()
 
+
+
         favCitiesFabListener()
         hourlyDailyListener()
 
+
     }
 
+    private fun nightMode() {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        binding.homeMainIconGIF.setBackgroundResource(R.drawable.night_wall)
+//        fun isDarkModeOn(context: Context): Boolean {
+//            val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+//            return
+//                currentNightMode = resources
+//        = Configuration.UI_MODE_NIGHT_YES
+//        }
+    }
 
 
     override fun onStart() {
@@ -261,6 +276,7 @@ class HomeActivity : AppCompatActivity() {
         val fab: View = binding.favCitiesFab
         fab.setOnClickListener {         //view ->
             startActivity(Intent(applicationContext, FavoriteActivity::class.java))
+//            nightMode()
         }
     }
 

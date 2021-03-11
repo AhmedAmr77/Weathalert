@@ -8,20 +8,20 @@
     tools:context=".settings.view.SettingsActivity">
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/language_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/transparency_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"
-        android:background="@drawable/circular_layout">
+        app:layout_constraintVertical_bias="0.046">
 
         <TextView
             android:id="@+id/languageTV"
@@ -51,33 +51,33 @@
             android:id="@+id/arabicTV"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="@string/arabic_btn_settings"
+            android:background="@drawable/btn_unpressed"
             android:gravity="center"
+            android:text="@string/arabic_btn_settings"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.3"
             app:layout_constraintHorizontal_bias="0.85"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.75"
-            app:layout_constraintWidth_percent="0.4"
-            app:layout_constraintHeight_percent="0.3"
-            android:background="@drawable/btn_unpressed"/>
+            app:layout_constraintWidth_percent="0.4" />
 
         <TextView
             android:id="@+id/EnglishTV"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="@string/english_btn_settings"
+            android:background="@drawable/btn_pressed"
             android:gravity="center"
+            android:text="@string/english_btn_settings"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.3"
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.75"
-            app:layout_constraintWidth_percent="0.4"
-            android:background="@drawable/btn_pressed"
-            app:layout_constraintHeight_percent="0.3"/>
+            app:layout_constraintWidth_percent="0.4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,7 +93,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.63"
-        android:background="@drawable/circular_layout">
+        android:background="@drawable/transparency_layout">
 
         <TextView
             android:id="@+id/tempTV"

@@ -18,8 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/day_wall"
-        android:background="@color/settings_main_background"/>
+        android:src="@drawable/day_wall"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_data_container"
@@ -90,7 +89,7 @@
             android:id="@+id/home_main_iconGIF"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:alpha="0.5"
+            android:alpha="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.2"
@@ -99,7 +98,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.4"
             app:layout_constraintWidth_percent="0.2"
-            android:background="@drawable/d_fifty"/>
+            android:background="@drawable/n_fifty"/>
 
 
         <TextView
@@ -158,7 +157,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/home_main_humidityTV"
-                        android:textColor="@color/home_main_table_label" />
+                        android:alpha="0.5"/>
 
                     <TextView
                         android:id="@+id/home_main_humidityTV_val"
@@ -188,7 +187,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/home_main_pressureTV"
-                        android:textColor="@color/btn_pressed" />
+                        android:alpha="0.5"/>
                     <TextView
                         android:id="@+id/home_main_pressureTV_val"
                         android:layout_width="match_parent"
@@ -225,7 +224,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/home_main_cloudsTV"
-                        android:textColor="@color/home_main_table_label" />
+                        android:alpha="0.5"/>
                     <TextView
                         android:id="@+id/home_main_cloudsTV_val"
                         android:layout_width="match_parent"
@@ -253,7 +252,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/home_main_windTV"
-                        android:textColor="@color/home_main_table_label" />
+                        android:alpha="0.5"/>
                     <TextView
                         android:id="@+id/home_main_windTV_val"
                         android:layout_width="match_parent"
@@ -284,37 +283,50 @@
         app:layout_constraintVertical_bias="0.95"
         android:background="@drawable/transparency_layout">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:weightSum="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.15"
             app:layout_constraintWidth_percent="0.9"
             app:layout_constraintVertical_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/table_layout">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/home_label_hourlyTV"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/hourly_daily_unpressed"
                 android:gravity="center"
                 android:text="@string/home_label_hourlyTV"
-                android:background="@drawable/table_layout"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="1"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintWidth_percent="0.5" />
+
             <TextView
                 android:id="@+id/home_label_dailyTV"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:gravity="center"
                 android:text="@string/home_label_dailyTV"
-                android:background="@drawable/hourly_daily_pressed"/>
-        </LinearLayout>
+                android:background="@drawable/hourly_daily_pressed"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="1"
+                app:layout_constraintWidth_percent="0.5"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -346,10 +358,7 @@
         android:id="@+id/loading_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -359,10 +368,7 @@
         android:id="@+id/list_error"
         android:layout_width="340dp"
         android:layout_height="196dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="8dp"
         android:gravity="center"
         android:text="Error"
         android:visibility="gone"
@@ -377,7 +383,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/settings_main_background"
         android:src="@drawable/ic_baseline_favorite_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

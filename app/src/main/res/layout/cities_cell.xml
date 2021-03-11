@@ -4,13 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/table_layout"
     android:layout_margin="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="185dp"
         android:layout_height="100dp"
-        android:background="@drawable/table_layout"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +61,6 @@
             android:text="@string/home_data"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.5"
@@ -83,7 +80,6 @@
             android:gravity="center_vertical"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.55"
@@ -102,7 +98,6 @@
             android:text="@string/home_data"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/home_text_night"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintWidth_percent="0.4"

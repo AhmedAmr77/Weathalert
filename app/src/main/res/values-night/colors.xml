@@ -5,7 +5,11 @@
     <color name="rounded_layout_background">#F0EAE9</color>
     <color name="settings_sperator">#B8B8B8</color>
     <color name="rounded_layout_stroke">#AAA6A5</color>
-    <color name="settings_main_background">#80D8FF</color>
+    <color name="settings_main_background">#05507E</color>
     <color name="btn_pressed">#616161</color>
     <color name="btn_Unpressed">#BDBDBD</color>
+
+
+    <color name="home_header">#4f83cc</color>
+    <color name="home_notification_bar">#002f6c</color>
 </resources>
