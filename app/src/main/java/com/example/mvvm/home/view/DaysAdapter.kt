@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.DaysCellBinding
-import com.example.Weathalert.datalayer.entity.Daily
+import com.example.mvvm.datalayer.entity.weather.Daily
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -96,14 +96,14 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
         private fun getResId(icon: String?): Int {
             return when(icon){
                 "01d", "01n" -> R.drawable.d_oneone
-                "02d", "02n" -> R.drawable.n_two
-                "03d", "03n", "04d", "04n" -> R.drawable.n_three_four
-                "09d", "09n" -> R.drawable.n_nine
-                "10d", "10n" -> R.drawable.n_ten
-                "11d", "11n" -> R.drawable.n_eleven
-                "13d", "13n" -> R.drawable.n_thirteen
-                "50d", "50n" -> R.drawable.n_fifty
-                else -> R.drawable.n_two
+                "02d", "02n" -> R.drawable.d_two
+                "03d", "03n", "04d", "04n" -> R.drawable.d_three_four
+                "09d", "09n" -> R.drawable.d_nine
+                "10d", "10n" -> R.drawable.d_ten
+                "11d", "11n" -> R.drawable.d_eleven
+                "13d", "13n" -> R.drawable.d_thirteen
+                "50d", "50n" -> R.drawable.d_fifty
+                else -> R.drawable.d_two
             }
         }
     }

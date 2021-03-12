@@ -14,7 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVVM">
-        <activity android:name="com.example.mvvm.favoritecities.view.FavoriteCityDetailsActivity"></activity>
+        <receiver
+            android:name="com.example.mvvm.alarm.view.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <activity android:name="com.example.mvvm.alarm.view.AlarmActivity" />
+        <activity android:name="com.example.mvvm.favoritecities.view.FavoriteCityDetailsActivity" />
         <activity android:name=".favoritecities.view.FavoriteActivity" />
         <activity
             android:name=".settings.view.SettingsActivity"

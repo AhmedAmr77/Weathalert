@@ -26,4 +26,5 @@ object Constants {
         "pk.eyJ1IjoiYWhtZC1hbXI3IiwiYSI6ImNrbHY5bHNlNzJudWwycW4xZWZ4ZnpwdmUifQ.i_uRDlSBTg9n27BabRXWKQ"
     const val AUTOCOMPLETE_FRAGMENT_TAG = "autoCompleteFragment"
 
+    const val ALARM_ID: String = "alarmId"
 }

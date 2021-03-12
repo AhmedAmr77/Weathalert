@@ -1,8 +1,7 @@
 package com.example.Weathalert.datalayer.local
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 
 
 @Dao
@@ -26,39 +25,3 @@ interface WeatherDao {
     @Query("DELETE FROM WeatherData")
     suspend fun deleteAll()
 }
-/*
-//    @Update         //DLT if not needed
-//    suspend fun update(weather: WeatherData)
-@Dao
-interface SleepDatabaseDao {
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(weather: SleepNight)
-
-    @Query("SELECT * FROM SleepNight")
-    fun getWeatherData(): LiveData<SleepNight>
-
-    @Query("DELETE FROM SleepNight")
-    suspend fun deleteAll()
-}
- */
-
-/*
-    @Insert
-    fun insert(night: SleepNight)
-
-    @Update
-    fun update(night: SleepNight)
-
-    @Query("SELECT * from daily_sleep_quality_table WHERE nightId = :key")
-    fun get(key: Long): SleepNight?
-
-    @Query("DELETE FROM daily_sleep_quality_table")
-    fun clear()
-
-    @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
-    fun getTonight(): SleepNight?
-
-    @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC")
-    fun getAllNights(): LiveData<List<SleepNight>>
- */

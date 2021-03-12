@@ -1,4 +1,4 @@
-package com.example.Weathalert.datalayer.entity
+package com.example.mvvm.datalayer.entity.weather
 
 data class Weather(
     val description: String? = null,

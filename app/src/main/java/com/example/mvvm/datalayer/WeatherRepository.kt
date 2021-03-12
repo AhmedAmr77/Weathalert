@@ -1,16 +1,9 @@
 package com.example.Weathalert.datalayer
 
 import android.app.Application
-import android.content.Context
-import android.provider.SyncStateContract
-import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.Weathalert.datalayer.local.LocalDataSource
 import com.example.Weathalert.datalayer.remote.RemoteDataSource
-import com.example.mvvm.utils.Constants
-import kotlinx.coroutines.*
 import retrofit2.Response
 
 class WeatherRepository(val application: Application) {

@@ -4,15 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityFavoriteCityDetailsBinding
-import com.example.Weathalert.datalayer.entity.Daily
-import com.example.Weathalert.datalayer.entity.Hourly
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.Daily
+import com.example.mvvm.datalayer.entity.weather.Hourly
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.Weathalert.home.view.DaysAdapter
 import com.example.Weathalert.home.view.HoursAdapter
 import com.example.mvvm.favoritecities.viewmodel.FavoriteCityDetailsViewModel
@@ -25,8 +23,8 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
 
     private lateinit var viewModel: FavoriteCityDetailsViewModel
     lateinit var binding: ActivityFavoriteCityDetailsBinding
-    private var hoursListAdapter = HoursAdapter(arrayListOf())
-    private var daysListAdapter = DaysAdapter(arrayListOf())
+//    private var hoursListAdapter = HoursAdapter(arrayListOf())
+//    private var daysListAdapter = DaysAdapter(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +33,7 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(FavoriteCityDetailsViewModel::class.java)
 
-        initUI()
+//        initUI()
         hourlyDailyListener()
         Log.i("test", "welcome FavDetails")
         // Get the Intent that started this activity and extract the string
@@ -55,18 +53,18 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
         observeViewModel(viewModel)
     }
 
-    private fun initUI() {
-        binding.hourlyRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-            adapter = hoursListAdapter
-        }
-        binding.dailyRecyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
-            adapter = daysListAdapter
-        }
-    }
+//    private fun initUI() {
+//        binding.hourlyRecyclerView.apply {
+//            layoutManager =
+//                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+//            adapter = hoursListAdapter
+//        }
+//        binding.dailyRecyclerView.apply {
+//            layoutManager =
+//                LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+//            adapter = daysListAdapter
+//        }
+//    }
 
     private fun hourlyDailyListener() {
         val hourly = binding.homeLabelHourlyTV
@@ -122,14 +120,12 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
         binding.homeMainPressureTVVal.text = it.current?.pressure.toString().plus(" ${resources.getString(R.string.hPa)}")
         binding.homeMainWindTVVal.text = it.current?.wind_speed?.toInt().toString().plus(" ${resources.getString(R.string.met_per_sec)}")
         binding.homeMainCloudsTVVal.text = it.current?.clouds.toString().plus(" %")
-        hoursListAdapter.updateHours(it.hourly as List<Hourly>)
-        daysListAdapter.updateDays(it.daily as List<Daily>)
+//        hoursListAdapter.updateHours(it.hourly as List<Hourly>)
+//        daysListAdapter.updateDays(it.daily as List<Daily>)
 
         binding.loadingView.visibility = View.GONE//                              why
 
 
-        hoursListAdapter.updateHours(it.hourly as List<Hourly>)
-        daysListAdapter.updateDays(it.daily as List<Daily>)
     }
 
     private fun convertLongToDateString(systemTime: Int, pattern: String): String {

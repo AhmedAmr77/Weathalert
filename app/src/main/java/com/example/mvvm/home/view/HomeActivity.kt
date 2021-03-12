@@ -24,12 +24,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityHomeBinding
-import com.example.Weathalert.datalayer.entity.Daily
-import com.example.Weathalert.datalayer.entity.Hourly
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.Daily
+import com.example.mvvm.datalayer.entity.weather.Hourly
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.Weathalert.favoritecities.view.FavoriteActivity
 import com.example.Weathalert.home.viewmodel.HomeViewModel
 import com.example.Weathalert.settings.view.SettingsActivity
+import com.example.mvvm.alarm.view.AlarmActivity
 import com.example.mvvm.utils.Constants
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -161,6 +162,13 @@ class HomeActivity : AppCompatActivity() {
                     SettingsActivity::class.java
                 )
             )
+            R.id.menu_alarm -> startActivity(
+                Intent(
+                    applicationContext,
+                    AlarmActivity::class.java
+                )
+            )
+
         }
         return true
     }

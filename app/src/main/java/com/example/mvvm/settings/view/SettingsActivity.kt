@@ -18,6 +18,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actionBar?.title = resources.getString(R.string.tempLabel_settings_TV)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPref = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)

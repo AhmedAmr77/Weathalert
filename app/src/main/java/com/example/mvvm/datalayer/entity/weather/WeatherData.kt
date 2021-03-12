@@ -1,4 +1,4 @@
-package com.example.Weathalert.datalayer.entity
+package com.example.mvvm.datalayer.entity.weather
 
 import androidx.room.Embedded
 import androidx.room.Entity

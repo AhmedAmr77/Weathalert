@@ -1,8 +1,7 @@
 package com.example.Weathalert.datalayer.entity.coverters
 
 import androidx.room.TypeConverter
-import com.example.Weathalert.datalayer.entity.Hourly
-import com.example.Weathalert.datalayer.entity.Weather
+import com.example.mvvm.datalayer.entity.weather.Weather
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

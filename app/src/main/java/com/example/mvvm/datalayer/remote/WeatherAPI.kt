@@ -1,6 +1,6 @@
 package com.example.Weathalert.datalayer.remote
 
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

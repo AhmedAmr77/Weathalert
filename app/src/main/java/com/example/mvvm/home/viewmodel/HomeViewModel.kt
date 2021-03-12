@@ -1,34 +1,15 @@
 package com.example.Weathalert.home.viewmodel
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.location.Location
-import android.location.LocationManager
-import android.os.Build
-import android.os.Looper
-import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.Weathalert.datalayer.WeatherRepository
-import com.example.Weathalert.datalayer.entity.WeatherData
-import com.example.Weathalert.home.view.HomeActivity
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.mvvm.utils.Constants
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnCompleteListener
 import kotlinx.coroutines.*
-import retrofit2.Response
-import kotlin.math.log
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 

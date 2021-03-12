@@ -1,7 +1,6 @@
 package com.example.Weathalert.datalayer.remote
 
-import com.example.Weathalert.datalayer.entity.WeatherData
-import com.example.mvvm.utils.Constants
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import retrofit2.Response
 
 class RemoteDataSource {

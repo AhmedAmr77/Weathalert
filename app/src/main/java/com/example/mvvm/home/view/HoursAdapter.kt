@@ -3,13 +3,11 @@ package com.example.Weathalert.home.view
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.HoursCellBinding
-import com.example.Weathalert.datalayer.entity.Hourly
-import java.io.Serializable
+import com.example.mvvm.datalayer.entity.weather.Hourly
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -41,7 +39,8 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
         RecyclerView.ViewHolder(binding.root) {
         fun bind(hours: Hourly) {
             binding.hoursCellHour.text = hours.dt?.let { convert(it.toLong()) }
-            binding.daysCellIcon?.setImageResource(getResId(hours.weather?.get(0)?.icon))  //(hours.weather[0].id)
+            binding.daysCellIcon?.setImageResource(R.drawable.d_oneone)  //(hours.weather[0].id)
+            binding.testdaysCellIcon?.setImageResource(R.drawable.clear_day)  //(hours.weather[0].id)
             Log.i("res", "binddd")
             binding.hoursCellTemp.text = (hours.temp)?.toInt().toString().plus("°")
         }
@@ -82,14 +81,14 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
             Log.i("res", "start ${icon}")
             val res = when (icon) {
                 "01d", "01n" -> R.drawable.d_oneone
-                "02d", "02n" -> R.drawable.n_two
-                "03d", "03n", "04d", "04n" -> R.drawable.n_three_four
-                "09d", "09n" -> R.drawable.n_nine
-                "10d", "10n" -> R.drawable.n_ten
-                "11d", "11n" -> R.drawable.n_eleven
-                "13d", "13n" -> R.drawable.n_thirteen
-                "50d", "50n" -> R.drawable.n_fifty
-                else -> R.drawable.night_cities
+                "02d", "02n" -> R.drawable.d_two
+                "03d", "03n", "04d", "04n" -> R.drawable.d_three_four
+                "09d", "09n" -> R.drawable.d_nine
+                "10d", "10n" -> R.drawable.d_ten
+                "11d", "11n" -> R.drawable.d_eleven
+                "13d", "13n" -> R.drawable.d_thirteen
+                "50d", "50n" -> R.drawable.d_fifty
+                else -> R.drawable.d_two
             }
             Log.i("res", "end res => ${res}")
             return res

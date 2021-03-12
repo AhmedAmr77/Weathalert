@@ -4,9 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.Weathalert.R
 import com.example.Weathalert.databinding.CitiesCellBinding
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId

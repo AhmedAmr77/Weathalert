@@ -15,22 +15,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.ActivityFavoriteBinding
-import com.example.Weathalert.datalayer.entity.WeatherData
+import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.mvvm.favoritecities.view.FavoriteAdapter
 import com.example.mvvm.favoritecities.view.FavoriteCityDetailsActivity
 import com.example.mvvm.favoritecities.viewmodel.FavoriteViewModel
 import com.example.mvvm.utils.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 import com.mapbox.api.geocoding.v5.models.CarmenFeature
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteFragment
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceSelectionListener
-import kotlinx.coroutines.NonCancellable.cancel
 
 
 class FavoriteActivity : AppCompatActivity() {
