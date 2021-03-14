@@ -20,4 +20,10 @@ data class Days(
         if (fri) days.add("fri")
         return days
     }
+
+    fun isAllFalse(): Boolean{
+        if (!sat && !sun && !mon && !tue && !wed && !thu && !fri)
+            return true
+        return false
+    }
 }

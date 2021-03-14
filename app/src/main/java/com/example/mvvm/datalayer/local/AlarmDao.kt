@@ -19,6 +19,9 @@ interface AlarmDao {
     @Query("SELECT * FROM ALARM_DATA_TABLE WHERE id = :id")
     suspend fun getAlarm(id: Int): AlarmData
 
+    @Query("SELECT * FROM ALARM_DATA_TABLE ORDER BY ID DESC LIMIT 1")
+    suspend fun getLastAlarm(): AlarmData
+
     @Query("DELETE FROM ALARM_DATA_TABLE WHERE id = :id")
     suspend fun deleteAlarm(id: Int)
 

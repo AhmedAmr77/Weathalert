@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/settings_main_background"
+    android:background="@color/home_notification_bar"
     tools:context=".favoritecities.view.FavoriteActivity">
 
     <androidx.recyclerview.widget.RecyclerView

@@ -27,4 +27,8 @@ object Constants {
     const val AUTOCOMPLETE_FRAGMENT_TAG = "autoCompleteFragment"
 
     const val ALARM_ID: String = "alarmId"
+    const val NOTIFICATION_CHANNEL_ID = "notifyId"
+    const val NOTIFICATION_CHANNEL_NAME = "WeatherAlarmChannel"
+    const val HOUR_24_IN_SECONDS = 86400000
+    const val HOUR_48_IN_SECONDS = 172800000
 }

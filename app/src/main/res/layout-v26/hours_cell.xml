@@ -52,6 +52,7 @@
                     app:srcCompat="@drawable/ic_baseline_cloud_24" />
         -->
         <ImageView
+            android:id="@+id/hoursCellIcon"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:alpha="0.5"
