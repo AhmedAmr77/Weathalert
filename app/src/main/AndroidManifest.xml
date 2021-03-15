@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVVM">
-        <activity android:name="com.example.mvvm.presentation.alarm.view.AddAlarmActivity"></activity>
+        <activity android:name="com.example.mvvm.presentation.alarm.view.AlarmsActivity"></activity>
 
         <receiver
             android:name="com.example.mvvm.presentation.alarm.view.AlarmReceiver"
@@ -28,7 +28,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name="com.example.mvvm.presentation.alarm.view.AlarmActivity" />
+        <activity android:name="com.example.mvvm.presentation.addalarm.view.AddAlarmActivity" />
         <activity android:name="com.example.mvvm.presentation.favoritecities.view.FavoriteCityDetailsActivity" />
         <activity android:name=".favoritecities.view.FavoriteActivity" />
         <activity

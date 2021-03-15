@@ -1,4 +1,4 @@
-package com.example.mvvm.presentation.alarm.view
+package com.example.mvvm.presentation.addalarm.view
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -16,28 +16,29 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.Weathalert.R
-import com.example.Weathalert.databinding.ActivityAlarmBinding
-import com.example.mvvm.presentation.alarm.viewmodel.AlarmViewModel
+import com.example.Weathalert.databinding.ActivityAddAlarmBinding
+import com.example.mvvm.presentation.addalarm.viewmodel.AddAlarmViewModel
 import com.example.mvvm.datalayer.entity.alarm.AlarmData
 import com.example.mvvm.datalayer.entity.alarm.Days
+import com.example.mvvm.presentation.alarm.view.AlarmReceiver
 import com.example.mvvm.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AlarmActivity : AppCompatActivity() {
+class AddAlarmActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: AlarmViewModel
-    lateinit var binding: ActivityAlarmBinding
+    private lateinit var viewModelAdd: AddAlarmViewModel
+    lateinit var binding: ActivityAddAlarmBinding
     private lateinit var calenderEvent : Calendar
     private lateinit var alarmList : List<AlarmData>
     private lateinit var lastAlarm : AlarmData
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAlarmBinding.inflate(layoutInflater)
+        binding = ActivityAddAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(AlarmViewModel::class.java)
+        viewModelAdd = ViewModelProvider(this).get(AddAlarmViewModel::class.java)
         calenderEvent = Calendar.getInstance()
 
 
@@ -47,15 +48,14 @@ class AlarmActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        observeViewModel(viewModel)
+        observeViewModel(viewModelAdd)
 
     }
 
 
 
-    private fun observeViewModel(viewModel: AlarmViewModel) {
-        viewModel.alarmsLiveData.observe(this, { alarmList = it })
-        viewModel.lastAlarmLiveData.observe(this, {
+    private fun observeViewModel(viewModelAdd: AddAlarmViewModel) {
+        viewModelAdd.lastAlarmLiveData.observe(this, {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 registerNotifi(it)
             } else {
@@ -71,10 +71,12 @@ class AlarmActivity : AppCompatActivity() {
         var typee: String
         var value: Int
         var isGreater: Boolean
+//        var time: Long = 0L
 
 
         binding.timeTV.setOnClickListener {
-            calenderTime(it as TextView,calenderEvent.time.hours,calenderEvent.time.minutes)
+            calenderTime(it as TextView, calenderEvent.time.hours,calenderEvent.time.minutes)
+//            time = calenderEvent.timeInMillis
         }
 
         binding.saveBtn.setOnClickListener {
@@ -108,7 +110,7 @@ class AlarmActivity : AppCompatActivity() {
             }
 
 
-            addDataAndRegister(days, typee, 1,value, isGreater)
+            addDataAndRegister(days, typee, 1,value, isGreater, calenderEvent.timeInMillis) //
 
 
         }
@@ -166,8 +168,8 @@ class AlarmActivity : AppCompatActivity() {
 
 
 
-    private fun addDataAndRegister( days: Days, type: String, reapeat: Int, value:Int, isGreater: Boolean){
-        val alarmData = AlarmData(days = days, Type = type, reapeat = reapeat, value = value, isGreater = isGreater)
+    private fun addDataAndRegister( days: Days, type: String, reapeat: Int, value:Int, isGreater: Boolean, time: Long){
+        val alarmData = AlarmData(days = days, Type = type, reapeat = reapeat, value = value, isGreater = isGreater, time = time)
 //        addAlarm(alarmData)
         addAndGetLastAlarm(alarmData)
 //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -182,13 +184,13 @@ class AlarmActivity : AppCompatActivity() {
 //    private fun addAlarm(alarm: AlarmData) {
 ////        val alarmData = AlarmData(555L, Days(false, true), "Temp", 1, 7, true)
 ////        Log.i("alarm", "from Activity ${alarmData}")
-//        viewModel.addAlarm(alarm)
+//        viewModelAdd.addAlarm(alarm)
 //        Log.i("alarm", "from Activity after call")
 //    }
     private fun addAndGetLastAlarm(alarm: AlarmData) {
 //        val alarmData = AlarmData(555L, Days(false, true), "Temp", 1, 7, true)
 //        Log.i("alarm", "from Activity ${alarmData}")
-        viewModel.addAndgetLastAlarm(alarm)
+        viewModelAdd.addAndgetLastAlarm(alarm)
         Log.i("alarm", "from Activity after call")
     }
 
@@ -208,7 +210,7 @@ class AlarmActivity : AppCompatActivity() {
 //------------------------------------NOTIFICATION--------------------------------------------------
     @RequiresApi(Build.VERSION_CODES.M)
     private fun registerNotifi(alarm: AlarmData){
-        val notifyIntent = Intent(this,AlarmReceiver::class.java)
+        val notifyIntent = Intent(this, AlarmReceiver::class.java)
         val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 //        for(alarm in alarmList){
             if(Calendar.getInstance().timeInMillis >= calenderEvent.timeInMillis){

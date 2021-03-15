@@ -31,7 +31,8 @@ import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.Weathalert.favoritecities.view.FavoriteActivity
 import com.example.Weathalert.home.viewmodel.HomeViewModel
 import com.example.Weathalert.settings.view.SettingsActivity
-import com.example.mvvm.presentation.alarm.view.AlarmActivity
+import com.example.mvvm.presentation.addalarm.view.AddAlarmActivity
+import com.example.mvvm.presentation.alarm.view.AlarmsActivity
 import com.example.mvvm.utils.Constants
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -105,7 +106,7 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         checkPermissionAndLoc()
 //        getLastLoc()
-//        observeViewModel(viewModel)
+//        observeViewModel(viewModelAdd)
     }
 
     private fun checkPermissionAndLoc(){
@@ -125,7 +126,7 @@ class HomeActivity : AppCompatActivity() {
 //        Log.i("test")
         if (sharedPreferences.getString(Constants.FIRST_USE.toString(), "0") == "0"){
             getLastLoc()
-            //viewModel.fetchData()
+            //viewModelAdd.fetchData()
             changeFirstUseStatus()
         } else {
             viewModel.fetchData()
@@ -165,7 +166,7 @@ class HomeActivity : AppCompatActivity() {
             R.id.menu_alarm -> startActivity(
                 Intent(
                     applicationContext,
-                    AlarmActivity::class.java
+                    AlarmsActivity::class.java
                 )
             )
 
@@ -443,11 +444,11 @@ class HomeActivity : AppCompatActivity() {
 //----------------------try to apply mvvm on places and permissions---------------------------------
     /*
     private fun setupNavigation() {
-        viewModel.showDialog.observe(this, Observer {
+        viewModelAdd.showDialog.observe(this, Observer {
             showPermDialog()
         })
 
-//        viewModel.openTaskEvent.observe(this, Observer {
+//        viewModelAdd.openTaskEvent.observe(this, Observer {
 //            openTaskDetails(it)
 //        })
     }

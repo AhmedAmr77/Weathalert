@@ -77,5 +77,11 @@
     <string name="hPa">hPa</string>
     <string name="home_hourly_am">AM</string>
     <string name="home_hourly_pm">PM</string>
+    <string name="add_alarm_valueTV">Enter Value</string>
+    <string name="add_alarm_typeTV">Select Type</string>
+    <string name="add_alarm_daysTV">Select Days</string>
+    <string name="add_alarm_compareTV">Select Comparison</string>
+    <string name="add_alarm_pickTimeTV">Pick Time</string>
+    <string name="add_alarm_timePickerTV">click to pick</string>
 
 </resources>

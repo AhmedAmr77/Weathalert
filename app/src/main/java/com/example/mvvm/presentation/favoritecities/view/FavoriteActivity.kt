@@ -60,7 +60,7 @@ class FavoriteActivity : AppCompatActivity() {
         SwipDeleteRecyclerViewCell()
 
         //                          GET FAV LIST
-        //                                   viewModel.fetchFavCities()  // not needed cause fetch in refreshFavCitiesList()
+        //                                   viewModelAdd.fetchFavCities()  // not needed cause fetch in refreshFavCitiesList()
         //                         REFRESH DATA
         viewModel.refreshFavCitiesList()
 
@@ -143,7 +143,7 @@ class FavoriteActivity : AppCompatActivity() {
                 binding.searchFragmentContainer.visibility= View.GONE
 
                 //add lat&long to DB and refresh RecyclerView
-                //viewModel.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
+                //viewModelAdd.savaFavCity(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())
 
                 //add to shared then call fetchData()
                 saveCurrentLocationToSharedPref(carmenFeature.center()?.latitude().toString(), carmenFeature.center()?.longitude().toString())

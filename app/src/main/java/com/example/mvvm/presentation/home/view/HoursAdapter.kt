@@ -50,7 +50,7 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
         private fun dateConverter(dt: Int): String {
             val calender = Calendar.getInstance()
             calender.timeInMillis = (dt)*1000L
-            val dateFormat = SimpleDateFormat("k")
+            val dateFormat = SimpleDateFormat("k") //"ka"
             var res = dateFormat.format(calender.time)
             res = amOrpm(res)
             return res

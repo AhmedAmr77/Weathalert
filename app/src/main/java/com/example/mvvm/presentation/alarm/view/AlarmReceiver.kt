@@ -13,7 +13,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.util.Log
 import com.example.mvvm.domain.repositories.WeatherRepository
-import com.example.mvvm.presentation.alarm.viewmodel.AlarmViewModel
+import com.example.mvvm.presentation.addalarm.viewmodel.AddAlarmViewModel
 import com.example.mvvm.domain.repositories.AlarmRepository
 import com.example.mvvm.datalayer.entity.alarm.AlarmData
 import com.example.mvvm.datalayer.entity.weather.Daily
@@ -35,7 +35,7 @@ class AlarmReceiver : BroadcastReceiver() {
     lateinit var lon: String
     lateinit var currWeatherData: WeatherData
     lateinit var currAlarmData: AlarmData
-    lateinit var viewModel: AlarmViewModel
+    lateinit var viewModelAdd: AddAlarmViewModel
 
     override fun onReceive(context: Context, intent: Intent) {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.

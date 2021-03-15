@@ -66,5 +66,11 @@
     <string name="hPa">هيكتوباسكال</string>
     <string name="home_hourly_am">صباحاً</string>
     <string name="home_hourly_pm">مساءً</string>
+    <string name="add_alarm_valueTV">ادخل القيمة</string>
+    <string name="add_alarm_typeTV">اختر الحالة</string>
+    <string name="add_alarm_daysTV">اختر الايام</string>
+    <string name="add_alarm_compareTV">اخنر نوع المقارنة</string>
+    <string name="add_alarm_pickTimeTV">ادخل وقت</string>
+    <string name="add_alarm_timePickerTV">اضغط لادخال الوقت</string>
 
 </resources>

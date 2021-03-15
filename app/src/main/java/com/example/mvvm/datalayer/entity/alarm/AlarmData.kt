@@ -13,5 +13,6 @@ data class AlarmData(
     val Type: String,
     val reapeat: Int,
     val value: Int,
-    val isGreater: Boolean
+    val isGreater: Boolean,
+    val time: Long
 )
