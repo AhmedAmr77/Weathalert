@@ -50,5 +50,7 @@
     <string name="add_alarm_compareTV">Select Comparison</string>
     <string name="add_alarm_pickTimeTV">Pick Time</string>
     <string name="add_alarm_timePickerTV">click to pick</string>
+    <string name="higher_than_alarmChBx">Higher Than</string>
+    <string name="less_than_alarmChBx">Less Than</string>
 
 </resources>

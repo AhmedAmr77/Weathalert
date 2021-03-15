@@ -21,6 +21,7 @@ import com.example.mvvm.presentation.addalarm.viewmodel.AddAlarmViewModel
 import com.example.mvvm.datalayer.entity.alarm.AlarmData
 import com.example.mvvm.datalayer.entity.alarm.Days
 import com.example.mvvm.presentation.alarm.view.AlarmReceiver
+import com.example.mvvm.presentation.alarm.view.AlarmsActivity
 import com.example.mvvm.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,6 +34,13 @@ class AddAlarmActivity : AppCompatActivity() {
     private lateinit var alarmList : List<AlarmData>
     private lateinit var lastAlarm : AlarmData
 
+    var days = Days()
+    lateinit var typee: String
+    var value: Int = 0
+    var isGreater: Boolean = false
+    var time: Long = 0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddAlarmBinding.inflate(layoutInflater)
@@ -41,7 +49,6 @@ class AddAlarmActivity : AppCompatActivity() {
         viewModelAdd = ViewModelProvider(this).get(AddAlarmViewModel::class.java)
         calenderEvent = Calendar.getInstance()
 
-
         setListeners()
 
     }
@@ -49,9 +56,7 @@ class AddAlarmActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         observeViewModel(viewModelAdd)
-
     }
-
 
 
     private fun observeViewModel(viewModelAdd: AddAlarmViewModel) {
@@ -59,61 +64,70 @@ class AddAlarmActivity : AppCompatActivity() {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 registerNotifi(it)
             } else {
-                Log.i("alarm", "nott Marshmello")
+                Log.i("alarm", "not Marshmello")
                 Toast.makeText(this, "NOT MARSH", Toast.LENGTH_LONG).show()
             }
         })
     }
 
     private fun setListeners() {
-
-        var days = Days()
-        var typee: String
-        var value: Int
-        var isGreater: Boolean
-//        var time: Long = 0L
-
-
         binding.timeTV.setOnClickListener {
-            calenderTime(it as TextView, calenderEvent.time.hours,calenderEvent.time.minutes)
-//            time = calenderEvent.timeInMillis
+            calenderTime(it as TextView, calenderEvent.time.hours, calenderEvent.time.minutes)
         }
 
         binding.saveBtn.setOnClickListener {
-            typee = typeCheck()
-            days = daysCheck()
-//            value = valueCheck(typee)
-
-            if (typee.isNullOrEmpty()){
-                Toast.makeText(this, "please select type", Toast.LENGTH_LONG).show()
+            if (checkSelections()){
+                addDataAndRegister(days, typee, 1,value, isGreater, time)
+                finish()
             }
-            else if (days.isAllFalse()){
-                Toast.makeText(this, "please select day(s)", Toast.LENGTH_LONG).show()
-            }
-//            else if(value == 777){
-//                Toast.makeText(this, "please enter value", Toast.LENGTH_LONG).show()
-//            }
-
-
-
-            //VALUE
-            value = binding.numTextEdit.text.toString().toInt()
-
-            //isGREATER
-            isGreater = false
-            var selecteedId = binding.isGreaterRadioGroup.checkedRadioButtonId
-            if (selecteedId == -1){
-                Toast.makeText(this, "please select greater or less", Toast.LENGTH_LONG).show()
-            } else {
-                isGreater = selecteedId == R.id.greatRadio
-                Log.i("alarm", "isGreat Actv = $isGreater")
-            }
-
-
-            addDataAndRegister(days, typee, 1,value, isGreater, calenderEvent.timeInMillis) //
-
-
         }
+    }
+
+    private fun checkSelections(): Boolean {
+
+        typee = typeCheck()
+        days = daysCheck()
+
+        if (typee.isNullOrEmpty()){
+            Toast.makeText(this, "Please select type", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if (days.isAllFalse()){
+            Toast.makeText(this, "Please select day(s)", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if (valueCheck(typee).isNullOrEmpty()){
+            Toast.makeText(this, "Please, enter alarm value", Toast.LENGTH_LONG).show()
+            return false
+        } else {
+            value = valueCheck(typee).toInt()
+        }
+        var selecteedId = binding.isGreaterRadioGroup.checkedRadioButtonId
+        if (selecteedId == -1){
+            if (when (typee) {"Temp", "Wind", "Clouds" -> true
+                                                  else -> false }){
+                Toast.makeText(this, "Please, select comparison type", Toast.LENGTH_LONG).show()
+                return false
+            } else  {
+                isGreater = false
+            }
+        } else {
+            isGreater = selecteedId == R.id.greatRadio
+            Log.i("alarm", "isGreat Actv = $isGreater")
+        }
+        if (binding.timeTV.text == resources.getString(R.string.add_alarm_timePickerTV)){
+            Toast.makeText(this, "Please, pick time", Toast.LENGTH_LONG).show()
+            return false
+        }
+        if (calenderEvent.timeInMillis < Calendar.getInstance().timeInMillis){
+            Toast.makeText(this, "Please, pick a valid time", Toast.LENGTH_LONG).show()
+            return false
+        }
+        else {
+            time = calenderEvent.timeInMillis
+        }
+
+        return true
     }
 
     private fun typeCheck(): String{
@@ -123,7 +137,6 @@ class AddAlarmActivity : AppCompatActivity() {
         } else {
             Log.i("alarm", "type check Actv")
             return (findViewById(selectedId) as RadioButton).text.toString()
-
         }
     }
 
@@ -147,52 +160,31 @@ class AddAlarmActivity : AppCompatActivity() {
         return days
     }
 
-//    private fun valueCheck(type: String): Int {
-//        val txt = binding.numTextEdit.text
-//        val res : Int
-//        if (txt.isNullOrEmpty()) {
-//            res = when (type) {
-//                "Temp" -> 777
-//                "Wind" -> 777
-//                "Clouds" -> 777
-//                else -> 0
-//            }
-//            return res
-//        }
-//        if (txt.isNullOrEmpty())
-//            return 777
-//        Log.i("chbx", "valuecheck")
-//        return txt.toString().toInt()
-//    }
-
-
+    private fun valueCheck(type: String): String {
+        val txt = binding.numTextEdit.text
+        if (txt.isNullOrEmpty()) {
+            if (when (type) {"Temp", "Wind", "Clouds" -> false
+                                                 else -> true }) {
+                return "1"
+            } else {
+                return ""
+            }
+        }
+        return "1"
+    }
 
 
     private fun addDataAndRegister( days: Days, type: String, reapeat: Int, value:Int, isGreater: Boolean, time: Long){
         val alarmData = AlarmData(days = days, Type = type, reapeat = reapeat, value = value, isGreater = isGreater, time = time)
-//        addAlarm(alarmData)
         addAndGetLastAlarm(alarmData)
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-//            registerNotifi(lastAlarm)
-//        } else {
-//            Log.i("alarm", "nott Marshmello")
-//            Toast.makeText(this, "NOT MARSH", Toast.LENGTH_LONG).show()
-//        }
     }
 
-
-//    private fun addAlarm(alarm: AlarmData) {
-////        val alarmData = AlarmData(555L, Days(false, true), "Temp", 1, 7, true)
-////        Log.i("alarm", "from Activity ${alarmData}")
-//        viewModelAdd.addAlarm(alarm)
-//        Log.i("alarm", "from Activity after call")
-//    }
-    private fun addAndGetLastAlarm(alarm: AlarmData) {
-//        val alarmData = AlarmData(555L, Days(false, true), "Temp", 1, 7, true)
-//        Log.i("alarm", "from Activity ${alarmData}")
+   private fun addAndGetLastAlarm(alarm: AlarmData) {
+        Log.i("alarm", "from Activity ${alarm}")
         viewModelAdd.addAndgetLastAlarm(alarm)
         Log.i("alarm", "from Activity after call")
     }
+
 
     private fun calenderTime(textView: TextView, hour:Int, min:Int){
         TimePickerDialog(this, object: TimePickerDialog.OnTimeSetListener{
@@ -212,23 +204,21 @@ class AddAlarmActivity : AppCompatActivity() {
     private fun registerNotifi(alarm: AlarmData){
         val notifyIntent = Intent(this, AlarmReceiver::class.java)
         val alarmManager = this.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        for(alarm in alarmList){
-            if(Calendar.getInstance().timeInMillis >= calenderEvent.timeInMillis){
-                notifyIntent.putExtra(Constants.ALARM_ID,alarm.id)
-                var time = calenderEvent.timeInMillis
-                calenderEvent.timeInMillis = time.plus(Constants.HOUR_24_IN_SECONDS)
-                var pendingIntent = PendingIntent.getBroadcast(this,alarm.id,notifyIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calenderEvent.timeInMillis,pendingIntent)
-                Log.i("alarm","twentyfour${calenderEvent.timeInMillis}")
-            }else{
-                notifyIntent.putExtra(Constants.ALARM_ID,alarm.id)
-                var pendingIntent = PendingIntent.getBroadcast(this,alarm.id,notifyIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT)
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calenderEvent.timeInMillis,pendingIntent)
-                Log.i("alarm","twentyfour${calenderEvent.timeInMillis}")
-            }
-//        }
+        if(Calendar.getInstance().timeInMillis >= calenderEvent.timeInMillis){
+            notifyIntent.putExtra(Constants.ALARM_ID,alarm.id)
+            var time = calenderEvent.timeInMillis
+            calenderEvent.timeInMillis = time.plus(Constants.HOUR_24_IN_SECONDS)
+            var pendingIntent = PendingIntent.getBroadcast(this,alarm.id,notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT)
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calenderEvent.timeInMillis,pendingIntent)
+            Log.i("alarm","twentyfour${calenderEvent.timeInMillis}")
+        }else{
+            notifyIntent.putExtra(Constants.ALARM_ID,alarm.id)
+            var pendingIntent = PendingIntent.getBroadcast(this,alarm.id,notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT)
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calenderEvent.timeInMillis,pendingIntent)
+            Log.i("alarm","twentyfour${calenderEvent.timeInMillis}")
+        }
     }
 
 }

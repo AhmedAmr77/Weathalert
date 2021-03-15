@@ -72,5 +72,7 @@
     <string name="add_alarm_compareTV">اخنر نوع المقارنة</string>
     <string name="add_alarm_pickTimeTV">ادخل وقت</string>
     <string name="add_alarm_timePickerTV">اضغط لادخال الوقت</string>
+    <string name="higher_than_alarmChBx">اكبر من</string>
+    <string name="less_than_alarmChBx">اصغر من</string>
 
 </resources>

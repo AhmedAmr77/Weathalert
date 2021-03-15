@@ -289,7 +289,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="numberSigned"
             android:text="0"
             android:background="@drawable/table_layout"
             android:paddingStart="8dp"
@@ -331,6 +331,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1"
             app:layout_constraintWidth_percent="0.5" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -389,13 +390,13 @@
                 android:id="@+id/greatRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="GreaterThan" />
+                android:text="@string/higher_than_alarmChBx" />
 
             <RadioButton
                 android:id="@+id/lessRadio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="LessThan" />
+                android:text="@string/less_than_alarmChBx" />
         </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
