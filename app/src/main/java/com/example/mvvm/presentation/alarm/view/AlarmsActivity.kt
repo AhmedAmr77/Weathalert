@@ -60,7 +60,6 @@ class AlarmsActivity : AppCompatActivity() {
         viewModel.alarmsListLiveData.observe(this){
             alarmsList = it
             alarmsListAdapter.updateAlarms(it)}
-        viewModel.alarmDeletedLiveData.observe(this){ alarmsListAdapter.deleteFromList(it)}
     }
 
     private fun addAlarmFabListener() {            ///WRITE IT IN VIEWMODEL
@@ -83,6 +82,7 @@ class AlarmsActivity : AppCompatActivity() {
                         .setMessage(resources.getString(R.string.deleteDialogSupportingText))
                         .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ dialog, which ->
                             // remove from adapter
+                            Log.i("delete", "swip to dlt recycler view onSwip()  before ${alarmsList}")
                             viewModel.deleteAlarm(alarmsList[viewHolder.adapterPosition].id, viewHolder.adapterPosition)
                         }
                         .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->

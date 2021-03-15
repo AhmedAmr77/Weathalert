@@ -132,62 +132,62 @@ class AlarmReceiver : BroadcastReceiver() {
 
         for (day in days.getDays()){                    //Fri & Mon
             Log.i("alarm", "day=> $day")
-
+            var str = ""
             when(day){
-                "sat" -> { res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                    if (!res.isNullOrEmpty()){
+                "sat" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                    if (!str.isNullOrEmpty()){
                         Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ SAT => ${res}")
 //                        res = res.plus(" on Saturday\n")
-                        res += " on Saturday\n"
+                        res += "$str on Saturday\n"
                         Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU SAT => ${res}")
 //                        resList.add(res)
                     }}
 
-                "sun" -> {res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                if (!res.isNullOrEmpty()){
+                "sun" -> {str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                if (!str.isNullOrEmpty()){
                     Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ SUN => ${res}")
-                    res = res.plus(" on Sunday\n")
+                    res += "$str on Sunday\n"
                     Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU SUN => ${res}")
 //                    resList.add(res)
                 }}
 
-                "mon" -> { res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                            if (!res.isNullOrEmpty()){
+                "mon" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                            if (!str.isNullOrEmpty()){
                                 Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ MON => ${res}")
-                                res = res.plus(" on Monday\n")
+                                res += "$str on Monday\n"
                                 Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU MON => ${res}")
 //                                resList.add(res)
                             }}
 
-                "tue" -> { res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                    if (!res.isNullOrEmpty()){
+                "tue" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                    if (!str.isNullOrEmpty()){
                         Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ TUE => ${res}")
-                        res = res.plus(" on Tuesday\n")
+                        res += "$str on Tuesday\n"
                         Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU TUE => ${res}")
 //                        resList.add(res)
                     }}
 
-                "wed" -> { res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                    if (!res.isNullOrEmpty()){
+                "wed" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                    if (!str.isNullOrEmpty()){
                         Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ WED => ${res}")
-                        res = res.plus(" on Wednesday\n")
+                        res += "$str on Wednesday\n"
                         Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU WED => ${res}")
 //                        resList.add(res)
                     }}
 
-                "thu" -> { res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                    if (!res.isNullOrEmpty()){
+                "thu" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                    if (!str.isNullOrEmpty()){
                         Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ THU => ${res}")
-                        res = res.plus(" on Thursday\n")
+                        res += "$str on Thursday\n"
                         Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU THU => ${res}")
 //                        resList.add(res)
                     }}
 
-                "fri" -> { res += checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
-                    if (!res.isNullOrEmpty()){
+                "fri" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                    if (!str.isNullOrEmpty()){
                         Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ FRI => ${res}")
 //                        res = res.plus(" on Friday\n")
-                        res += " on Friday\n"
+                        res += "$str on Friday\n"
                         Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU FRI => ${res}")
 //                        resList.add(res)
                     }}
@@ -210,7 +210,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
         for (d in currWeatherDataa.daily!!){
             if (day == convertToDay(d?.dt!!)){                       //TO HANDLE LATER //what if user choose first day in DailyObj(there are 8 days, first day is duplicated), now there are two days of this day
-                Log.i("alarm", "ON checkDay IIIIIIIIIIIIIIIIIIIIIIIIIII r => ${type}")
+                Log.i("alarm", "ON checkDay IIIIIIIIIIIIIIIIIIIIIIIIIII r => ${type} on day => ${day}")
                 val r=  getMatchType(type, d, isGreater, value)
                 Log.i("alarm", "ON checkDay OOOOOOOOOOOOOOOOOO r => ${r}")
                 return r
@@ -268,13 +268,13 @@ class AlarmReceiver : BroadcastReceiver() {
         if (greater){
             if (d.clouds!! > value){
                 Log.i("alarm", "ON checkClouds LLLLLLLLLLLLLLLLLLLLLLLL")
-                val res= "Clouds is $value"
+                val res= "Clouds is ${d.clouds} %"
                 return res
             }
         } else {
             if (d.clouds!! < value){
                 Log.i("alarm", "ON checkClouds MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
-                return "Clouds is $value"
+                return "Clouds is ${d.clouds} %"
             }
         }
         Log.i("alarm", "ON checkClouds NNNNNNNNNNNNNNNNNNNNNNNNNNNN")
@@ -284,10 +284,10 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun checkWind(d: Daily, greater: Boolean, value: Int): String {
         if (greater){
             if (d.wind_speed!! > value)
-                return "Wind is $value"
+                return "Wind is ${d.wind_speed}"
         } else {
-            if (d.temp?.day!! < value)
-                return "Wind is $value"
+            if (d.wind_speed!! < value)
+                return "Wind is ${d.wind_speed}"
         }
         return ""
     }
@@ -297,12 +297,12 @@ class AlarmReceiver : BroadcastReceiver() {
         if (greater){
             if (d.temp?.day!! > value) {
                 Log.i("alarm", "ON checkTemp SSSSSSSSSSS")
-                return "Temperture is $value"
+                return "Temperture is ${d.temp.day.toInt()}°"
             }
         } else {
             if (d.temp?.day!! < value){
                 Log.i("alarm", "ON checkTemp ELSE 22   TTTTTTTTTTTT")
-                return "Temperture is $value"
+                return "Temperture is ${d.temp.day.toInt()}°"
             }
         }
         Log.i("alarm", "ON checkTemp ELSE UUUUUUUUUUUUU")

@@ -16,7 +16,7 @@ class AlarmsViewModel (application: Application) : AndroidViewModel(application)
     private val alarmRepository = AlarmRepository(getApplication())
 
     val alarmsListLiveData = MutableLiveData<List<AlarmData>>()
-    val alarmDeletedLiveData = MutableLiveData<Int>()
+//    val alarmDeletedLiveData = MutableLiveData<Int>()
 
     fun getAllAlarms(){
         val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
@@ -36,7 +36,8 @@ class AlarmsViewModel (application: Application) : AndroidViewModel(application)
         CoroutineScope(Dispatchers.IO + exceptionHandlerException).launch {
             Log.i("alarm", "Alarm VM deleteAlarm start coro")
             alarmRepository.deleteAlarm(id)
-            alarmDeletedLiveData.postValue(index)
+            getAllAlarms()
+//            alarmDeletedLiveData.postValue(index)
             Log.i("alarm", "Alarm VM deleteAlarm success delete from local")
         }
     }
