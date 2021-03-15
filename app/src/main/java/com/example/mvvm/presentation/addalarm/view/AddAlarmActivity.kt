@@ -231,19 +231,4 @@ class AddAlarmActivity : AppCompatActivity() {
 //        }
     }
 
-
-//------------------------------------------------UNREGISTER----------------------------------------
-//    private fun unregisterAlarm(id:Int){
-//        val notifyIntent = Intent(context,AlarmReceiver::class.java)
-//        var pendingIntent = PendingIntent.getBroadcast(context,id,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT)
-//        val alarmManager = context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        if (alarmManager != null) {
-//            alarmManager.cancel(pendingIntent)
-//        }
-//    }
-
-
-
-
-
 }

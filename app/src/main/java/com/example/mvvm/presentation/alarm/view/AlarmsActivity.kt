@@ -1,5 +1,8 @@
 package com.example.mvvm.presentation.alarm.view
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
@@ -84,6 +87,7 @@ class AlarmsActivity : AppCompatActivity() {
                             // remove from adapter
                             Log.i("delete", "swip to dlt recycler view onSwip()  before ${alarmsList}")
                             viewModel.deleteAlarm(alarmsList[viewHolder.adapterPosition].id, viewHolder.adapterPosition)
+                            unregisterAlarm(alarmsList[viewHolder.adapterPosition].id)
                         }
                         .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
                         }
@@ -116,4 +120,15 @@ class AlarmsActivity : AppCompatActivity() {
             })
         mIth.attachToRecyclerView(binding.alarmsRecyclerView)
     }
+
+    //------------------------------------------------UNREGISTER----------------------------------------
+    private fun unregisterAlarm(id:Int){
+        val notifyIntent = Intent(this, AlarmReceiver::class.java)
+        var pendingIntent = PendingIntent.getBroadcast(this, id,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent)
+        }
+    }
+
 }

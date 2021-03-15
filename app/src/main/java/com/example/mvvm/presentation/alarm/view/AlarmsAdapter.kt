@@ -44,8 +44,6 @@ class AlarmsAdapter(var alarms: ArrayList<AlarmData>): RecyclerView.Adapter<Alar
             binding.alarmMsgTV.text = alarm.Type.plus(" ${getMsg(alarm)}")
             binding.alarmTimeTV.text = dateConverter(alarm.time)
             binding.alarmDaysTV.text = getSelectedDays(alarm.days.getDays())
-
-//            binding.daysWindTVVal.text = (days.wind_speed)?.toString().plus(" ${ context.resources.getString(R.string.met_per_sec)}")
         }
 
         private fun getSelectedDays(days: List<String>): String {
