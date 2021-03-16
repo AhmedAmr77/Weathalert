@@ -89,24 +89,26 @@ class AddAlarmActivity : AppCompatActivity() {
         days = daysCheck()
 
         if (typee.isNullOrEmpty()){
-            Toast.makeText(this, "Please select type", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.add_alarm_toast_type), Toast.LENGTH_LONG).show()
             return false
         }
         if (days.isAllFalse()){
-            Toast.makeText(this, "Please select day(s)", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.add_alarm_toast_days), Toast.LENGTH_LONG).show()
             return false
         }
         if (valueCheck(typee).isNullOrEmpty()){
-            Toast.makeText(this, "Please, enter alarm value", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.add_alarm_toast_value), Toast.LENGTH_LONG).show()
             return false
         } else {
             value = valueCheck(typee).toInt()
         }
         var selecteedId = binding.isGreaterRadioGroup.checkedRadioButtonId
         if (selecteedId == -1){
-            if (when (typee) {"Temp", "Wind", "Clouds" -> true
+            if (when (typee) {resources.getString(R.string.add_alrm_temp),
+                              resources.getString(R.string.add_alrm_wind),
+                              resources.getString(R.string.add_alrm_Clouds) -> true
                                                   else -> false }){
-                Toast.makeText(this, "Please, select comparison type", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, resources.getString(R.string.add_alarm_toast_isGreat), Toast.LENGTH_LONG).show()
                 return false
             } else  {
                 isGreater = false
@@ -116,11 +118,11 @@ class AddAlarmActivity : AppCompatActivity() {
             Log.i("alarm", "isGreat Actv = $isGreater")
         }
         if (binding.timeTV.text == resources.getString(R.string.add_alarm_timePickerTV)){
-            Toast.makeText(this, "Please, pick time", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.add_alarm_toast_pickTime), Toast.LENGTH_LONG).show()
             return false
         }
         if (calenderEvent.timeInMillis < Calendar.getInstance().timeInMillis){
-            Toast.makeText(this, "Please, pick a valid time", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, resources.getString(R.string.add_alarm_toast_validTime), Toast.LENGTH_LONG).show()
             return false
         }
         else {
@@ -132,11 +134,11 @@ class AddAlarmActivity : AppCompatActivity() {
 
     private fun typeCheck(): String{
         val selectedId = binding.typeRadioGroup.checkedRadioButtonId
-        if (selectedId == -1){
-            return ""
+        return if (selectedId == -1){
+            ""
         } else {
             Log.i("alarm", "type check Actv")
-            return (findViewById(selectedId) as RadioButton).text.toString()
+            (findViewById<RadioButton>(selectedId)).text.toString()
         }
     }
 
@@ -163,14 +165,16 @@ class AddAlarmActivity : AppCompatActivity() {
     private fun valueCheck(type: String): String {
         val txt = binding.numTextEdit.text
         if (txt.isNullOrEmpty()) {
-            if (when (type) {"Temp", "Wind", "Clouds" -> false
+            if (when (type) {resources.getString(R.string.add_alrm_temp),
+                            resources.getString(R.string.add_alrm_wind),
+                            resources.getString(R.string.add_alrm_Clouds) -> false
                                                  else -> true }) {
-                return "1"
+                return txt.toString()
             } else {
                 return ""
             }
         }
-        return "1"
+        return txt.toString()
     }
 
 
@@ -193,7 +197,7 @@ class AddAlarmActivity : AppCompatActivity() {
                 calenderEvent.set(Calendar.HOUR_OF_DAY,p1)
                 calenderEvent.set(Calendar.MINUTE,p2)
                 calenderEvent.set(Calendar.SECOND,0)
-                textView.setText(SimpleDateFormat("HH:mm").format(calenderEvent.time))
+                textView.setText(SimpleDateFormat("HH:mm", Locale(Constants.LANGUAGE_SETTINGS)).format(calenderEvent.time))
                 Log.i("alarm","time => ${calenderEvent.timeInMillis}")
             }
         }, hour, min, false).show()

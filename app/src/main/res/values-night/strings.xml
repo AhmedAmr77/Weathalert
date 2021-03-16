@@ -52,5 +52,25 @@
     <string name="add_alarm_timePickerTV">click to pick</string>
     <string name="higher_than_alarmChBx">Higher Than</string>
     <string name="less_than_alarmChBx">Less Than</string>
+    <string name="add_alrm_temp">Temperature</string>
+    <string name="add_alrm_Rain">Rain</string>
+    <string name="add_alrm_wind">Wind</string>
+    <string name="add_alrm_Fog_Mist_Haze">Fog-Mist-Haze</string>
+    <string name="add_alrm_Snow">Snow</string>
+    <string name="add_alrm_Clouds">Clouds</string>
+    <string name="add_alrm_Thunderstorm">Thunderstorm</string>
+    <string name="add_alarm_toast_type">Please select type</string>
+    <string name="add_alarm_toast_days">Please select day(s)</string>
+    <string name="add_alarm_toast_value">Please, enter alarm value</string>
+    <string name="add_alarm_toast_isGreat">Please, select comparison type</string>
+    <string name="add_alarm_toast_pickTime">Please, pick time</string>
+    <string name="add_alarm_toast_validTime">Please, pick a valid time</string>
+    <string name="alarm_beCare">Be careful</string>
+    <string name="alarm_msg_willBe">will be</string>
+    <string name="alarm_msg_thereWillBe">There will be</string>
+    <string name="add_alrm_Haze">Haze</string>
+    <string name="add_alrm_Mist">Mist</string>
+    <string name="add_alrm_Fog">Fog</string>
+    <string name="alarm_msg_on">on</string>
 
 </resources>

@@ -74,5 +74,25 @@
     <string name="add_alarm_timePickerTV">اضغط لادخال الوقت</string>
     <string name="higher_than_alarmChBx">اكبر من</string>
     <string name="less_than_alarmChBx">اصغر من</string>
+    <string name="add_alrm_temp">درجة الحرارة</string>
+    <string name="add_alrm_Rain">امطار</string>
+    <string name="add_alrm_wind">رياح</string>
+    <string name="add_alrm_Fog_Mist_Haze">ضباب - شبورة</string>
+    <string name="add_alrm_Snow">ثلج</string>
+    <string name="add_alrm_Clouds">سحاب</string>
+    <string name="add_alrm_Thunderstorm">عاصفة</string>
+    <string name="add_alarm_toast_type">Please select type</string>
+    <string name="add_alarm_toast_days">Please select day(s)</string>
+    <string name="add_alarm_toast_value">Please, enter alarm value</string>
+    <string name="add_alarm_toast_isGreat">Please, select comparison type</string>
+    <string name="add_alarm_toast_pickTime">Please, pick time</string>
+    <string name="add_alarm_toast_validTime">Please, pick a valid time</string>
+    <string name="alarm_beCare">احذر</string>
+    <string name="alarm_msg_willBe">ستكون</string>
+    <string name="alarm_msg_thereWillBe">سيكون هناك</string>
+    <string name="add_alrm_Haze">ضباب</string>
+    <string name="add_alrm_Mist">شبورة</string>
+    <string name="add_alrm_Fog">ضباب</string>
+    <string name="alarm_msg_on">يوم</string>
 
 </resources>

@@ -207,8 +207,8 @@ class HomeActivity : AppCompatActivity() {
         binding.homeMainIcon.setImageResource(getResId(it.current?.weather?.get(0)?.icon))
         Log.i("icon", "endHomeUI ${it.current?.weather?.get(0)?.icon}")
 
-        val araNum = NumberFormat.getInstance(Locale("ar")).format(it.current!!.temp)
-        binding.homeMainTempTV.text = araNum.plus("°")
+        val localeNum = NumberFormat.getInstance(Locale(sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en"))).format(it.current!!.temp)
+        binding.homeMainTempTV.text = localeNum.plus("°")
 //        binding.homeMainTempTV.text = it.current?.temp?.toInt().toString().plus("°")
         binding.homeMainHumidityTVVal.text = it.current?.humidity.toString().plus(" %")
         binding.homeMainPressureTVVal.text = it.current?.pressure.toString().plus(" ${resources.getString(R.string.hPa)}")

@@ -64,43 +64,43 @@
                 android:id="@+id/timpChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Temp" />
+                android:text="@string/add_alrm_temp" />
 
             <RadioButton
                 android:id="@+id/rainChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Rain" />
+                android:text="@string/add_alrm_Rain" />
 
             <RadioButton
                 android:id="@+id/windChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Wind" />
+                android:text="@string/add_alrm_wind" />
 
             <RadioButton
                 android:id="@+id/fogChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fog/Mist/Haze" />
+                android:text="@string/add_alrm_Fog" />
 
             <RadioButton
                 android:id="@+id/snowChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Snow" />
+                android:text="@string/add_alrm_Snow" />
 
             <RadioButton
                 android:id="@+id/cloudsChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Clouds" />
+                android:text="@string/add_alrm_Clouds" />
 
             <RadioButton
                 android:id="@+id/thunderstormChBx"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thunderstorm" />
+                android:text="@string/add_alrm_Thunderstorm" />
 
 
         </RadioGroup>
