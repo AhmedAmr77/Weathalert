@@ -1,5 +1,6 @@
 package com.example.Weathalert.settings.view
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,13 +16,26 @@ class SettingsActivity : AppCompatActivity() {
 
     lateinit var binding: ActivitySettingsBinding
     lateinit var sharedPref: SharedPreferences
+    lateinit var selectedLang : String
+    lateinit var selectedUnit : String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        actionBar?.title = resources.getString(R.string.tempLabel_settings_TV)
+        setAppLocale(
+            getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).getString(
+                Constants.LANGUAGE_SETTINGS,
+                "en"
+            )!!
+        )
+        supportActionBar?.title = resources.getString(R.string.menu_settings)
+
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPref = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
+        selectedLang = sharedPref.getString(Constants.LANGUAGE_SETTINGS, "en").toString()
+        selectedUnit = sharedPref.getString(Constants.UNIT_SETTINGS, "standard").toString()
+
         langBtnListener()
     }
 
@@ -29,37 +43,36 @@ class SettingsActivity : AppCompatActivity() {
         binding.EnglishTV.setOnClickListener {
             binding.EnglishTV.setBackgroundResource(R.drawable.btn_pressed)
             binding.arabicTV.setBackgroundResource(R.drawable.btn_unpressed)
-            sharedPref.edit().putString(Constants.LANGUAGE_SETTINGS, "en").apply()
+            selectedLang = "en"
         }
         binding.arabicTV.setOnClickListener {
             binding.arabicTV.setBackgroundResource(R.drawable.btn_pressed)
             binding.EnglishTV.setBackgroundResource(R.drawable.btn_unpressed)
-            sharedPref.edit().putString(Constants.LANGUAGE_SETTINGS, "ar").apply()
+            selectedLang = "ar"
         }
         binding.standardBtn.setOnClickListener {
             binding.standardBtn.setBackgroundResource(R.drawable.btn_pressed)
             binding.metricBtn.setBackgroundResource(R.drawable.btn_unpressed)
             binding.imperialBtn.setBackgroundResource(R.drawable.btn_unpressed)
-            sharedPref.edit().putString(Constants.UNIT_SETTINGS, "standard").apply()
+            selectedUnit = "standard"
         }
         binding.metricBtn.setOnClickListener {
             binding.standardBtn.setBackgroundResource(R.drawable.btn_unpressed)
             binding.metricBtn.setBackgroundResource(R.drawable.btn_pressed)
             binding.imperialBtn.setBackgroundResource(R.drawable.btn_unpressed)
-            sharedPref.edit().putString(Constants.UNIT_SETTINGS, "metric").apply()
+            selectedUnit = "metric"
         }
         binding.imperialBtn.setOnClickListener {
             binding.standardBtn.setBackgroundResource(R.drawable.btn_unpressed)
             binding.metricBtn.setBackgroundResource(R.drawable.btn_unpressed)
             binding.imperialBtn.setBackgroundResource(R.drawable.btn_pressed)
-            sharedPref.edit().putString(Constants.UNIT_SETTINGS, "imperial").apply()
+            selectedUnit =  "imperial"
         }
 
 
         binding.saveTV.setOnClickListener {
-            Toast.makeText(this, "saveeeeeeeeeee", Toast.LENGTH_LONG).show()
-            saveNewLang(sharedPref.getString(Constants.LANGUAGE_SETTINGS, "en").toString())
-            saveNewUnit(sharedPref.getString(Constants.UNIT_SETTINGS, "standard").toString())
+            saveNewLang(selectedLang)
+            saveNewUnit(selectedUnit)
             restartApp()
         }
         binding.cancelTV.setOnClickListener {
@@ -68,35 +81,35 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun saveNewUnit(newUnit: String) {
-        Toast.makeText(this, "out intent unit", Toast.LENGTH_LONG).show()
         sharedPref.edit().putString(Constants.UNIT_SETTINGS, newUnit).apply()
 
     }
 
     private fun saveNewLang(newLang: String) {
-        Toast.makeText(this, "out intent lang", Toast.LENGTH_LONG).show()
-//        if (sharedPref.getString(Constants.LANGUAGE_SETTINGS, "en").toString() != newLang){//if language does NOT change, then do NOT restart activitry
-            sharedPref.edit().putString(Constants.LANGUAGE_SETTINGS, newLang).apply()
-            setAppLocale(newLang)
-//        }
+        sharedPref.edit().putString(Constants.LANGUAGE_SETTINGS, newLang).apply()
+        setAppLocale(newLang)
     }
+
     private fun setAppLocale(localeCode: String) {
         val resources = resources
         val dm = resources.getDisplayMetrics()
         val config = resources.getConfiguration()
         config.setLocale(Locale(localeCode.toLowerCase()))
         resources.updateConfiguration(config, dm)
+
+        val appRes = application.resources
+        val dmApp = appRes.getDisplayMetrics()
+        val configApp = appRes.configuration
+        configApp.setLocale(Locale(localeCode.toLowerCase()))
+        appRes.updateConfiguration(configApp, dmApp)
     }
 
     fun restartApp(){
         val intent = Intent(this, HomeActivity::class.java)
+        intent.putExtra(Constants.LANG_CHANGED, true)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
         finish()
-        Toast.makeText(this, "INTENT", Toast.LENGTH_LONG).show()
     }
-
-
-
 
 }

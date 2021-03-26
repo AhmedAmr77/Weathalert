@@ -39,12 +39,6 @@ class AlarmsAdapter(var alarms: ArrayList<AlarmData>): RecyclerView.Adapter<Alar
         notifyDataSetChanged()
     }
 
-//    fun deleteFromList(index: Int) {
-//        alarms.removeAt(index)
-////        notifyItemChanged(index)
-//        notifyDataSetChanged()
-//    }
-
     class AlarmsVH(val binding: AlarmsCellBinding, val context: Context): RecyclerView.ViewHolder(binding.root) {
         val sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
 
@@ -56,15 +50,9 @@ class AlarmsAdapter(var alarms: ArrayList<AlarmData>): RecyclerView.Adapter<Alar
 
         private fun getMsg(alarm: AlarmData): String {
             return when(alarm.Type){
-                context.resources.getString(R.string.add_alrm_temp) -> {
-                    "${getReturnMsg(alarm)}°"
-                }
-                context.resources.getString(R.string.add_alrm_wind) -> {
-                    "${getReturnMsg(alarm)}" //${ context.resources.getString(R.string.met_per_sec)}" }
-                }
-                context.resources.getString(R.string.add_alrm_Clouds) -> {
-                    "${getReturnMsg(alarm)} %"
-                }
+                context.resources.getString(R.string.add_alrm_temp) -> { "${getReturnMsg(alarm)}°" }
+                context.resources.getString(R.string.add_alrm_wind) -> { "${getReturnMsg(alarm)}"} //${ context.resources.getString(R.string.met_per_sec)}" } }
+                context.resources.getString(R.string.add_alrm_Clouds) -> { "${getReturnMsg(alarm)} %" }
                 else -> ""
             }
         }
@@ -112,9 +100,3 @@ class AlarmsAdapter(var alarms: ArrayList<AlarmData>): RecyclerView.Adapter<Alar
     }
 
 }
-
-
-
-
-
-

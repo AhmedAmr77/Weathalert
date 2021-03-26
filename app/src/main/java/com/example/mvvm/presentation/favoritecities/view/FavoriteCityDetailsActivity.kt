@@ -1,5 +1,7 @@
 package com.example.mvvm.presentation.favoritecities.view
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +16,8 @@ import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.Weathalert.home.view.DaysAdapter
 import com.example.Weathalert.home.view.HoursAdapter
 import com.example.mvvm.presentation.favoritecities.viewmodel.FavoriteCityDetailsViewModel
+import com.example.mvvm.utils.Constants
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,24 +27,28 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
     lateinit var binding: ActivityFavoriteCityDetailsBinding
     private var hoursListAdapter = HoursAdapter(arrayListOf())
     private var daysListAdapter = DaysAdapter(arrayListOf())
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setAppLocale(getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).getString(Constants.LANGUAGE_SETTINGS, "en")!!)
+        supportActionBar?.title = resources.getString(R.string.favCities_label)
+
         binding = ActivityFavoriteCityDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(FavoriteCityDetailsViewModel::class.java)
 
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
+
         initUI()
         hourlyDailyListener()
-        Log.i("test", "welcome FavDetails")
         // Get the Intent that started this activity and extract the string
         val lat = intent.getStringExtra("LAT")
         val lon = intent.getStringExtra("LON")
 
         if (lat != null && lon != null) {   //  8-3
-            Log.i("test", "welcome FavDetails lat $lat")
-            Log.i("test", "welcome FavDetails lon $lon")
             viewModel.getCity(lat, lon)
         }
 
@@ -62,6 +70,14 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
                 LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
             adapter = daysListAdapter
         }
+    }
+
+    private fun setAppLocale(localeCode: String) {
+        val resources = resources;
+        val dm = resources.getDisplayMetrics()
+        val config = resources.configuration
+        config.setLocale(Locale(localeCode.toLowerCase()))
+        resources.updateConfiguration(config, dm)
     }
 
     private fun hourlyDailyListener() {
@@ -109,29 +125,35 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
         }
     }
     private fun updateUI(it: WeatherData) {
+        binding.textClockHome.timeZone = it.timezone
         val cityTime = it.current?.dt
         binding.homeMainBackground.setImageResource(getModeRes(it))
-        Log.i("daay", "icon before => ${it.current?.weather?.get(0)?.icon}")
         binding.homeMainIcon.setImageResource(getResId(it.current?.weather?.get(0)?.icon))
-        Log.i("daay", "icon after => ${getResId(it.current?.weather?.get(0)?.icon)}")
         binding.homeMainCityNameTV.text = it.timezone
         binding.homeMainDescTV.text = it.current?.weather?.get(0)?.description
         binding.homeMainDateTV.text = cityTime?.let { it1 -> dateConverter(it1, "EEE, d MMM") }
-        binding.homeMainTempTV.text = it.current?.temp?.toInt().toString().plus("°")
-        binding.homeMainHumidityTVVal.text = it.current?.humidity.toString().plus(" %")
-        binding.homeMainPressureTVVal.text = it.current?.pressure.toString().plus(" ${resources.getString(R.string.hPa)}")
-        binding.homeMainWindTVVal.text = it.current?.wind_speed?.toInt().toString().plus(" ${resources.getString(R.string.met_per_sec)}")
-        binding.homeMainCloudsTVVal.text = it.current?.clouds.toString().plus(" %")
+
+        binding.homeMainTempTV.text = "${numLocale(it.current?.temp!!)}°"
+        binding.homeMainHumidityTVVal.text = "${numLocale(it.current.humidity?.toDouble()!!)} ${resources.getString(R.string.percent_sign)}"
+        binding.homeMainPressureTVVal.text = "${numLocale(it.current.pressure?.toDouble()!!)}  ${resources.getString(R.string.hPa)}"
+        binding.homeMainWindTVVal.text = "${numLocale(it.current.wind_speed!!)} ${resources.getString(R.string.met_per_sec)}"
+        binding.homeMainCloudsTVVal.text = "${numLocale(it.current.clouds?.toDouble()!!)} ${resources.getString(R.string.percent_sign)}"
         hoursListAdapter.updateHours(it.hourly as List<Hourly>)
         daysListAdapter.updateDays(it.daily as List<Daily>)
 
         binding.loadingView.visibility = View.GONE     //      why
     }
 
+    private fun numLocale(num: Double): String {
+        return NumberFormat.getInstance(Locale
+            (sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en"))).format(num.toInt())
+    }
+
     private fun dateConverter(dt: Int, pattern: String): String {
         val calender = Calendar.getInstance()
-        calender.timeInMillis = (dt)*1000L
-        val dateFormat = SimpleDateFormat(pattern)
+        calender.timeInMillis = (dt) * 1000L
+        val dateFormat =
+            SimpleDateFormat(pattern, Locale(sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en")))
         return dateFormat.format(calender.time)
     }
 
@@ -143,7 +165,6 @@ class FavoriteCityDetailsActivity : AppCompatActivity() {
     }
 
     private fun getResId(icon: String?): Int {
-        Log.i("icon", "startHomeGET ${icon}")
         return  when(icon){
             "01d" -> R.drawable.d_oneone
             "01n" -> R.drawable.n_one_n

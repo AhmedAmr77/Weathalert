@@ -105,5 +105,8 @@
     <string name="add_alrm_Mist">Mist</string>
     <string name="add_alrm_Fog">Fog</string>
     <string name="alarm_msg_on">on</string>
+    <string name="favCities_label">Favorite</string>
+    <string name="addalarm_label">Add Alarm</string>
+    <string name="percent_sign">%</string>
 
 </resources>

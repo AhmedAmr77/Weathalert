@@ -35,22 +35,43 @@
 
         <!--android:background="@drawable/btn_unpressed"-->
 
-        <TextView
-            android:id="@+id/home_main_dateTV"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:gravity="center"
-            android:text="@string/home_data"
-            android:textSize="20sp"
-            android:textColor="@color/home_text_night"
+            android:orientation="horizontal"
+            android:weightSum="2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintHeight_percent="0.075"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.013"
-            app:layout_constraintWidth_percent="0.3" />
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_percent="0.5">
+
+            <TextView
+                android:id="@+id/home_main_dateTV"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/home_data"
+                android:textSize="20sp"
+                android:textColor="@color/home_text_night"
+                tools:text="17:46 AM"/>
+
+            <TextClock
+                android:id="@+id/textClock_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:format12Hour="HH:mm a"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                tools:text="TUE, 18 march"/>
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/home_main_cityNameTV"
@@ -263,6 +284,8 @@
 
             </LinearLayout>
         </LinearLayout>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.HoursCellBinding
 import com.example.mvvm.datalayer.entity.weather.Hourly
+import com.example.mvvm.utils.Constants
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -40,36 +42,27 @@ class HoursAdapter(var hours: ArrayList<Hourly>) : RecyclerView.Adapter<HoursAda
 
     class HoursVH(val binding: HoursCellBinding, val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
+        val sharedPreferences = context.getSharedPreferences(
+            Constants.SHARED_PREF,
+            Context.MODE_PRIVATE
+        )
+
         fun bind(hours: Hourly) {
             binding.hoursCellHour.text = hours.dt?.let { dateConverter(it) }
-            binding.hoursCellIcon?.setImageResource(getResId(hours.weather?.get(0)?.icon))
-            Log.i("res", "binddd")
-            binding.hoursCellTemp.text = (hours.temp)?.toInt().toString().plus("°")
+            binding.hoursCellIcon.setImageResource(getResId(hours.weather?.get(0)?.icon))
+            binding.hoursCellTemp.text = "${numLocale((hours.temp)!!.toDouble())}°"
         }
 
         private fun dateConverter(dt: Int): String {
             val calender = Calendar.getInstance()
             calender.timeInMillis = (dt)*1000L
-            val dateFormat = SimpleDateFormat("k") //"ka"
-            var res = dateFormat.format(calender.time)
-            res = amOrpm(res)
-            return res
+            val dateFormat = SimpleDateFormat("hh a", Locale(sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en")))
+            return dateFormat.format(calender.time)
         }
 
-        private fun amOrpm(time: String): String {
-            Log.i("time", "amPm start $time")
-            var tm = time.toInt()
-            if (tm > 11 && tm < 24) {
-                Log.i("time", "amPm >12 $tm")
-                if (tm != 12)
-                    tm -= 12
-                return tm.toString()
-                    .plus(" ${context.resources.getString(R.string.home_hourly_pm)}")
-            }
-            Log.i("time", "else>12 $tm")
-            if (tm == 24)
-                tm -= 12
-            return "${(tm)} ${context.resources.getString(R.string.home_hourly_am)}"
+        private fun numLocale(num: Double): String {
+            return NumberFormat.getInstance(Locale
+                (sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en"))).format(num.toInt())
         }
 
         private fun getResId(icon: String?): Int {

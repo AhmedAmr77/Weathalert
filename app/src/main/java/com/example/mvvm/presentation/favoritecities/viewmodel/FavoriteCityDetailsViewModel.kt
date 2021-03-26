@@ -21,24 +21,13 @@ class FavoriteCityDetailsViewModel (application: Application) : AndroidViewModel
 
 
     fun getCity(lat: String, lon: String) {
-        Log.i("test", "FavDet VM getCity")
         loadingLiveData.postValue(true)
-        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
+        val exceptionHandlerException = CoroutineExceptionHandler { _, _ ->
             loadingLiveData.postValue(false)
-            errorLiveData.postValue("FavDet VM getCity from ExceptionHandlerr : ${th.message.toString()}")
-            Log.i("test", "FavDet VM getCity from ExceptionHandlerr")
+            errorLiveData.postValue("Please, try again")
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
             cityLiveData.postValue(weatherRepository.getCity(lat, lon))
-            Log.i("test", "FavDet VM getCity success")
         }
     }
-
-//    val startCityDetailsActivityLiveData = MutableLiveData<WeatherData>()
-//
-//
-//    fun startCityDetailsActivity(city: WeatherData) {
-//        startCityDetailsActivityLiveData.value = city
-//    }
-
 }

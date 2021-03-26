@@ -62,8 +62,8 @@
     <string name="home_main_pressureTV">الضغط</string>
     <string name="home_label_hourlyTV">الساعات</string>
     <string name="home_label_dailyTV">الأيام</string>
-    <string name="met_per_sec">متر/ثانية</string>
-    <string name="hPa">هيكتوباسكال</string>
+    <string name="met_per_sec">م/ث</string>
+    <string name="hPa">هـ با</string>
     <string name="home_hourly_am">صباحاً</string>
     <string name="home_hourly_pm">مساءً</string>
     <string name="add_alarm_valueTV">ادخل القيمة</string>
@@ -81,12 +81,12 @@
     <string name="add_alrm_Snow">ثلج</string>
     <string name="add_alrm_Clouds">سحاب</string>
     <string name="add_alrm_Thunderstorm">عاصفة</string>
-    <string name="add_alarm_toast_type">Please select type</string>
-    <string name="add_alarm_toast_days">Please select day(s)</string>
-    <string name="add_alarm_toast_value">Please, enter alarm value</string>
-    <string name="add_alarm_toast_isGreat">Please, select comparison type</string>
-    <string name="add_alarm_toast_pickTime">Please, pick time</string>
-    <string name="add_alarm_toast_validTime">Please, pick a valid time</string>
+    <string name="add_alarm_toast_type">من فضلك اختر النوع</string>
+    <string name="add_alarm_toast_days">من فضلك اختر الايام</string>
+    <string name="add_alarm_toast_value">من فضلك ادخل القيمة</string>
+    <string name="add_alarm_toast_isGreat">من فضلك اختر نوع المقارنة</string>
+    <string name="add_alarm_toast_pickTime">من فضلك اضف وقت</string>
+    <string name="add_alarm_toast_validTime">من فضلك ادخل وقت صحيح</string>
     <string name="alarm_beCare">احذر</string>
     <string name="alarm_msg_willBe">ستكون</string>
     <string name="alarm_msg_thereWillBe">سيكون هناك</string>
@@ -94,5 +94,8 @@
     <string name="add_alrm_Mist">شبورة</string>
     <string name="add_alrm_Fog">ضباب</string>
     <string name="alarm_msg_on">يوم</string>
+    <string name="favCities_label">المفضلة</string>
+    <string name="addalarm_label">إضافة منبه</string>
+    <string name="percent_sign">٪</string>
 
 </resources>

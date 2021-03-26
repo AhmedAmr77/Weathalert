@@ -51,39 +51,22 @@ class AlarmReceiver : BroadcastReceiver() {
         weatherRepository = WeatherRepository(context.applicationContext as Application)
         alarmRepository = AlarmRepository(context.applicationContext as Application)
 
-            Log.i("alarm", "ON RECEIVE AAAAAAAAAAAAAAAAAAAAAAAAAAA ${alarmTimeId}")
         initVar(context)
 
-//        getData()
         runBlocking(Dispatchers.IO){
             launch {
                 currWeatherData = getCurrentWeatherData()
-                Log.i("alarm", "AlrmRec getCurrWeathData success")
                 currAlarmData =  getCurrentAlarmData(alarmTimeId)
             }
         }
-        Log.i(
-            "alarm",
-            "ON RECEIVE BBBBBBBBBBBBBBBBBBBBBBBBBBBB ${currWeatherData.timezone} &${convertToDay(
-                currWeatherData.daily?.get(0)?.dt!!.toInt())} & ${currAlarmData.id} & ${currAlarmData.Type}"
-        )
-//        checkNotificationList(currAlarmData, currWeatherData, context)
         checkAlrm(currAlarmData, currWeatherData)
-//        pushNotification(context, "asdfghjkl")
-
-
-
     }
 
     private fun sendNotification(res: String) {
         var builder = Notification.Builder(context)
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                Constants.NOTIFICATION_CHANNEL_ID,
-                "Weathalert",
-                NotificationManager.IMPORTANCE_HIGH
-            )
+            val channel = NotificationChannel(Constants.NOTIFICATION_CHANNEL_ID, "Weathalert", NotificationManager.IMPORTANCE_HIGH)
             manager.createNotificationChannel(channel)
             builder = Notification.Builder(context, Constants.NOTIFICATION_CHANNEL_ID)
         } else {
@@ -98,182 +81,83 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     private fun checkAlrm(currAlarmData: AlarmData, currWeatherData: WeatherData) {
-        Log.i("alarm", "ON checkAlrm EEEEEEEEEEEEEEEEEEEEEEEEE")
-
         val type = currAlarmData.Type
         val days = currAlarmData.days
         val value = currAlarmData.value
         val isGreater = currAlarmData.isGreater
         var res = ""
 
-        for (day in days.getDays()){                    //Fri & Mon
-            Log.i("alarm", "day=> $day")
+        for (day in days.getDays()){
             var str = ""
             when(day){
-                "sat" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                "sat" -> {
+                    str = checkDay(day, type, isGreater, value, currWeatherData)
                     if (!str.isNullOrEmpty()) {
-                        Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ SAT => ${res}")
-//                        res = res.plus(" on Saturday\n")
                         res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
                             getLocaleStringResource(R.string.days_sat)}\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU SAT => ${res}")
-//                        resList.add(res)
                     }
                 }
 
-                "sun" -> { str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
+                "sun" -> {
+                    str = checkDay(day, type, isGreater, value, currWeatherData)             //match & check with Mon
                     if (!str.isNullOrEmpty()) {
-                        Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ SUN => ${res}")
                         res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
-                            getLocaleStringResource(
-                                R.string.days_sun
-                            )
-                        }\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU SUN => ${res}")
-//                    resList.add(res)
-                    }
+                            getLocaleStringResource(R.string.days_sun)}\n"
+                       }
                 }
 
                 "mon" -> {
-                    str = checkDay(
-                        day,
-                        type,
-                        isGreater,
-                        value,
-                        currWeatherData
-                    )             //match & check with Mon
+                    str = checkDay(day, type, isGreater, value, currWeatherData)
                     if (!str.isNullOrEmpty()) {
-                        Log.i(
-                            "alarm",
-                            "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ MON => ${res}"
-                        )
-                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
-                            getLocaleStringResource(
-                                R.string.days_mon
-                            )
-                        }\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU MON => ${res}")
-//                                resList.add(res)
+                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${getLocaleStringResource(R.string.days_mon)}\n"
                     }
                 }
 
                 "tue" -> {
-                    str = checkDay(
-                        day,
-                        type,
-                        isGreater,
-                        value,
-                        currWeatherData
-                    )             //match & check with Mon
+                    str = checkDay(day, type, isGreater, value, currWeatherData)
                     if (!str.isNullOrEmpty()) {
-                        Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ TUE => ${res}")
-                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
-                            getLocaleStringResource(
-                                R.string.days_tue
-                            )
-                        }\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU TUE => ${res}")
-//                        resList.add(res)
+                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${getLocaleStringResource(R.string.days_tue)}\n"
                     }
                 }
 
                 "wed" -> {
-                    str = checkDay(
-                        day,
-                        type,
-                        isGreater,
-                        value,
-                        currWeatherData
-                    )             //match & check with Mon
+                    str = checkDay(day, type, isGreater, value, currWeatherData)
                     if (!str.isNullOrEmpty()) {
-                        Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ WED => ${res}")
-                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
-                            getLocaleStringResource(
-                                R.string.days_wed
-                            )
-                        }\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU WED => ${res}")
-//                        resList.add(res)
+                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${getLocaleStringResource(R.string.days_wed)}\n"
                     }
                 }
 
                 "thu" -> {
-                    str = checkDay(
-                        day,
-                        type,
-                        isGreater,
-                        value,
-                        currWeatherData
-                    )             //match & check with Mon
+                    str = checkDay(day, type, isGreater, value, currWeatherData)
                     if (!str.isNullOrEmpty()) {
-                        Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ THU => ${res}")
-                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
-                            getLocaleStringResource(
-                                R.string.days_thu
-                            )
-                        }\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU THU => ${res}")
-//                        resList.add(res)
+                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${getLocaleStringResource(R.string.days_thu)}\n"
                     }
                 }
 
                 "fri" -> {
-                    str = checkDay(
-                        day,
-                        type,
-                        isGreater,
-                        value,
-                        currWeatherData
-                    )             //match & check with Mon
+                    str = checkDay(day, type, isGreater, value, currWeatherData)
                     if (!str.isNullOrEmpty()) {
-                        Log.i("alarm", "ON checkAlrm QQQQQQQQQQQQQQQQQQQQQQQQ FRI => ${res}")
-//                        res = res.plus(" on Friday\n")
-                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${
-                            getLocaleStringResource(
-                                R.string.days_fri
-                            )
-                        }\n"
-                        Log.i("alarm", "ON checkAlrm UUUUUUUUUUUUUUUUUUUUUUU FRI => ${res}")
-//                        resList.add(res)
+                        res += "$str ${getLocaleStringResource(R.string.alarm_msg_on)} ${getLocaleStringResource(R.string.days_fri)}\n"
                     }
                 }
             }
-
         }
-        if (res.isNullOrEmpty()){
-            Log.i("alarm", "ON checkAlrm TTTTTTTTTTTTTTTTTTTTTT")
-        } else{
-//            pushNotification(context, res)
+        if (!res.isNullOrEmpty()){
             sendNotification(res)
         }
-//        Log.i("alarm", "ON checkAlrm JJJJJJJJJJJJJJJJJJJJJJJJJJJJ ${ resList}")
-//        return resList
     }
 
     @SuppressLint("LogNotTimber")
     private fun checkDay(day: String, type: String, isGreater: Boolean, value: Int, currWeatherDataa: WeatherData): String {
-        Log.i("alarm", "ON checkDay FFFFFFFFFFFFFFFFFFFFFFF")
-        Log.i("alarm", "ON checkDay FFFFFF day => ${day}")
-
         for (d in currWeatherDataa.daily!!){
-            Log.i("alarm", "ON checkDay FFFFFF dailyDT => ${convertToDay(d?.dt!!)}")
             if (day == convertToDay(d?.dt!!)){                       //TO HANDLE LATER //what if user choose first day in DailyObj(there are 8 days, first day is duplicated), now there are two days of this day
-                Log.i("alarm", "ON checkDay IIIIIIIIIIIIIIIIIIIIIIIIIII r => ${type} on day => ${day}")
-                val r=  getMatchType(type, d, isGreater, value)
-                Log.i("alarm", "ON checkDay OOOOOOOOOOOOOOOOOO r => ${r}")
-                return r
-            } else{
-                Log.i("alarm", "ON checkDay FFFFFF ELSEEEE")
-
+                return getMatchType(type, d, isGreater, value)
             }
         }
-        Log.i("alarm", "ON checkDay PPPPPPPPPPPPPPPPPPPPPPP r => ${type}")
         return ""
     }
 
     private fun getMatchType(type: String, d: Daily, isGreater: Boolean, value: Int): String {
-        val loacleType = getLocaleStringResource(R.string.add_alrm_temp)
-        Log.i("alarm", "ON getMatchType GGG0000 $type && $loacleType")
         return when(type){
             getLocaleStringResource(R.string.add_alrm_temp) -> checkTemp(d, isGreater, value)
             getLocaleStringResource(R.string.add_alrm_wind) -> checkWind(d, isGreater, value)
@@ -300,43 +184,30 @@ class AlarmReceiver : BroadcastReceiver() {
 
     private fun checkThunderstorm(d: Daily): String {
         if (d.weather?.get(0)?.main == "Thunderstorm")
-            return "${getLocaleStringResource(R.string.alarm_msg_thereWillBe)} ${getLocaleStringResource(
-                R.string.add_alrm_Thunderstorm
-            )}"
+            return "${getLocaleStringResource(R.string.alarm_msg_thereWillBe)} ${getLocaleStringResource(R.string.add_alrm_Thunderstorm)}"
         return ""
     }
 
     private fun checkFog(d: Daily): String {
         if (d.weather?.get(0)?.main == "Fog")
-            return "${getLocaleStringResource(R.string.alarm_msg_thereWillBe)} ${getLocaleStringResource(
-                R.string.add_alrm_Fog
-            )}"
+            return "${getLocaleStringResource(R.string.alarm_msg_thereWillBe)} ${getLocaleStringResource(R.string.add_alrm_Fog)}"
         return ""
     }
 
     private fun checkClouds(d: Daily, greater: Boolean, value: Int): String {
-        Log.i(
-            "alarm",
-            "ON checkClouds HHHHHHHHHHHHHHHHHHHHH val => ${value} -- grtr => ${greater} -- dtV => ${d.clouds}"
-        )
-        val localeValueEn = NumberFormat.getInstance(Locale("en")).format(value).toInt() //locale val to en cause it comes from api in en
+        val localeValueEn = NumberFormat.getInstance(Locale("en")).format(value).toInt()
         if (greater){
-            if (d.clouds!! > localeValueEn){
-                Log.i("alarm", "ON checkClouds LLLLLLLLLLLLLLLLLLLLLLLL")
+            if (d.clouds!! > localeValueEn)
                 return getReturnMsg(d.clouds.toInt(), R.string.add_alrm_Clouds, "%")
-            }
         } else {
-            if (d.clouds!! < localeValueEn){
-                Log.i("alarm", "ON checkClouds MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
+            if (d.clouds!! < localeValueEn)
                 return getReturnMsg(d.clouds.toInt(), R.string.add_alrm_Clouds, "%")
-            }
         }
-        Log.i("alarm", "ON checkClouds NNNNNNNNNNNNNNNNNNNNNNNNNNNN")
         return ""
     }
 
     private fun checkWind(d: Daily, greater: Boolean, value: Int): String {
-        val localeValueEn = NumberFormat.getInstance(Locale("en")).format(value).toInt() //locale val to en cause it comes from api in en
+        val localeValueEn = NumberFormat.getInstance(Locale("en")).format(value).toInt()
         if (greater){
             if (d.wind_speed!! > localeValueEn)
                 return getReturnMsg(d.wind_speed.toInt(), R.string.add_alrm_wind, "")
@@ -348,23 +219,16 @@ class AlarmReceiver : BroadcastReceiver() {
     }
 
     private fun checkTemp(d: Daily, greater: Boolean, value: Int): String {
-        Log.i(
-            "alarm",
-            "ON checkTemp RRRRRRRRRRRRRRRRR val => ${value} -- grtr => ${greater} -- dtV => ${d.temp?.day}"
-        )
         val localeValueEn = NumberFormat.getInstance(Locale("en")).format(value).toInt() //locale val to en cause it comes from api in en
         if (greater){
             if (d.temp?.day!! > localeValueEn) {
-                Log.i("alarm", "ON checkTemp SSSSSSSSSSS")
-                return getReturnMsg(d.temp?.day?.toInt(), R.string.add_alrm_temp, "°")
+                return getReturnMsg(d.temp.day.toInt(), R.string.add_alrm_temp, "°")
             }
         } else {
             if (d.temp?.day!! < localeValueEn){
-                Log.i("alarm", "ON checkTemp ELSE 22   TTTTTTTTTTTT")
-                return getReturnMsg(d.temp?.day?.toInt(), R.string.add_alrm_temp, "°")
+                return getReturnMsg(d.temp.day.toInt(), R.string.add_alrm_temp, "°")
             }
         }
-        Log.i("alarm", "ON checkTemp ELSE UUUUUUUUUUUUU")
         return ""
     }
 
@@ -380,7 +244,7 @@ class AlarmReceiver : BroadcastReceiver() {
         return dateFormat.format(calender.time).toLowerCase()
     }
 
-    fun getLocaleStringResource(resourceId: Int): String {
+    private fun getLocaleStringResource(resourceId: Int): String {
         val result: String
         val config = Configuration(context.resources.configuration)
         config.setLocale(currLocale)
@@ -388,40 +252,18 @@ class AlarmReceiver : BroadcastReceiver() {
         return result
     }
 
-    //-----------------------------------GETDATA--------------------------------------------------------
-//    private fun getData(){
-//        val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
-//            Log.i("alarm", "AlrmRec getCurrWeathData from ExceptionHandlerr ${th.message}")
-//        }
-//        runBlocking(Dispatchers.IO+exceptionHandlerException){
-//            launch {
-//                currWeatherData = getCurrentWeatherData()
-//                Log.i("alarm", "AlrmRec getCurrWeathData success")
-//                currAlarmData =  getCurrentAlarmData(alarmTimeId)
-//            }
-//        }
-//    }
     private fun initVar(app: Context) {
         shPref = app.getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
         currLocale = Locale(shPref.getString(Constants.LANGUAGE_SETTINGS, "en").toString())
         lat = shPref.getString(Constants.LATITUDE, "0").toString()
         lon = shPref.getString(Constants.LONGITUDE, "0").toString()
-        Log.i("alarm", "init: $lat and $lon ")
-        Log.i(
-            "alarm", "${shPref.getString(Constants.LATITUDE, "0").toString()}\n${
-                shPref.getString(
-                    Constants.LONGITUDE,
-                    "0"
-                ).toString()
-            }"
-        )
     }
-    private suspend fun getCurrentWeatherData(): WeatherData{
 
+    private suspend fun getCurrentWeatherData(): WeatherData{
         return weatherRepository.getCity(lat, lon)
     }
+
     private suspend fun getCurrentAlarmData(id: Int): AlarmData{
         return alarmRepository.getAlarm(id)
     }
 }
-

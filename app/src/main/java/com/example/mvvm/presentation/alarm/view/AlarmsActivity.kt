@@ -24,7 +24,9 @@ import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.mvvm.presentation.addalarm.view.AddAlarmActivity
 import com.example.mvvm.presentation.addalarm.viewmodel.AddAlarmViewModel
 import com.example.mvvm.presentation.alarm.viewmodel.AlarmsViewModel
+import com.example.mvvm.utils.Constants
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
 class AlarmsActivity : AppCompatActivity() {
 
@@ -35,6 +37,13 @@ class AlarmsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setAppLocale(
+            getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).getString(
+                Constants.LANGUAGE_SETTINGS,
+                "en"
+            )!!
+        )
+        supportActionBar?.title = resources.getString(R.string.menu_alarm)
         binding = ActivityAlarmsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -43,13 +52,13 @@ class AlarmsActivity : AppCompatActivity() {
         initUI()
 
         addAlarmFabListener()
+        observeViewModel(viewModel)
+        SwipDeleteRecyclerViewCell()
     }
 
     override fun onStart() {
         super.onStart()
-        observeViewModel(viewModel)
         viewModel.getAllAlarms()
-        SwipDeleteRecyclerViewCell()
     }
 
     private fun initUI() {
@@ -71,11 +80,18 @@ class AlarmsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setAppLocale(localeCode: String) {
+        val resources = resources;
+        val dm = resources.getDisplayMetrics()
+        val config = resources.configuration
+        config.setLocale(Locale(localeCode.toLowerCase()))
+        resources.updateConfiguration(config, dm)
+    }
+
     private fun SwipDeleteRecyclerViewCell() {
         val mIth = ItemTouchHelper(
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                    Log.i("test", "Fav swip to dlt recycler view onMove()")
                     return false // true if moved, false otherwise
                 }
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -83,13 +99,11 @@ class AlarmsActivity : AppCompatActivity() {
                     MaterialAlertDialogBuilder(this@AlarmsActivity, R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog_Delete)
                         .setTitle(resources.getString(R.string.deleteDialogtitle))
                         .setMessage(resources.getString(R.string.deleteDialogSupportingText))
-                        .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ dialog, which ->
-                            // remove from adapter
-                            Log.i("delete", "swip to dlt recycler view onSwip()  before ${alarmsList}")
+                        .setPositiveButton(resources.getString(R.string.deleteDialogDelete)){ _, _ ->
                             viewModel.deleteAlarm(alarmsList[viewHolder.adapterPosition].id, viewHolder.adapterPosition)
                             unregisterAlarm(alarmsList[viewHolder.adapterPosition].id)
                         }
-                        .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { dialog, which ->
+                        .setNegativeButton(resources.getString(R.string.deleteDialogCancel)) { _, _ ->
                         }
                         .setOnDismissListener {
                             alarmsListAdapter.notifyDataSetChanged()
@@ -124,7 +138,7 @@ class AlarmsActivity : AppCompatActivity() {
     //------------------------------------------------UNREGISTER----------------------------------------
     private fun unregisterAlarm(id:Int){
         val notifyIntent = Intent(this, AlarmReceiver::class.java)
-        var pendingIntent = PendingIntent.getBroadcast(this, id,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(this, id,notifyIntent,PendingIntent.FLAG_UPDATE_CURRENT)
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent)

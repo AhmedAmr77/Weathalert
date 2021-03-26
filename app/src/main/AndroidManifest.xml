@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MVVM">
+
         <activity android:name="com.example.mvvm.presentation.alarm.view.AlarmsActivity"></activity>
 
         <receiver
@@ -34,7 +35,10 @@
         <activity
             android:name=".settings.view.SettingsActivity"
             android:label="@string/title_activity_settingss" />
-        <activity android:name=".home.view.HomeActivity">
+
+        <activity
+            android:name=".home.view.HomeActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

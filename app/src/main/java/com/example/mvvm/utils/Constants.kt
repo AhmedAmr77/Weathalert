@@ -14,13 +14,9 @@ object Constants {
     const val FAV_LONGITUDE = "FAV_LONGITUDE"
     const val FAV_LATITUDE = "FAV_LATITUDE"
 
-    //    const val SHARED_PREF_SETTINGS = "SETTINGS"
     const val LANGUAGE_SETTINGS = "en"
     const val UNIT_SETTINGS = "standard"
-//    const val STANDARD_SETTINGS = "STANDARD"
-//    const val METRIC_SETTINGS = "METRIC"
-//    const val IMPERIAL_SETTINGS = "IMPERIAL"
-//    const val CURRENT_LANGAUGE = "en"
+    const val LANG_CHANGED = "LANG_CHANGED"
 
     const val MAPBOX_API_KEY =
         "pk.eyJ1IjoiYWhtZC1hbXI3IiwiYSI6ImNrbHY5bHNlNzJudWwycW4xZWZ4ZnpwdmUifQ.i_uRDlSBTg9n27BabRXWKQ"
@@ -28,7 +24,6 @@ object Constants {
 
     const val ALARM_ID: String = "alarmId"
     const val NOTIFICATION_CHANNEL_ID = "notifyId"
-    const val NOTIFICATION_CHANNEL_NAME = "WeatherAlarmChannel"
     const val HOUR_24_IN_SECONDS = 86400000
-    const val HOUR_48_IN_SECONDS = 172800000
+
 }

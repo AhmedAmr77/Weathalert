@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Weathalert.R
 import com.example.Weathalert.databinding.DaysCellBinding
 import com.example.mvvm.datalayer.entity.weather.Daily
+import com.example.mvvm.utils.Constants
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -39,39 +41,29 @@ class DaysAdapter(var days: ArrayList<Daily>) : RecyclerView.Adapter<DaysAdapter
     }
 
 
-
     class DaysVH(val binding: DaysCellBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
-
+        val sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREF,
+            Context.MODE_PRIVATE
+        )
         fun bind(days: Daily) {
-            binding.daysCellIcon.setImageResource(getResId(days.weather?.get(0)?.icon))  //(hours.weather[0].id)
-            binding.daysDayTVVal.text = (days.dt?.let { dateConverter(it) })
-            binding.daysGrtTempTVVal.text = days.temp?.max?.toInt().toString().plus("°")
-            binding.daysSmlTempTVVal.text = days.temp?.min?.toInt().toString().plus("°")
-            binding.daysDescTVVal.text = days.weather?.get(0)?.main
-            binding.daysHumidityTVVal.text = (days.humidity)?.toString().plus(" %")
-            binding.daysCloudsTVVal.text = (days.clouds)?.toString().plus(" %")
-            binding.daysPressureTVVal.text = (days.pressure)?.toString().plus(" ${ context.resources.getString(R.string.hPa)}")
-            binding.daysWindTVVal.text = (days.wind_speed)?.toString().plus(" ${ context.resources.getString(R.string.met_per_sec)}")
+            binding.daysCellIcon.setImageResource(getResId(days.weather?.get(0)?.icon))
+            binding.daysDayTVVal.text = (days.dt?.let { dateConverter(it.toLong()) })
+            binding.daysGrtTempTVVal.text = "${numLocale(days.temp?.max!!)}°"
+            binding.daysSmlTempTVVal.text = "${numLocale(days.temp?.min!!)}°"
+            binding.daysDescTVVal.text = days.weather?.get(0)?.description
+            binding.daysHumidityTVVal.text = "${numLocale((days.humidity)!!.toDouble())} ${context.resources.getString(R.string.percent_sign)}"
+            binding.daysCloudsTVVal.text = "${numLocale((days.clouds)!!.toDouble())} ${context.resources.getString(R.string.percent_sign)}"
+            binding.daysPressureTVVal.text = "${numLocale((days.pressure)!!.toDouble())} ${context.resources.getString(R.string.hPa)}"
+            binding.daysWindTVVal.text = "${numLocale((days.wind_speed)!!.toDouble())} ${context.resources.getString(R.string.met_per_sec)}"
         }
 
-        private fun dateConverter(dt: Int): String {
-            val calender = Calendar.getInstance()
-            calender.timeInMillis = (dt)*1000L
-            val dateFormat = SimpleDateFormat("EEEE")
-            return getDay(dateFormat.format(calender.time))
+        private fun dateConverter(dt: Long): String {
+            return SimpleDateFormat("EEEE", Locale(sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en"))).format(dt*1000)
         }
 
-        private fun getDay(day: String): String { //for locale
-            return when (day){
-                "Monday" -> context.resources.getString(R.string.days_mon)
-                "Tuesday" -> context.resources.getString(R.string.days_tue)
-                "Wednesday" -> context.resources.getString(R.string.days_wed)
-                "Thursday" -> context.resources.getString(R.string.days_thu)
-                "Friday" -> context.resources.getString(R.string.days_fri)
-                "Saturday" -> context.resources.getString(R.string.days_sat)
-                "Sunday" -> context.resources.getString(R.string.days_sun)
-                else -> "nullly"
-            }
+        private fun numLocale(num: Double): String {
+            return NumberFormat.getInstance(Locale
+                (sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en"))).format(num.toInt())
         }
 
         private fun getResId(icon: String?): Int {

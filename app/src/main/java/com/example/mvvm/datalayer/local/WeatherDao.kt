@@ -11,7 +11,7 @@ interface WeatherDao {
     suspend fun insert(weather: WeatherData?)
 
     @Query("SELECT * FROM WeatherData WHERE lat = :lat and lon = :lon")
-    suspend fun getCityData(lat: Double, lon: Double): WeatherData  //no need suspend cause => Room already uses a background thread for that specific @Query which returns LiveData
+    suspend fun getCityData(lat: Double, lon: Double): WeatherData
 
     @Query("SELECT * from WeatherData WHERE isFavorite = 1")
     suspend fun getAllCities(): List<WeatherData>

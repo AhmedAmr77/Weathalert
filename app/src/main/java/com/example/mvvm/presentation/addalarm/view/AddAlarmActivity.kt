@@ -43,29 +43,30 @@ class AddAlarmActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setAppLocale(
+            getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).getString(
+                Constants.LANGUAGE_SETTINGS,
+                "en"
+            )!!
+        )
+        supportActionBar?.title = resources.getString(R.string.menu_alarm)
         binding = ActivityAddAlarmBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModelAdd = ViewModelProvider(this).get(AddAlarmViewModel::class.java)
         calenderEvent = Calendar.getInstance()
 
-        setListeners()
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         observeViewModel(viewModelAdd)
-    }
 
+        setListeners()
+    }
 
     private fun observeViewModel(viewModelAdd: AddAlarmViewModel) {
         viewModelAdd.lastAlarmLiveData.observe(this, {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 registerNotifi(it)
             } else {
-                Log.i("alarm", "not Marshmello")
-                Toast.makeText(this, "NOT MARSH", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Notifications are not working in this version", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -81,6 +82,14 @@ class AddAlarmActivity : AppCompatActivity() {
                 finish()
             }
         }
+    }
+
+    private fun setAppLocale(localeCode: String) {
+        val resources = resources;
+        val dm = resources.getDisplayMetrics()
+        val config = resources.configuration
+        config.setLocale(Locale(localeCode.toLowerCase()))
+        resources.updateConfiguration(config, dm)
     }
 
     private fun checkSelections(): Boolean {
@@ -115,7 +124,6 @@ class AddAlarmActivity : AppCompatActivity() {
             }
         } else {
             isGreater = selecteedId == R.id.greatRadio
-            Log.i("alarm", "isGreat Actv = $isGreater")
         }
         if (binding.timeTV.text == resources.getString(R.string.add_alarm_timePickerTV)){
             Toast.makeText(this, resources.getString(R.string.add_alarm_toast_pickTime), Toast.LENGTH_LONG).show()
@@ -137,7 +145,6 @@ class AddAlarmActivity : AppCompatActivity() {
         return if (selectedId == -1){
             ""
         } else {
-            Log.i("alarm", "type check Actv")
             (findViewById<RadioButton>(selectedId)).text.toString()
         }
     }
@@ -158,7 +165,6 @@ class AddAlarmActivity : AppCompatActivity() {
             days.wed = true
         if (binding.thuChBx.isChecked)
             days.thu = true
-        Log.i("alarm", "days in Activity = $days")
         return days
     }
 
@@ -184,9 +190,7 @@ class AddAlarmActivity : AppCompatActivity() {
     }
 
    private fun addAndGetLastAlarm(alarm: AlarmData) {
-        Log.i("alarm", "from Activity ${alarm}")
         viewModelAdd.addAndgetLastAlarm(alarm)
-        Log.i("alarm", "from Activity after call")
     }
 
 
@@ -198,7 +202,6 @@ class AddAlarmActivity : AppCompatActivity() {
                 calenderEvent.set(Calendar.MINUTE,p2)
                 calenderEvent.set(Calendar.SECOND,0)
                 textView.setText(SimpleDateFormat("HH:mm", Locale(Constants.LANGUAGE_SETTINGS)).format(calenderEvent.time))
-                Log.i("alarm","time => ${calenderEvent.timeInMillis}")
             }
         }, hour, min, false).show()
     }
@@ -215,13 +218,11 @@ class AddAlarmActivity : AppCompatActivity() {
             var pendingIntent = PendingIntent.getBroadcast(this,alarm.id,notifyIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calenderEvent.timeInMillis,pendingIntent)
-            Log.i("alarm","twentyfour${calenderEvent.timeInMillis}")
         }else{
             notifyIntent.putExtra(Constants.ALARM_ID,alarm.id)
             var pendingIntent = PendingIntent.getBroadcast(this,alarm.id,notifyIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT)
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calenderEvent.timeInMillis,pendingIntent)
-            Log.i("alarm","twentyfour${calenderEvent.timeInMillis}")
         }
     }
 
