@@ -193,7 +193,12 @@ class HomeActivity : AppCompatActivity() {
         val cityTime = it.current?.dt
         binding.homeMainDateTV.text =
             cityTime?.let { it1 -> dateConverter(it1, "EEE, d MMM") } //"EEE d MMM"
-        binding.homeMainCityNameTV.text = it.timezone                                                     //switch case to locale days
+        binding.homeMainCityNameTV.text = getCityName(this,
+            sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en")!!,                                                     //switch case to locale days
+            sharedPreferences.getString(Constants.LATITUDE, "0").toString().toDouble(),                                                    //switch case to locale days
+            sharedPreferences.getString(Constants.LONGITUDE, "0").toString().toDouble(),
+            it.timezone.toString()
+        )                                                    //switch case to locale days
         binding.homeMainDescTV.text = it.current?.weather?.get(0)?.description
         binding.homeMainIcon.setImageResource(getResId(it.current?.weather?.get(0)?.icon))
         binding.homeMainTempTV.text = "${numLocale(it.current?.temp!!)}°"
@@ -415,21 +420,21 @@ class HomeActivity : AppCompatActivity() {
         viewModel.deleteOldCurrent()
     }
 
+    fun getCityName(context:Context,savedLang: String,lat: Double,lon:Double,timeZone:String):String{
+        var locationAddress = ""
+        val geocoder = Geocoder(context, Locale(savedLang));
+        try {
+            if(savedLang=="ar"){
+                locationAddress = geocoder.getFromLocation(lat,lon,1)[0].countryName ?: timeZone
+            }else{
+                locationAddress = geocoder.getFromLocation(lat,lon,1)[0].adminArea ?: timeZone
+                locationAddress += ", ${geocoder.getFromLocation(lat,lon,1)[0].countryName ?: timeZone}"}
+        } catch (e: IOException){
+            e.printStackTrace()
+        }
+        return locationAddress
+    }
+
+
 }
 
-/*
-   fun getCityName(context:Context,savedLang: String,lat: Double,lon:Double,timeZone:String):String{
-      var locationAddress = ""
-      val geocoder = Geocoder(context, Locale(savedLang));
-      try {
-          if(savedLang=="ar"){
-              locationAddress = geocoder.getFromLocation(lat,lon,1)[0].countryName ?: timeZone
-          }else{
-              locationAddress = geocoder.getFromLocation(lat,lon,1)[0].adminArea ?: timeZone
-              locationAddress += ", ${geocoder.getFromLocation(lat,lon,1)[0].countryName ?: timeZone}"}
-      } catch (e: IOException){
-          e.printStackTrace()
-      }
-      return locationAddress
-  }
-*/
