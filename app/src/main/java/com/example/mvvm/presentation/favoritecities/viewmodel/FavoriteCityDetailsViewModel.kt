@@ -24,7 +24,7 @@ class FavoriteCityDetailsViewModel (application: Application) : AndroidViewModel
         loadingLiveData.postValue(true)
         val exceptionHandlerException = CoroutineExceptionHandler { _, _ ->
             loadingLiveData.postValue(false)
-            errorLiveData.postValue("Please, try again")
+//            errorLiveData.postValue("Please, try again")  // if user become disconnected // handle it
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
             cityLiveData.postValue(weatherRepository.getCity(lat, lon))

@@ -32,7 +32,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         loadingLiveData.postValue(true)
         val exceptionHandlerException = CoroutineExceptionHandler { _, th ->
             loadingLiveData.postValue(false)
-            errorLiveData.postValue("Please, try again")
+//            errorLiveData.postValue("Please, try again") // if user become disconnected // handle it
         }
         CoroutineScope(Dispatchers.IO+exceptionHandlerException).launch {
          val response = weatherRepository.getWeatherData(lat, lon, Constants.APP_ID, units, lang, Constants.EXECLUDE)

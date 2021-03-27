@@ -1,6 +1,7 @@
 package com.example.mvvm.presentation.favoritecities.view
 
 import android.content.Context
+import android.location.Geocoder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,7 @@ import com.example.Weathalert.R
 import com.example.Weathalert.databinding.CitiesCellBinding
 import com.example.mvvm.datalayer.entity.weather.WeatherData
 import com.example.mvvm.utils.Constants
+import java.io.IOException
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,7 +48,12 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>,
         fun bind(city: WeatherData) {
             binding.daysCellBackgroud.setImageResource(getModeRes(city))
             binding.favDateTVVal.text = city.current?.dt?.let { it1 -> dateConverter(it1, "EEE, d MMM") }.toString()
-            binding.favCityNameTVVal.text = city.timezone
+            binding.favCityNameTVVal.text = getCityName(context,
+                sharedPreferences.getString(Constants.LANGUAGE_SETTINGS, "en")!!,
+                city.lat,
+                city.lon,
+                city.timezone.toString()
+            )
             binding.favTempTVVal.text = "${numLocale((city.current?.temp)!!.toDouble())}°"
         }
 
@@ -68,6 +75,21 @@ class FavoriteAdapter(var cities: ArrayList<WeatherData>,
             calender.timeInMillis = (dt)*1000L
             val dateFormat = SimpleDateFormat(pattern)
             return dateFormat.format(calender.time)
+        }
+
+        fun getCityName(context:Context,savedLang: String,lat: Double,lon:Double,timeZone:String):String{
+            var locationAddress = ""
+            val geocoder = Geocoder(context, Locale(savedLang));
+            try {
+                if(savedLang=="ar"){
+                    locationAddress = geocoder.getFromLocation(lat,lon,1)[0].countryName ?: timeZone
+                }else{
+                    locationAddress = geocoder.getFromLocation(lat,lon,1)[0].adminArea ?: timeZone
+                    locationAddress += ", ${geocoder.getFromLocation(lat,lon,1)[0].countryName ?: timeZone}"}
+            } catch (e: IOException){
+                e.printStackTrace()
+            }
+            return locationAddress
         }
 
     }
